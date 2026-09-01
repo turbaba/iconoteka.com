@@ -1301,6 +1301,16 @@ function copySVG(icon, sz) {
   trackDownload(icon, 'Copy SVG', sz);
 }
 
+// One action for the three Copy-code buttons and their W / A / I shortcuts.
+function copyCode(icon, label) {
+  const gen = { Web: cssSnippet, Android: androidSnippet, Apple: iosSnippet }[label];
+  if (!gen || !icon) return;
+  navigator.clipboard.writeText(gen(icon))
+    .then(() => showToast(label + ' code for ' + formatSegment(icon.name.split('-')[0]) + ' Copied'))
+    .catch(() => showToast('Copy failed'));
+  trackDownload(icon, 'Copy ' + label);
+}
+
 function cssSnippet(icon) {
   const name = (icon.name.split('-')[0]).replace(/_/g,'-').toLowerCase();
   const sz = panelSize || 24;
@@ -1572,12 +1582,7 @@ function openPanel(icon) {
   copyRow.appendChild(copyLbl);
   function makeCopyBtn(label, getText) {
     const btn = document.createElement('button'); btn.className = 'copy-btn'; btn.textContent = label;
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(getText())
-        .then(() => showToast(label + ' code for ' + formatSegment(icon.name.split('-')[0]) + ' Copied'))
-        .catch(() => showToast('Copy failed'));
-      trackDownload(icon, 'Copy ' + label);
-    });
+    btn.addEventListener('click', () => copyCode(icon, label));
     return btn;
   }
   const copyOpts = document.createElement('div'); copyOpts.className = 'copy-opts';
@@ -1647,15 +1652,20 @@ handleWeightSlider(weightSlider, () => {
 });
 
 document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); document.getElementById('search').focus(); }
-  if (e.key === 'Escape') { document.getElementById('search').blur();  state.focusedIdx = -1; }
-  const searchFocused = document.activeElement === document.getElementById('search');
+  const mk = (e.key || '').toLowerCase();   // Shift+S reports 'S' — compare case-insensitively
+  if ((e.ctrlKey || e.metaKey) && mk === 'k') { e.preventDefault(); document.getElementById('search').focus(); }
+  if (e.key === 'Escape') {
+    document.getElementById('search').blur();  state.focusedIdx = -1;
+    document.getElementById('panel').classList.remove('sheet-open');
+    document.getElementById('burgerMenu').classList.remove('open');
+  }
+  // Shortcuts stand down inside ANY text field (search, mobile search, export-size input...)
+  const ae = document.activeElement;
+  const searchFocused = !!ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.tagName === 'SELECT' || ae.isContentEditable);
   const hasSelection = window.getSelection && window.getSelection().toString().length > 0;
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Enter' && panelIcon && !searchFocused) { e.preventDefault(); downloadPNG(panelIcon); }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'c' && panelIcon && !searchFocused && !hasSelection) { e.preventDefault(); copySVG(panelIcon); }
-  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 's' && panelIcon && !searchFocused) { e.preventDefault(); downloadSVG(panelIcon); }
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 's' && panelIcon && !searchFocused) { e.preventDefault(); downloadPNG(panelIcon); }
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Enter' && panelIcon && !searchFocused) { e.preventDefault(); downloadPNG(panelIcon); }
+  if ((e.ctrlKey || e.metaKey) && mk === 'c' && panelIcon && !searchFocused && !hasSelection) { e.preventDefault(); copySVG(panelIcon); }
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && mk === 's' && panelIcon && !searchFocused) { e.preventDefault(); downloadSVG(panelIcon); }
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && mk === 's' && panelIcon && !searchFocused) { e.preventDefault(); downloadPNG(panelIcon); }
 
   if (searchFocused) return;
 
@@ -1666,6 +1676,11 @@ document.addEventListener('keydown', e => {
     if (k === 's') { e.preventDefault(); setStyleFromKey('stroke'); return; }
     if (k === 'f') { e.preventDefault(); setStyleFromKey('fill'); return; }
     if (k >= '1' && k <= '7') { e.preventDefault(); setWeightFromKey(parseInt(k, 10) - 1); return; }
+    if (k === '[') { e.preventDefault(); setWeightFromKey(state.weightIdx - 1); return; }
+    if (k === ']') { e.preventDefault(); setWeightFromKey(state.weightIdx + 1); return; }
+    if (k === 'w' && panelIcon) { e.preventDefault(); copyCode(panelIcon, 'Web'); return; }
+    if (k === 'a' && panelIcon) { e.preventDefault(); copyCode(panelIcon, 'Android'); return; }
+    if (k === 'i' && panelIcon) { e.preventDefault(); copyCode(panelIcon, 'Apple'); return; }
   }
   const arrows = ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];
   if (!arrows.includes(e.key) && e.key !== 'Enter') return;
