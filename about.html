@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About Iconoteka</title>
+<meta name="description" content="Iconoteka is a free, open-source library of 1 298 icons in 7 weights, drawn on a 24-point grid by Oleg Turbaba. MIT licensed."/>
+<meta property="og:title" content="About Iconoteka"/>
+<meta property="og:description" content="A free, open-source library of 1 298 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
+<meta property="og:image" content="https://beta.iconoteka.com/preview.png"/>
+<meta property="og:url" content="https://beta.iconoteka.com/about.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Iconoteka"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="About Iconoteka"/>
+<meta name="twitter:description" content="A free, open-source library of 1 298 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
+<meta name="twitter:image" content="https://beta.iconoteka.com/preview.png"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/websans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="support.css?v=10">
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f7f7f7;
+  --surface2: #efefef;
+  --border: #ededed;
+  --text: #141414;
+  --text-muted: #63626d;
+  --text-dim: #8b8a94;
+  --brand: #ffc3dc;
+  --radius: 6px;
+  --panel-w: 270px;
+  --pad: 24px;
+  --panel-pad: 20px;
+  --sb: 11px;   /* native scrollbar width inside the category list */
+  /* radius scale */
+  --r-xs: 3px;      /* scrollbar thumbs, slider track */
+  --r-sm: 6px;      /* small controls: buttons, segmented, options */
+  --r-md: 10px;     /* surfaces: cards, dropdown menus */
+  --r-pill: 999px;  /* badges, tags, search */
+  /* motion */
+  --t-fast: .12s;   /* hover/colour */
+  --t-base: .2s;    /* size/position */
+  --t-slow: .28s;   /* panel + large moves */
+  /* elevation */
+  --shadow-md: 0 4px 16px rgba(20,20,20,0.12);
+  --shadow-lg: 0 8px 30px rgba(20,20,20,0.18);
+  --panel-margin: 0px;
+  --ui-surface: #f2f2f3;
+  --ui-surface-hover: #e8e8e8;
+  --ui-input: #f3f3f4;
+  --ui-input-hover: #eeeeef;
+  --ui-seg-on: #ffffff;
+  --ui-panel: #ffffff;
+  --ui-dropdown: #ffffff;
+  --ui-card-hover: rgba(242,242,243,0.7);
+  --ui-card-active: #f2f2f3;
+  --ui-slider-track: #efefef;
+  --ui-slider-stop: #cecece;
+  --logomark-color: #141414;
+}
+[data-theme="dark"] {
+  --shadow-md: 0 4px 16px rgba(20,20,20,0.45);
+  --shadow-lg: 0 8px 30px rgba(20,20,20,0.55);
+  --bg: #191919;
+  --surface: #222222;
+  --surface2: #2a2a2a;
+  --border: #333333;
+  --text: #ffffff;
+  --text-muted: #a2a2a2;
+  --text-dim: #8a8a8a;
+  --brand: #ffc3dc;
+  --ui-surface: #2a2a2a;
+  --ui-surface-hover: #363636;
+  --ui-input: #252525;
+  --ui-input-hover: #2e2e2e;
+  --ui-seg-on: #3a3a3a;
+  --ui-panel: #202020;
+  --ui-dropdown: #242424;
+  --ui-card-hover: rgba(50,50,50,0.49);
+  --ui-card-active: #232323;
+  --ui-slider-track: #2e2e2e;
+  --ui-slider-stop: #444444;
+  --logomark-color: #ffffff;
+}
+
+@font-face { font-family: 'WebSans'; src: url('fonts/websans.woff2') format('woff2'); font-weight: 400 600; font-display: swap; }   /* the page's text face: a 122-glyph subset (ASCII + the punctuation the page uses), weights 400–600 only, kern + tnum only, neutral names, no glyph names, no hinting — 11 KB */
+* { box-sizing: border-box; }
+:root { --rule: color-mix(in srgb, var(--text) 30%, transparent); }   /* every page rule: the text colour at 30% */
+/* vertical spacing system — an 8px scale with four roles; only these tokens are used for vertical space
+   --major  hero → headline, stat rows → weight grid          130 / 96 / 64
+   --sec    section padding (top and bottom), footer padding   65 / 48 / 32  (= --major / 2)
+   --block  between blocks inside a section, text → media      48 / 40 / 32
+   --stack  label → content, title → text, text → buttons      24 / 24 / 16
+   plus two fixed steps: --sp-1 8px (small title → text, list gaps) and --sp-2 16px (large title → text, icon → title, row padding) */
+:root { --sp-1: 8px; --sp-2: 16px; --stack: 24px; --block: 48px; --sec: 65px; --major: 130px; --gut: 42px; --exc: 100px; --display: clamp(30px, 4.2vw, 60px); }   /* --display: headline statement and the stat numbers */   /* --exc: the one exception — the gap above and below the Missing-an-icon block */   /* --sec is half of --major, so every block-to-block gap is --major (130, per user) */
+@media (max-width: 860px) { :root { --stack: 24px; --block: 40px; --sec: 38px; --major: 76px; --gut: 32px; --exc: 74px; } }   /* tablet: section gaps 20px tighter than before (76 / 38, user) */
+@media (max-width: 480px) { :root { --stack: 16px; --block: 32px; --sec: 32px; --major: 64px; --gut: 20px; --exc: 50px; } }
+html { scroll-behavior: smooth; }
+/* no ligatures or contextual alternates in running text */
+html, body { margin: 0; font-family: 'WebSans', 'Inter', sans-serif; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; font-size: 16px; line-height: 24px; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+html, body { overflow-x: hidden; }   /* the flying hero tiles must never widen the page (iOS ignores a body-only clip) */
+a { color: inherit; }
+
+/* ── header: same bar as the library ─────────────────────────────────────── */
+/* 500px header: the 78px bar (logo + navigation, same as the library) and a 422px band with the icon wall, on the page colour */
+header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 8px;
+         padding: 0 var(--panel-pad); height: 78px; border-bottom: 1px solid var(--border);
+         position: sticky; top: 0; background: var(--bg); color: var(--text); z-index: 10; transition: transform var(--t-slow) ease; }
+header.hidden { transform: translateY(-100%); }   /* slides away while scrolling down, comes back on the first scroll up (user, all breakpoints) */
+header .header-nav { grid-column: 3; }
+/* the bar is set in Inter with the library's line-height so it matches the homepage header exactly */
+header { font-family: 'Inter', sans-serif; font-size: 14px; line-height: normal; font-variant-ligatures: normal; font-feature-settings: normal; }   /* the library's body context */
+header .support-btn { font: inherit; font-size: 14px; font-weight: 600; }
+.hero-band { background: var(--bg); color: var(--text); --band-h: 422px; padding: 20px 20px 0; }   /* 20px inset left, right, top; as many full rows as fit --band-h, height follows the rows */
+/* headline under the hero */
+.row.headline { padding-top: var(--major); padding-bottom: 0; }   /* .row.headline so the generic .row padding below cannot override it */
+.headline .g { padding-bottom: var(--block); border-bottom: 1px solid var(--rule); }   /* rule under the headline, layout width only */
+.row.headline + .row { padding-top: calc(var(--major) - var(--block)); }   /* rule-terminated blocks keep a --major (128) gap to the next content, like License */
+.nobr { white-space: nowrap; }
+.ver { grid-column: 10 / 13; justify-self: end; align-self: start; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; line-height: 16px; font-weight: 500; margin-top: 4px; font-feature-settings: normal; color: var(--text-muted); }   /* small mono library version, same size as the weight-grid labels, top aligned with the headline's caps */
+.statement { grid-column: 1 / 10; margin: 0; font-size: var(--display); line-height: 1.1; letter-spacing: -.02em; font-weight: 400; }
+/* the wall: as many colour tiles as fit the band, each a random icon on a random brand colour and shape.
+   Tiles change one by one on their own, change under the pointer, and open the icon in the library on click */
+.wall { display: grid; grid-template-columns: repeat(var(--cols), var(--tile)); grid-auto-rows: var(--tile); row-gap: var(--wgap); justify-content: space-between; --tile: 76px; --wgap: 16px; }   /* columns spread edge to edge */
+.tile-w { width: var(--tile); height: var(--tile); border-radius: 10%;   /* three containers, per the blueprint: rounded 10%, soft 22%, circle 6% larger (optical) */ background: var(--c); color: var(--fg); display: flex; align-items: center; justify-content: center; }
+.tile-w { will-change: transform; position: relative; }   /* z-index during the parallax */
+.tile-w.round { border-radius: 50%; width: calc(var(--tile) * 1.06); height: calc(var(--tile) * 1.06); margin: calc(var(--tile) * -0.03); }
+.tile-w.soft { border-radius: 22%; }
+.tile-w svg { width: 66%; height: 66%; fill: currentColor; display: block; }
+/* no clipping: flying tiles pass behind the page content (main sits above the band), under the sticky bar */
+.hero-band { position: relative; z-index: 0; }
+main, footer { position: relative; z-index: 1; }
+
+.logo-wrap { display: flex; align-items: center; gap: 8px; position: relative; top: -1px; }   /* flex like the homepage: the link is only as wide as the logo, not the whole grid column (the hover area was huge) */
+.logo-wrap a { display: flex; align-items: center; gap: 5px; text-decoration: none; color: var(--text); transition: opacity var(--t-fast); }
+.logo-wrap a:hover { opacity: .8; }
+#logomark { color: var(--logomark-color); }
+.logo { font-weight: 550; font-size: 23px; letter-spacing: -0.3px; }
+.beta-badge { font-size: 8.5px; font-weight: 700; background: var(--brand); color: #141414; height: 14px; padding: 2px 6px 0 6.6px; line-height: 1;
+              border-radius: var(--r-pill); letter-spacing: .6px; text-transform: uppercase; display: inline-flex; align-items: center; position: relative; top: -2px; }
+.header-nav { display: flex; align-items: center; gap: 32px; justify-content: flex-end; position: relative; top: -1px; }
+.header-link { font-size: 14px; font-weight: 600; text-decoration: none; transition: color var(--t-fast); }
+.header-link:hover { opacity: .8; }
+/* hit area ≈ 38×(text+24)px without moving the text: padding cancelled by negative margins */
+.header-link { padding: 10px 12px; margin: -10px -12px; border-radius: var(--r-sm); }
+.header-link.current { color: var(--text-dim); }
+.burger-btn { display: none; background: none; border: none; cursor: pointer; padding: 4px; margin-right: -4px; color: var(--text); }
+.burger-btn { transition: opacity var(--t-fast); } .burger-btn:hover { opacity: .8; }
+/* pressed state for every control on the page: a deeper dim than the hover (the wall tiles have no hover by design and stay as they are) */
+.header-link:active, .logo-wrap a:active, .burger-btn:active, .burger-link:active, .button:active, .links a:active, .handle:active,
+.slider-nav button:active:not(:disabled), button.primary:active:not(:disabled), footer a:active, footer button:active, .footer-icon:active,
+.card:active svg { opacity: .6; }
+.burger-menu { display: none; position: fixed; background: var(--ui-panel); border-radius: var(--r-md); box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; flex-direction: column; gap: 2px; width: 272px; }
+.burger-menu.open { display: flex; }
+.burger-link { font-size: 14px; font-weight: 600; color: var(--text); text-decoration: none; padding: 14px 12px; border-radius: var(--r-sm); }
+.burger-link:hover { background: var(--surface); }
+.burger-ver { font-size: 12px; color: var(--text-muted); padding: 12px 12px 8px; line-height: 1.6; }
+.ver-num { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; font-weight: 500; }
+#toast { position: fixed; top: 92px; left: 50%; transform: translateX(-50%); background: var(--brand); color: #141414; font-size: 12px; padding: 4px 14px; border-radius: var(--r-pill); pointer-events: none; opacity: 0; transition: opacity var(--t-base); z-index: 2100; white-space: nowrap; }
+#toast.visible { opacity: 1; }
+/* BETA badge shown again (user 2026-09-06) */
+
+/* ── page grid ────────────────────────────────────────────────────────────── */
+/* Every block is a full-width row; content sits on a 12-column grid, 32px gutters, 1152px max */
+.row { padding: var(--sec) var(--pad); }
+.g   { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); row-gap: 0; max-width: 1152px; margin: 0 auto; }
+.g > * { min-width: 0; }
+.full { grid-column: 1 / -1; }
+.half-a { grid-column: 1 / 7; }
+.half-b { grid-column: 7 / 13; }
+.half-a p, .half-b p { margin-bottom: var(--stack); }
+/* License and Repository: larger title and text than the feature items */
+.license .half-a, .license .half-b { padding-bottom: var(--block); border-bottom: 1px solid var(--rule); }   /* two rules, one under each half; the halves stretch to one height so the lines align */
+.license h3, .request h3 { font-size: 28px; line-height: 34px; margin-bottom: var(--sp-2); }
+.license p, .request p { font-size: 20px; line-height: 30px; max-width: 46ch; }
+/* request: a brand-Blue box, white text (the Blue card's logo-mark rule), input white at 10%, white pill button.
+   Exception to the spacing system: 100px above and below (neighbour padding --sec + own padding = --exc) */
+.row.request { padding-top: calc(var(--exc) - var(--sec)); padding-bottom: var(--exc); }   /* 100 above the box, 100 from the box to the footer rule */
+.request-box { grid-column: 1 / -1; background: #1e39c9; color: #ffffff; padding: clamp(17px, 2vw, 28px); border-radius: var(--r-md);   /* 30% less than the first cut (24/2.8vw/40) — user */
+               display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--gut); row-gap: var(--block); }   /* full width; title on the left half, text and form on the right half */
+.request-box h3 { margin: 0; }
+.request-box .request-body p { max-width: none; margin-bottom: var(--stack); }
+.request-box input[type=text] { background: rgba(255, 255, 255, .1); color: #ffffff; border: none; padding-top: 2px; }   /* white at 10% on the blue (user); the text sits 2px down (optical, user: 1px, then 1px more) */
+.request-box input[type=text]:focus { background: rgba(255, 255, 255, .16); }
+.request-box input[type=text]::placeholder { color: #ffffff; opacity: .6; }
+.request-box button.primary { background: #ffffff; color: #141414; border-radius: 999px; }   /* white pill (user) */
+
+p { margin: 0 0 var(--stack); }
+p:last-child { margin-bottom: 0; }
+.label { font-size: 14px; line-height: 21px; font-weight: 500; color: var(--text-muted); margin: 0 0 var(--stack); }   /* small captions are grey (user): section labels, their numbers, the version, the grid-cell texts — same grey as the footer titles */
+.label.full { display: flex; justify-content: space-between; align-items: baseline; }   /* section number at the right edge */
+.no { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; line-height: 16px; font-weight: 500; font-feature-settings: normal; color: var(--text-muted); }   /* section numbers 01–04: the version's mono style */
+.ver .no { margin-left: 16px; }   /* 01 sits after the version, at the right edge */
+h2.huge { font-size: var(--display); line-height: 1; letter-spacing: -.02em; font-weight: 600; margin: 0 0 var(--block) -0.04em; }   /* same size as the headline statement */
+h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 var(--sp-1); }
+
+/* universal reveal on scroll: every content block starts faded and 24px low, and eases in the first time it
+   enters the viewport; siblings inside one row follow each other with a short delay (set inline by JS) */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.now { transition: none; }   /* shown at once: blocks that are already above the viewport, or come in from the top while scrolling up */
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* layout-grid overlay, toggled with the G key: the same .g columns, tinted */
+.grid-overlay { position: fixed; inset: 0; padding: 0 var(--pad); pointer-events: none; z-index: 5000; }
+.grid-overlay .g { height: 100%; }
+.grid-overlay span { display: block; height: 100vh; background: rgba(255, 195, 220, .18); }
+
+/* buttons (Inter-style: plain filled block, no chrome) */
+.button, .links a { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 2px 18px 0; border-radius: var(--r-sm);   /* 18px sides; 2px top padding moves the centred label down by 1px (optical) */
+          background: var(--text); color: var(--bg); text-decoration: none; font-size: 15px; font-weight: 500; letter-spacing: .01em;
+          transition: opacity var(--t-fast); white-space: nowrap; }
+.button:hover, .links a:hover { opacity: .82; }
+.links { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.links a.ghost { background: var(--ui-surface); color: var(--text); }
+.links a.ghost:hover { background: var(--text); color: var(--bg); opacity: 1; }   /* hover = inverted: white on the dark theme, black on light */
+
+
+/* stat blocks: one row each — title on the left half, text on the right half */
+.stat-block { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); align-items: start; margin-bottom: var(--block); }
+.stat-block:nth-of-type(4) { margin-bottom: var(--major); }   /* the weight grid gets a major gap */
+.stat-block h2 { grid-column: 1 / 7; margin: 0; white-space: nowrap; }   /* size comes from h2.huge (--display, same as the headline); no font-size here or it would win by source order */
+.stat-block h2, .stat-block p { grid-row: 1; }
+/* right half: a 1px rule aligned with the cap height of the number on the left, the small text below it
+   (measured in the render: the caps of the 66px title start 3px below its box top) */
+.stat-block p { grid-column: 7 / 13; align-self: start; margin: 3px 0 0; padding-top: var(--sp-2); border-top: 1px solid var(--rule); font-size: 20px; line-height: 30px; }   /* same large body size as License / Repository */
+
+/* weight grid: 7×2 stroked cells (1px lines, shared): number top-left, code (TS, RF…) top-right, name bottom-left, icon in a dealt palette colour */
+.cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; padding: 1px; }   /* 1px gaps + 1px padding hold the lines, which each cell draws itself (box-shadow) so the cells can reveal one by one without a tinted block behind them */
+.card { position: relative; aspect-ratio: 1; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px var(--rule); }   /* the grid lines: text colour at 30% */
+.card svg { width: 54%; height: 54%; fill: var(--ic, currentColor); display: block; position: relative; top: -3px; }   /* was -5px; moved 2px down (user) */   /* --ic: a brand colour dealt at random (light palette), re-dealt on hover with the icon; switches instantly, no fade (user) */
+.card small { position: absolute; font-size: 12px; line-height: 16px; font-weight: 500; }   /* text colour (the grey try was reverted for the grid — user) */
+.card .n { left: 10px; top: 8px; font-feature-settings: "liga" 0, "calt" 0, "tnum" 1; }
+.card .code { right: 10px; top: 8px; }
+.card .cap { left: 10px; bottom: 8px; }
+
+/* features 3×2 */
+.facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--block) var(--gut); }   /* 3 × 2, full width; the label's own --stack is the only gap above, as for Author and the timeline */
+.facts .f-icon { width: 64px; height: 64px; fill: var(--fc, currentColor); display: block; margin-bottom: var(--sp-2); position: relative; left: -8px; }   /* brand colour per feature; 8px LEFT = optical compensation (user, 2026-09-06 — an 8px-right try was reversed) */
+.facts [data-icon="grid"] { --fc: #a25624; }   /* Transparent Ox (user swapped it from Blue) */
+.facts [data-icon="eye"] { --fc: #febd32; }   /* Yellow */
+.facts [data-icon="circle"] { --fc: #12ab57; }   /* Green */
+.facts [data-icon="layers"] { --fc: #f04c1a; }   /* Red */
+.facts [data-icon="user"] { --fc: #673726; }   /* Warm Sepia on the light theme … */
+[data-theme="dark"] .facts [data-icon="user"] { --fc: #ffc3dc; }   /* … Pink on dark, where it reads */
+.facts [data-icon="cube"] { --fc: #979c1a; }   /* Moss Olive */
+
+/* in use: one 16:9 slide at content width, the next peeking past the right edge; arrows above */
+.inuse-text { grid-column: 1 / 9; margin: var(--block) 0 0; font-size: 20px; line-height: 30px; letter-spacing: 0; max-width: 60ch; }   /* large body size */
+.handle { font-weight: inherit; text-decoration: underline; text-underline-offset: .3em; text-decoration-thickness: 1px; text-decoration-skip-ink: none; transition: opacity var(--t-fast); }   /* inline links: same weight and colour as the copy; a 1px underline set low, in the text colour (palette colours were tried and removed — user) */
+.handle:hover { opacity: .8; }   /* same hover as the header links — no colour */
+.slider-nav { grid-column: 9 / 13; align-self: end; display: flex; justify-content: flex-end; gap: 28px; margin-top: var(--block); }
+.slider-nav button { font: inherit; background: none; border: none; padding: 0; cursor: pointer; color: var(--text); display: flex; transition: opacity var(--t-fast); }
+.slider-nav button:hover:not(:disabled) { opacity: .7; }
+.slider-nav button svg { width: 28px; height: 28px; fill: currentColor; display: block; }
+.slider-nav button:disabled { opacity: .3; cursor: default; }
+.slider { display: flex; gap: var(--gut); overflow-x: auto; scrollbar-width: none; cursor: grab; user-select: none;
+          margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%); }   /* runs edge to edge, so slides leave the screen on the left too; snapping is done in JS */
+.slider.dragging { cursor: grabbing; }
+.slider::-webkit-scrollbar { display: none; }
+.slider .slot { flex: 0 0 100%; aspect-ratio: 16 / 9; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
+.slider .slot img, .slider .slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* author: 4:3 portrait on the left half, text and links on the right half */
+.photo { aspect-ratio: 4 / 3; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
+.author .half-a, .author .half-b { margin-top: 0; }   /* the label's --stack already separates them */
+.author .half-b { display: flex; flex-direction: column; justify-content: space-between; }   /* text at the top, links at the bottom */
+.author .bio, .author-contact { font-size: 24px; line-height: 32px; letter-spacing: -.01em; }   /* author copy: one step above the large body */
+.author .bio { margin: 0 0 var(--stack); }
+.half-b .author-contact { margin: 0 0 var(--block); }   /* .half-b prefix: outranks the generic `.half-b p` margin */
+.author .half-b .links { margin-top: auto; align-items: center; }   /* links stay at the bottom */
+.author-links .site { margin-left: auto; border-radius: 999px; }   /* the website button sits at the right edge, fully rounded */
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* request form */
+form { display: flex; gap: var(--sp-1); }
+input[type=text] { flex: 1; min-width: 0; height: 44px; padding: 0 var(--sp-2); border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--ui-input); color: var(--text); font: inherit; font-size: 16px; outline: none; }
+input[type=text]:focus { background: var(--ui-input-hover); border-color: var(--text); }
+input[type=text]::placeholder { color: var(--text); opacity: .5; }
+button.primary { height: 44px; padding: 2px 18px 0; border: none; border-radius: var(--r-sm); background: var(--text); color: var(--bg); font: inherit; font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity var(--t-fast); }
+button.primary:hover { opacity: .82; }
+button.primary:disabled { cursor: default; opacity: 1; }   /* while it shows a status */
+
+
+/* timeline: date · version · count · weights/styles · note, on the page's 12 columns */
+.tl { list-style: none; margin: 0; padding: 0; grid-column: 1 / -1; border-top: 1px solid var(--rule); }
+.tl li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut);   /* the page's 12 columns, so the cells sit on the grid lines */ padding: var(--sp-2) 0; border-bottom: 1px solid var(--rule); font-size: 16px; line-height: 24px; }
+.tl li:last-child { border-bottom: none; }   /* no rule under the last timeline row */
+.tl time { grid-column: 1 / 3; color: var(--text); }
+.tl b { grid-column: 3 / 5; }
+.tl .n { grid-column: 5 / 7; }
+.tl .w { grid-column: 7 / 9; }
+.tl .d { grid-column: 9 / 13; }
+.tl b { font-weight: inherit; }
+.tl b .v { font-feature-settings: "liga" 0, "calt" 0, "tnum" 1; }
+.tl .d strong { font-weight: inherit; }
+.tl .n { color: var(--text); }
+
+footer { border-top: 1px solid var(--border);   /* same line as the header */ padding: var(--sec) var(--pad) calc(var(--sec) + 20px);   /* double space before the footer: one --major above its rule, then the usual padding */ font-size: 14px; line-height: 21px; color: var(--text); }
+footer .g { row-gap: var(--block); align-items: start; }
+/* footer on the 12 page columns, one row: icon top-left and © bottom-left (1–2), columns 3–4 empty, Library (5–6) · Support (7–8) · Follow (9–10) · Contact (11–12) */
+.footer-icon { grid-column: 1 / 3; grid-row: 1; align-self: start; justify-self: start; width: 48px; color: var(--text); height: 48px; position: relative; left: -6px; top: -3px; }   /* 48px box = the hover target is the mark itself, not the whole cell */   /* optical compensation: the glyph's own side bearings make it look inset */
+.footer-icon svg { width: 48px; height: 48px; fill: currentColor; display: block; }
+.footer-icon, .card { cursor: pointer; }   /* they react to a click / tap */
+.f-lib { grid-column: 5 / 7; } .f-sup { grid-column: 7 / 9; } .f-fol { grid-column: 9 / 11; } .f-contact { grid-column: 11 / 13; }   /* icon + © in 1–4, groups from column 5, Contact two columns (user) */
+.f-contact p { margin: 0; font-size: 14px; line-height: 21px; }
+.footer-group h4 { font-size: 14px; line-height: 21px; font-weight: 500; color: var(--text-muted); margin: 0 0 var(--sp-2); }   /* grey titles, 16px to the links (links are 8px apart) */
+.footer-group nav { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-1); }
+.footer-crypto-label { color: var(--text-muted); position: relative; top: 3px; }   /* "Crypto:" — plain grey text, not a link; nudged 4px down visually, the next line does not move */
+.footer-crypto { display: flex; gap: 14px; }
+footer a { text-decoration: none; }
+footer a:hover, footer button:hover { opacity: .8; }
+footer button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; text-align: left; }
+footer button.copied { color: var(--brand); }
+.footer-copy { grid-column: 1 / 3; grid-row: 1; white-space: nowrap; color: var(--text-muted); align-self: end; }   /* grey ©, on the groups' row, its baseline on the last links (Download Press Kit, X) */
+
+/* wide screens: the 1152px column looked narrow past ~1600px, so the layout widens in two steps (user) */
+@media (min-width: 1600px) {
+  .g { max-width: 1440px; }
+  :root { --gut: 52px; --display: clamp(30px, 4.2vw, 72px); }
+  .wall { --tile: 88px; --wgap: 18px; }
+  .hero-band { --band-h: 480px; }
+}
+@media (min-width: 2000px) {
+  .g { max-width: 1680px; }
+  :root { --gut: 60px; --display: clamp(30px, 4.2vw, 84px); }
+  .wall { --tile: 100px; --wgap: 20px; }
+  .hero-band { --band-h: 540px; }
+}
+@media (max-width: 1100px) {
+  .tl .w { grid-column: 7 / 10; } .tl .d { grid-column: 10 / 13; }   /* "7 weights, 2 styles" no longer wraps; the note keeps three columns */
+}
+@media (max-width: 700px) {
+  .card .cap .st { display: none; }   /* cells are ~80px: caption = weight name only (the S/F code carries the style) */
+}
+@media (max-width: 640px) {
+  .request-box { grid-template-columns: 1fr; row-gap: var(--stack); }   /* title above the text and form */
+  .facts { grid-template-columns: 1fr; }   /* one feature per row: two 200px text columns were too narrow */
+}
+/* header ≤860: the homepage's tablet bar — navigation folds into the burger (support.js fills its Support group) */
+@media (min-width: 481px) and (max-width: 860px) {
+  header { grid-template-columns: auto 1fr auto; height: 78px; padding: 0 var(--panel-pad); column-gap: 20px; }   /* stays sticky (the homepage makes it relative here — user wants it to stay while scrolling) */
+  .header-nav { display: none; }
+  .burger-btn { display: flex; align-items: center; justify-content: center; grid-column: 3; grid-row: 1; }
+  /* tablet-only layout (user 2026-09-06): */
+  :root { --display: clamp(36px, 5vw, 60px); }   /* intro statement (and the stat numbers that share its size) bigger on tablet: 43px at 860, 38px at 768, 36px floor */
+  .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }   /* weight grid 4-3-4-3: the stroke row breaks after Regular, the fill row starts a new line */
+  .card:nth-child(8) { grid-column-start: 1; }
+  .license .half-a, .license .half-b { grid-column: 1 / -1; }   /* License above Repository, each with its own rule */
+  .license .half-a { margin-bottom: var(--block); }
+  .tl li { grid-template-columns: 1fr 2fr; grid-template-areas: "t d" "n d" "v d"; row-gap: 0; align-content: start; }   /* timeline: date, count, version stacked on the left; the note on the right; no weights cell */
+  .tl time { grid-area: t; } .tl .n { grid-area: n; } .tl b { grid-area: v; } .tl .d { grid-area: d; } .tl .w { display: none; }
+  .f-lib { grid-column: 1 / 4; } .f-sup { grid-column: 4 / 7; } .f-fol { grid-column: 1 / 4; } .f-contact { grid-column: 4 / 7; }   /* footer 2 × 2: Library | Support, Follow | Contact */
+}
+@media (max-width: 860px) {
+  .burger-ver { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+  .g { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .full, .facts { grid-column: 1 / -1; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .stat-block { grid-template-columns: 1fr; row-gap: var(--sp-2); border-top: 1px solid var(--rule); padding-top: var(--sp-2); }   /* stacked: the text sits UNDER the number, the rule ABOVE the number (user) */
+  .stat-block h2, .stat-block p { grid-column: 1 / -1; }
+  .stat-block h2 { grid-row: 1; } .stat-block p { grid-row: 2; margin-top: 0; border-top: none; padding-top: 0; }
+  .headline .g { border-bottom: none; padding-bottom: 0; }   /* no rule under the intro — the first stat row brings its own line */
+  .row.headline + .row { padding-top: var(--major); }
+  .author-links .site { margin-left: 0; }   /* all four author buttons in one row (user) */
+  .half-a { grid-column: 1 / 4; }
+  .half-b { grid-column: 4 / 7; }
+  .author .half-a, .author .half-b { grid-column: 1 / -1; }   /* portrait above the text: the 24px bio is too narrow in half the width */
+  .author .photo { margin-bottom: var(--block); }
+  .statement { grid-column: 1 / -1; grid-row: 2; }
+  .ver { grid-column: 1 / -1; grid-row: 1; justify-self: stretch; display: flex; justify-content: space-between; margin: 0 0 var(--stack); }   /* above the intro: version at the LEFT, 01 at the right (user) */
+  .ver .no { margin-left: 0; }
+  .inuse-text { grid-column: 1 / 5; }
+  .slider-nav { grid-column: 5 / 7; }
+  .hero-band { --band-h: 360px; }
+  .wall { --tile: 68px; --wgap: 14px; }
+  .slider-nav button svg { width: 24px; height: 24px; }
+  .footer-icon { grid-column: 1 / -1; grid-row: auto; }
+  .footer-copy { grid-column: 1 / -1; grid-row: auto; }
+}
+@media (max-width: 480px) {
+  /* header: the homepage's phone bar */
+  header { grid-template-columns: 1fr auto; height: auto; padding: 18px var(--panel-pad) 16px; column-gap: 0; }   /* stays sticky on the phone too (user) */
+  .header-nav { display: none; }
+  .burger-btn { display: flex; align-items: center; justify-content: center; }
+  .logo { font-size: 18.9px; }
+  .beta-badge { top: -3px; }
+  .hero-band { --band-h: 300px; }
+  .wall { --tile: 60px; --wgap: 12px; }
+  .g { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .full, .facts, .stat-block, .inuse-text, .half-a, .half-b { grid-column: 1 / -1; }
+  .footer-icon { grid-column: 1 / -1; grid-row: auto; }
+  .footer-copy { grid-column: 1 / -1; grid-row: auto; }
+  .footer-copy br { display: none; }   /* © on one line on the phone (user) */
+  .half-a { margin-bottom: var(--block); }
+  .slider-nav { grid-column: 1 / -1; }
+  .facts { grid-template-columns: 1fr; row-gap: var(--block); }
+  .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }   /* 4-3-4-3 on the phone too (user) */
+  .card:nth-child(8) { grid-column-start: 1; }
+  .card small { font-size: 10px; line-height: 13px; }   /* smaller cell texts on the phone (user) */
+  .card .n { left: 6px; top: 5px; } .card .code { right: 6px; top: 5px; } .card .cap { left: 6px; bottom: 5px; }
+  .author .bio, .author-contact, .inuse-text, .request-box .request-body p, .license p { font-size: 16px; line-height: 24px; letter-spacing: 0; }   /* phone: the standard body size for the author, gallery, License/Repository and request copy (user) */
+  .request-box h3 { font-size: 22px; line-height: 28px; }   /* smaller request title on the phone (user) */
+  .slider { grid-row: 1; } .slider-nav { grid-row: 2; justify-content: flex-end; margin-top: var(--block); } .inuse-text { grid-row: 3; margin-top: var(--stack); }   /* arrows above the text, at the right (user) */
+  .tl li { display: block; }   /* phone: a small title (date + version) with the note under it; count and weights skipped (user) */
+  .tl time, .tl b { display: inline; font-weight: 500; }
+  .tl b { margin-left: var(--sp-1); }
+  .tl .n, .tl .w { display: none; }
+  .tl .d { display: block; margin-top: 2px; }
+  form { flex-direction: column; }
+  input[type=text] { flex: none; }   /* in the column the flex basis would squash the 44px input */
+  .links a, .button { width: 100%; justify-content: center; height: 44px; }   /* full width and 44px tall: the touch-target minimum (Apple HIG 44pt) */
+  .half-b .author-contact { margin-bottom: calc(var(--block) * 1.5); }   /* 48px between the author text and the buttons (user) */
+  .row.headline + .row { padding-top: calc(var(--major) - 20px); }   /* intro → first stat row 20px closer on the phone (user): 44px */
+  .f-lib, .f-fol { grid-column: 1 / 3; } .f-sup, .f-contact { grid-column: 3 / 5; }   /* two groups per row: Library | Support, Follow | Contact */
+}
+</style>
+<script>
+// Theme init — runs immediately before page renders
+(function() {
+  const saved = new URLSearchParams(location.search).get('theme') || localStorage.getItem('iconoteka-theme');   // ?theme=light|dark: dev switch for renders
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <a href="./">
+      <svg id="logomark" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.0005 22C10.1672 22 8.48382 21.5583 6.95049 20.675C5.41716 19.7917 4.20882 18.5833 3.32549 17.05C2.44216 15.5167 2.00049 13.8333 2.00049 12C2.00049 10.1667 2.44216 8.48333 3.32549 6.95C4.20882 5.41667 5.41716 4.20833 6.95049 3.325C8.48382 2.44167 10.1672 2 12.0005 2C13.8338 2 15.5172 2.44167 17.0505 3.325C18.5838 4.20833 19.7922 5.41667 20.6755 6.95C21.5588 8.48333 22.0005 10.1667 22.0005 12C22.0005 13.8333 21.5588 15.5167 20.6755 17.05C19.7922 18.5833 18.5838 19.7917 17.0505 20.675C15.5172 21.5583 13.8338 22 12.0005 22ZM12.0005 19.925C13.4505 19.925 14.7755 19.575 15.9755 18.875C17.1755 18.175 18.1255 17.225 18.8255 16.025C19.5255 14.8083 19.8755 13.4667 19.8755 12C19.8755 10.55 19.5255 9.21667 18.8255 8C18.1255 6.78333 17.1755 5.825 15.9755 5.125C14.7755 4.425 13.4505 4.075 12.0005 4.075C10.5505 4.075 9.22549 4.425 8.02549 5.125C6.82549 5.825 5.87549 6.78333 5.17549 8C4.47549 9.2 4.12549 10.5333 4.12549 12C4.12549 13.45 4.47549 14.7833 5.17549 16C5.87549 17.2167 6.82549 18.175 8.02549 18.875C9.22549 19.575 10.5505 19.925 12.0005 19.925ZM12.0005 21.525C11.0005 21.525 10.1672 21.1333 9.50049 20.35C8.83382 19.5667 8.33382 18.4583 8.00049 17.025C7.68382 15.5917 7.52549 13.9167 7.52549 12C7.52549 10.0833 7.68382 8.41667 8.00049 7C8.33382 5.56667 8.83382 4.45833 9.50049 3.675C10.1672 2.89167 11.0005 2.5 12.0005 2.5C13.0005 2.5 13.8338 2.9 14.5005 3.7C15.1672 4.48333 15.6588 5.58333 15.9755 7C16.3088 8.41667 16.4755 10.0833 16.4755 12C16.4755 13.9167 16.3088 15.5917 15.9755 17.025C15.6588 18.4583 15.1672 19.5667 14.5005 20.35C13.8338 21.1333 13.0005 21.525 12.0005 21.525ZM12.0005 19.925C12.5005 19.925 12.9255 19.6 13.2755 18.95C13.6255 18.3 13.8838 17.3833 14.0505 16.2C14.2338 15.0167 14.3255 13.6167 14.3255 12C14.3255 10.4 14.2338 9.00833 14.0505 7.825C13.8838 6.625 13.6255 5.7 13.2755 5.05C12.9255 4.4 12.5005 4.075 12.0005 4.075C11.5005 4.075 11.0755 4.4 10.7255 5.05C10.3755 5.7 10.1088 6.625 9.92549 7.825C9.75882 9.00833 9.67549 10.4 9.67549 12C9.67549 13.6167 9.75882 15.0167 9.92549 16.2C10.1088 17.3833 10.3755 18.3 10.7255 18.95C11.0755 19.6 11.5005 19.925 12.0005 19.925ZM3.00049 13.8H21.0005V15.85H3.00049V13.8ZM3.00049 8.175H21.0005V10.225H3.00049V8.175Z"/></svg>
+      <span class="logo">Iconoteka</span>
+      <span class="beta-badge">Beta</span>
+    </a>
+  </div>
+  <nav class="header-nav">
+      <div class="support-wrap">
+        <button class="header-link support-btn" id="supportBtn" aria-haspopup="true" aria-expanded="false">Support Project</button>
+      </div>
+    <a class="header-link" href="https://www.figma.com/community/plugin/1675995752572535073/iconoteka" target="_blank" rel="noopener">Figma Plugin</a>
+    <a class="header-link current" href="about.html">About</a>
+  </nav>
+  <!-- Mobile burger (same as the homepage) -->
+  <button class="burger-btn" id="burgerBtn" aria-label="Menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
+  </button>
+  <!-- Burger dropdown -->
+  <div class="burger-menu" id="burgerMenu">
+    <div class="burger-group" id="burgerSupport"><div class="burger-label">Support Project</div></div>
+    <hr class="burger-sep">
+    <a class="burger-link" href="https://www.figma.com/community/plugin/1675995752572535073/iconoteka" target="_blank" rel="noopener">Figma Plugin</a>
+    <a class="burger-link" href="about.html">About</a>
+    <hr class="burger-sep">
+    <div class="burger-ver"><br>Made by Oleg Turbaba</div>
+  </div>
+</header>
+<div class="hero-band">
+  <div class="wall" id="wall" aria-hidden="true"></div>
+</div>
+
+<main>
+
+<!-- headline -->
+<div class="row headline">
+  <div class="g">
+    <h1 class="statement">Iconoteka is a universal, <span class="nobr">open-source</span> library of precisely designed pictograms.</h1>
+    <span class="ver"><span id="libVer" aria-label="Library version"></span><span class="no" aria-hidden="true">01</span></span>
+  </div>
+</div>
+
+<!-- weights: 14 cards, one per weight × style, drawn live from icons.json -->
+<div class="row weights">
+  <div class="g">
+    <div class="stat-block">
+      <h2 class="huge"><span class="num" id="iconCount" data-target="1298">1 298</span> Icons</h2>
+      <p>Iconoteka's extensive icon library supports a wide range of use cases, from rapid prototyping to real-world wayfinding systems.</p>
+    </div>
+    <div class="stat-block">
+      <h2 class="huge"><span class="num" data-target="7">7</span> Weights</h2>
+      <p>Icon portfolio covers all extremes, featuring seven distinct weights: Thin, Ultralight, Light, Regular, Medium, Semibold, and Bold. More than enough to meet any design need.</p>
+    </div>
+    <div class="stat-block">
+      <h2 class="huge"><span class="num" data-target="2">2</span> Styles</h2>
+      <p>Stroke and fill styles work seamlessly together, allowing instant switches from lightweight outline icons to heavy filled variants across all seven weights.</p>
+    </div>
+    <div class="stat-block">
+      <h2 class="huge"><span class="num" id="shapeCount" data-target="14942">14 942</span> Shapes</h2>
+      <p>Combining a wide range of icons multiplied by 7 weights in both fill and stroke styles, Iconoteka offers a massive library to choose from. This enables complete coverage for almost any use case, whether for personal projects, UX/UI design, or software development.</p>
+    </div>
+    <div class="cards full" id="cards"></div>
+  </div>
+</div>
+
+<!-- license (left) + repository (right) -->
+<div class="row license">
+  <div class="g">
+    <div class="half-a">
+      <h3>License</h3>
+      <p>Iconoteka icon library is released under the MIT License. You're free to use them in personal and commercial projects, ship them in closed-source products, no permission needed and no fee. Crediting Iconoteka isn't required, though it's always appreciated.</p>
+      <div class="links">
+        <a class="ghost" href="https://github.com/turbaba/Iconoteka/blob/main/LICENSE" target="_blank" rel="noopener">Read the License</a>
+      </div>
+    </div>
+    <div class="half-b">
+      <h3>Repository</h3>
+      <p>Available directly on GitHub, the repository provides open access to the complete vector source files and updates. This allows developers and designers to easily integrate the icon system, track changelogs, or contribute to its ongoing development.</p>
+      <div class="links">
+        <a class="ghost" href="https://github.com/turbaba/Iconoteka" target="_blank" rel="noopener">GitHub Repository</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- facts -->
+<div class="row">
+  <div class="g">
+    <p class="label full">Features<span class="no" aria-hidden="true">02</span></p>
+    <div class="facts">
+      <div data-icon="grid"><h3>24-Point Grid</h3><p>All icons are constructed on a 24px grid system, ensuring crisp pixel alignment for straight lines at 24px, 48px, 96px, and larger multiples. This baseline structure guarantees smooth integration alongside other popular icon libraries.</p></div>
+      <div data-icon="eye"><h3>Advanced Optics</h3><p>Advanced optical compensation is applied throughout Iconoteka. Principles such as deliberate overshoots, density-based weight modularity, and optical stroke compensations give the system its refined execution and set it apart from conventional icon sets.</p></div>
+      <div data-icon="circle"><h3>Universality</h3><p>Built around geometric principles and high visual clarity, Iconoteka integrates effortlessly into varied digital environments. Its universal design language preserves legibility across products and industries that require high contrast and structural consistency.</p></div>
+      <div data-icon="layers"><h3>Bracketing System</h3><p>A specialized bracketing system ensures structural integrity across all weights, from Thin to Bold. Unlike typical stroke-based icon libraries that simply scale outlines, this technique preserves legibility and visual balance at every weight extreme.</p></div>
+      <div data-icon="user"><h3>Design Approach</h3><p>Iconoteka is built upon years of multidisciplinary practice across graphic design, iconography, and typeface design. The result is an adaptable, highly organized icon system crafted with meticulous attention to optical balance and long-term utility.</p></div>
+      <div data-icon="cube"><h3>System Architecture</h3><p>Through a structured metaphor hierarchy, 5° geometric angle rule, tiered corner rounding, and modular component architecture, Iconoteka guarantees complete structural consistency. This rigor yields a scalable, adaptable library for large-scale production.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- author -->
+<div class="row author">
+  <div class="g">
+    <p class="label full">Author<span class="no" aria-hidden="true">03</span></p>
+    <div class="photo half-a" id="authorPhoto"><img src="media/turbaba.jpg" alt="Oleg Turbaba" width="800" height="600" loading="lazy" decoding="async"></div>
+    <div class="half-b">
+      <p class="bio">Oleg Turbaba is a multidisciplinary designer specializing in the intersection of brand identity, digital products, and visual experiences. Brand Design Director at <a class="handle nobr" href="https://clay.global" target="_blank" rel="noopener">Clay Global</a> and author of Iconoteka.</p>
+      <p class="author-contact">For enquiries, collaborations, interviews, or sponsorships, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
+      <div class="links author-links">
+        <a class="ghost" href="https://www.instagram.com/turbaba/" target="_blank" rel="noopener">Instagram</a>
+        <a class="ghost" href="https://www.linkedin.com/in/oleg-turbaba-35438828/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="ghost" href="https://www.behance.net/turbaba" target="_blank" rel="noopener">Behance</a>
+        <a class="ghost site" href="https://turbaba.com" target="_blank" rel="noopener">turbaba.com</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- in use: six 16:9 slots for photos or videos of Iconoteka in the wild -->
+<div class="row inuse">
+  <div class="g">
+    <div class="slider full" id="gallery"></div>
+    <p class="inuse-text">Share your work, mention <a class="handle" href="https://www.instagram.com/iconoteka/" target="_blank" rel="noopener">@iconoteka</a> on LinkedIn, X, or Instagram when presenting your projects.</p>
+    <div class="slider-nav">
+      <button type="button" id="slidePrev" aria-label="Previous"></button>
+      <button type="button" id="slideNext" aria-label="Next"></button>
+    </div>
+  </div>
+</div>
+
+<!-- timeline -->
+<div class="row">
+  <div class="g">
+    <p class="label full">Project Timeline<span class="no" aria-hidden="true">04</span></p>
+    <ol class="tl">
+      <li><time>Sep 2026</time><b>v<span class="v">2.0.1</span></b><span class="n">1 298 icons</span><span class="w">7 weights, 2 styles</span><span class="d"><strong>Version 2 release.</strong> Fully reworked icon library, 7 weights in 2 styles, new website, Figma plugin, MIT license, GitHub repository</span></li>
+      <li><time>26 Aug 2026</time><b></b><span class="n">1 298 icons</span><span class="w">7 weights, 2 styles</span><span class="d">Every icon redrawn from scratch as clean vectors: seven weights, stroke and fill</span></li>
+      <li><time>15 Mar 2021</time><b>v<span class="v">1.0.2</span></b><span class="n">1 040 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Updated icons</span></li>
+      <li><time>17 Jun 2019</time><b>v<span class="v">1.0.1</span></b><span class="n">388 icons</span><span class="w">4 weights, 2 styles</span><span class="d">iconoteka.com launched</span></li>
+      <li><time>14 Jun 2019</time><b></b><span class="n">388 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Public beta released</span></li>
+      <li><time>9 Mar 2019</time><b>v<span class="v">1.0.0</span></b><span class="n">237 icons</span><span class="w">4 weights, 2 styles</span><span class="d">8 styles, global rework, revisions, Sport and Nature added</span></li>
+      <li><time>28 Jul 2018</time><b>v<span class="v">0.2.0</span></b><span class="n">716 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Bold stroke and fill, rework</span></li>
+      <li><time>3 Jun 2018</time><b>v<span class="v">0.1.4</span></b><span class="n">715 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Bold stroke and fill styles</span></li>
+      <li><time>24 Apr 2018</time><b>v<span class="v">0.1.3</span></b><span class="n">309 icons</span><span class="w">2 weights</span><span class="d">New categories added</span></li>
+      <li><time>4 Mar 2018</time><b>v<span class="v">0.1.2</span></b><span class="n">227 icons</span><span class="w">2 weights</span><span class="d">All icons categorised</span></li>
+      <li><time>3 Mar 2018</time><b>v<span class="v">0.1.1</span></b><span class="n">226 icons</span><span class="w">2 weights</span><span class="d">First public version</span></li>
+      <li><time>20 Sep 2017</time><b></b><span class="n">13 icons</span><span class="w"></span><span class="d">Started the project</span></li>
+      <li><time>24 May 2016</time><b></b><span class="n">3 icons</span><span class="w"></span><span class="d">Idea was born</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- request: full width, above the footer -->
+<div class="row request">
+  <div class="g">
+    <div class="request-box">
+      <h3>Request an Icon</h3>
+      <div class="request-body">
+        <p>If you haven’t found what you were looking for or need a specific icon for your project, enter the icon name below. It goes into the production queue.</p>
+        <form id="requestForm" autocomplete="off">
+          <input type="text" id="requestInput" placeholder="Icon name" aria-label="Icon name" maxlength="80"/>
+          <button class="primary" type="submit" id="requestBtn">Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="g">
+    <div class="footer-icon" id="footerIcon" aria-hidden="true"></div>   <!-- one random icon, text colour, new on every load -->
+    <div class="footer-group f-lib">
+      <h4>Library</h4>
+      <nav>
+        <a href="https://github.com/turbaba/Iconoteka/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+        <a href="https://github.com/turbaba/Iconoteka" target="_blank" rel="noopener">GitHub Repository</a>
+        <a href="https://www.figma.com/community/plugin/1675995752572535073/iconoteka" target="_blank" rel="noopener">Figma Plugin</a>
+        <a href="https://www.dropbox.com/scl/fo/7g41zwngx13ys4wr0sl3b/ACU4p5Ya1mCY1JYoQi-u9qE?rlkey=3krjlxfzftxt5fubh3elerut2&amp;dl=0" target="_blank" rel="noopener">Download Press Kit</a>
+      </nav>
+    </div>
+    <div class="footer-group f-sup">
+      <h4>Support</h4>
+      <nav id="footerSupport"></nav>
+    </div>
+    <div class="footer-group f-fol">
+      <h4>Follow</h4>
+      <nav>
+        <a href="https://www.instagram.com/iconoteka/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.pinterest.com/turbaba/iconoteka/" target="_blank" rel="noopener">Pinterest</a>
+        <a href="https://www.are.na/oleg-turbaba/iconoteka" target="_blank" rel="noopener">Are.na</a>
+        <a href="https://x.com/iconoteka" target="_blank" rel="noopener">X</a>
+      </nav>
+    </div>
+    <div class="footer-group f-contact">
+      <h4>Contact</h4>
+      <p>For enquiries, collaborations, interviews, or sponsorships, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
+    </div>
+    <div class="footer-copy">© 2016–2026 Oleg Turbaba.<br> All rights reserved.</div>
+  </div>
+</footer>
+<div id="toast"></div>
+<div class="grid-overlay" id="gridOverlay" hidden aria-hidden="true"><div class="g"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+<script>
+let toastTimer = null;
+function showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('visible'), 1800); }
+
+
+// Reveal on scroll: every direct child of a content row (labels, texts, stat rows, the weight grid, the slider,
+// the timeline…) and every footer group fades in and rises the first time it comes into view. Siblings in the
+// same row are staggered by 90 ms. The hero wall is left alone — it has its own motion.
+(() => {
+  // the timeline reveals ROW BY ROW, the weight grid CELL BY CELL and Features ITEM BY ITEM (each li / .card / feature is its own target; the containers are not)
+  const targets = [...document.querySelectorAll('main .row .g > *:not(.tl):not(.cards):not(.facts), .tl li, .facts > *, footer .footer-icon, footer .footer-group, footer .footer-copy')];
+  const prep = el => { el.classList.add('reveal'); const i = [...el.parentElement.children].indexOf(el); el.style.transitionDelay = (el.matches('.tl li, .card, .facts > *') ? 0 : i * 90) + 'ms'; };
+  targets.forEach(prep);
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || /noreveal/.test(location.search);   // ?noreveal = dev switch for screenshots
+  window.revealMore = els => { els.forEach(prep); targets.push(...els); if (still) els.forEach(el => el.classList.add('in')); else els.forEach(el => io.observe(el)); };   // targets built after load (the weight grid cells)
+  if (still) { targets.forEach(el => el.classList.add('in')); return; }
+  // anything already above the viewport (page restored mid-scroll, anchor jump) is shown without animation
+  targets.forEach(el => { if (el.getBoundingClientRect().bottom < 0) el.classList.add('now', 'in'); });
+  // blocks entering from the top edge (scrolling up) appear at once; only blocks rising from below animate
+  const io = new IntersectionObserver(entries => { let row = 0; entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    if (e.boundingClientRect.top < 0) e.target.classList.add('now');
+    if (e.target.matches('.tl li, .facts > *')) e.target.style.transitionDelay = (row++ * 90) + 'ms';   // rows / feature items that come into view together cascade 90 ms apart; one arriving alone shows at once
+    if (e.target.matches('.card')) e.target.style.transitionDelay = (row++ * 60) + 'ms';     // grid cells: 60 ms apart, left to right, top row then bottom
+    e.target.classList.add('in'); io.unobserve(e.target);
+  }); }, { threshold: 0.05 });
+  const footerEls = targets.filter(el => el.closest('footer'));
+  targets.forEach(el => { if (!el.classList.contains('stat-block') && !footerEls.includes(el)) io.observe(el); });   // stat rows reveal with their counters
+  // the footer reveals as one unit — icon, groups and © staggered together — when the footer itself comes into view
+  const fio = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { footerEls.forEach(el => el.classList.add('in')); fio.disconnect(); } }, { threshold: 0.05 });
+  fio.observe(document.querySelector('footer'));
+  // safety net: at the very bottom of the page everything left is shown
+  window.addEventListener('scroll', () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) targets.forEach(el => el.classList.add('in')); }, { passive: true });
+})();
+
+// Counters: the four stat numbers count up from 0 ONE AFTER ANOTHER the first time the block scrolls into
+// view (1.4 s each, eased, staggered by 1 s; instant under prefers-reduced-motion).
+const fmt = n => Math.round(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, '\u2009');
+const nums = [...document.querySelectorAll('.stat-block .num')];
+let countersData = false, countersSeen = false, countersDone = false;
+const runCounters = () => {
+  if (countersDone || !countersData || !countersSeen) return; countersDone = true;
+  const targets = nums.map(n => +n.dataset.target);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { nums.forEach((n, i) => n.textContent = fmt(targets[i])); document.querySelectorAll('.stat-block').forEach(b => b.classList.add('in')); return; }
+  const dur = 1400, stagger = 1000;   // each number takes 1.4 s; the next one starts 1 s after the previous began
+  const blocks = [...document.querySelectorAll('.stat-block')];
+  blocks.forEach((b, i) => { b.style.transitionDelay = (i * stagger) + 'ms'; b.classList.add('in'); });   // each row fades in as its number starts counting
+  const t0 = performance.now();
+  const tick = now => {
+    let running = false;
+    nums.forEach((n, i) => {
+      const p = Math.min(1, Math.max(0, (now - t0 - i * stagger) / dur)), e = 1 - Math.pow(1 - p, 3);   // ease-out cubic
+      n.textContent = fmt(targets[i] * e);
+      if (p < 1) running = true;
+    });
+    if (running) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+};
+const countersReady = () => { countersData = true; runCounters(); };
+nums.forEach(n => n.textContent = '0');
+new IntersectionObserver((entries, obs) => { if (entries.some(e => e.isIntersecting)) { countersSeen = true; runCounters(); if (countersDone) obs.disconnect(); } }, { threshold: 0 })
+  .observe(document.querySelector('.stat-block'));   // fires as soon as the first row shows
+
+// Header: hides while scrolling down, reappears as soon as the user scrolls up (every breakpoint)
+(() => {
+  const hdr = document.querySelector('header'); let last = scrollY, acc = 0;
+  window.addEventListener('scroll', () => {
+    const y = scrollY, dy = y - last; last = y;
+    if (y <= hdr.offsetHeight) { hdr.classList.remove('hidden'); acc = 0; return; }   // near the top it is always shown
+    acc = (dy > 0) === (acc > 0) ? acc + dy : dy;                                    // travel in the current direction
+    if (acc > 12) { hdr.classList.add('hidden'); document.getElementById('burgerMenu').classList.remove('open'); }
+    else if (acc < -4) hdr.classList.remove('hidden');
+  }, { passive: true });
+})();
+
+// Mobile burger (same as the homepage)
+const burgerBtn = document.getElementById('burgerBtn');
+const burgerMenu = document.getElementById('burgerMenu');
+burgerBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  const rect = burgerBtn.querySelector('svg').getBoundingClientRect();   // align to the glyph, not the padded button
+  burgerMenu.style.top = (rect.bottom + 6) + 'px';
+  burgerMenu.style.left = 'auto';
+  burgerMenu.style.right = (document.documentElement.clientWidth - rect.right) + 'px';
+  burgerMenu.classList.toggle('open');
+});
+document.addEventListener('click', () => burgerMenu.classList.remove('open'));
+
+// G toggles the layout-grid overlay (ignored while typing in a field); Escape closes the burger
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') burgerMenu.classList.remove('open');
+  if (e.key !== 'g' && e.key !== 'G') return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const t = e.target; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  const o = document.getElementById('gridOverlay'); o.hidden = !o.hidden;
+});
+
+// Weight cards: one icon in every weight × style. Numbering is
+// the library's frame convention (1x = stroke, 2x = fill, x = weight 1–7).
+const WEIGHTS = ['thin','ultralight','light','regular','medium','semibold','bold'];
+const LABELS  = ['Thin','Ultralight','Light','Regular','Medium','Semibold','Bold'];
+const SAMPLE = 'arrow_in_circle_up_right';
+fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pages serves max-age=600 + ETag, so repeat visits get a 304 instead of the 8 MB file again
+  const icons = data.icons || [];
+  const ver = data.meta && data.meta.version ? 'v' + data.meta.version.split('.').map(x => String(+x)).join('.') : '';   // 02.00.05 → v2.0.5, the timeline's form
+  if (ver) document.getElementById('libVer').textContent = ver;
+  const bv = document.querySelector('.burger-ver'); if (bv) bv.innerHTML = '<span><span class="ver-num">' + ver + '</span><br>Made by Oleg Turbaba</span>';   // the burger's footer line, as on the homepage
+  const uniq = new Set(icons.map(i => i.name.split('-')[0])).size;
+  document.getElementById('iconCount').dataset.target = uniq;   // the counter below writes the text
+  const icon = icons.find(i => i.name.split('-')[0] === SAMPLE) || icons.find(i => WEIGHTS.every(w => i.variants[w] && i.variants[w].stroke && i.variants[w].fill));
+  if (!icon) return;
+  const pathOf = (ic, w, style) => { const v = ic.variants[w] && ic.variants[w][style]; return typeof v === 'string' ? v : (v && (v.d || v.path)) || ''; };
+  // shapes = every drawn variant of every unique icon (weights × styles that exist), summed
+  const seen = new Set(); let shapes = 0;
+  icons.forEach(i => { const b = i.name.split('-')[0]; if (seen.has(b)) return; seen.add(b); WEIGHTS.forEach(w => ['stroke', 'fill'].forEach(st => { if (pathOf(i, w, st)) shapes++; })); });
+  document.getElementById('shapeCount').dataset.target = shapes;
+  countersReady();
+  const card = (w, i, style, n) =>
+    '<div class="card" data-w="' + w + '" data-style="' + style + '"><small class="n">' + n + '</small>' +
+    '<small class="code">' + LABELS[i].charAt(0) + (style === 'stroke' ? 'S' : 'F') + '</small>' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + pathOf(icon, w, style) + '"/></svg>' +
+    '<small class="cap">' + LABELS[i] + '<span class="st"> ' + (style === 'stroke' ? 'Stroke' : 'Fill') + '</span></small></div>';
+  const arrow = (name, fallback) => { const ic = icons.find(i => i.name.split('-')[0] === name); return ic ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + pathOf(ic, 'regular', 'stroke') + '"/></svg>' : fallback; };
+  document.getElementById('slidePrev').innerHTML = arrow('arrow_left', '←');
+  document.getElementById('slideNext').innerHTML = arrow('arrow_right', '→');
+  // Header wall of tiles — the Brand file's "icons grid rules":
+  //   colours: the 13 starred palette colours; Beige 1.5× as often as the rest, Transparent Ox only three times
+  //   in the whole grid, everything else about equally; no same colour up / down / left / right;
+  //   icons: no similar icons touching, diagonals included ("similar" = same icon or same family, e.g. arrow_*).
+  //   Foreground follows each colour's logo-mark rule. Black is skipped on this page (user's call, 2026-09-05).
+  //   No hover behaviour on the tiles (user's call); click opens the icon in the library.
+  const WALL_COLORS = [
+    { bg: '#ffc3dc', fg: '#141414', w: 1,   name: 'Pink' },
+    { bg: '#f7f2e9', fg: '#141414', w: 1.5, name: 'Beige' },
+    { bg: '#1e39c9', fg: '#ffffff', w: 1,   name: 'Blue' },
+    { bg: '#061584', fg: '#ffffff', w: 1,   name: 'Dark Blue' },
+    { bg: '#12ab57', fg: '#141414', w: 1,   name: 'Green' },
+    { bg: '#979c1a', fg: '#141414', w: 1,   name: 'Moss Olive' },
+    { bg: '#cfbc13', fg: '#141414', w: 1,   name: 'Golden Olive' },
+    { bg: '#febd32', fg: '#141414', w: 1,   name: 'Yellow' },
+    { bg: '#f04c1a', fg: '#ffffff', w: 1,   name: 'Red' },
+    { bg: '#673726', fg: '#ffffff', w: 1,   name: 'Warm Sepia' },
+    { bg: '#a25624', fg: '#ffffff', w: 1,   name: 'Transparent Ox', max: 3 },
+    { bg: '#81808b', fg: '#ffffff', w: 1,   name: 'Cool Pewter' },
+  ];
+  const wall = document.getElementById('wall');
+  const wallPool = icons.filter(i => WEIGHTS.every(w => pathOf(i, w, 'stroke') && pathOf(i, w, 'fill')));   // any weight, any style
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const nameOf = ic => { const b = ic.name.split('-')[0]; return b.charAt(0).toUpperCase() + b.slice(1).replace(/_/g, ' '); };
+  const familyOf = ic => ic.name.split('-')[0].split('_')[0];   // arrow_in_circle → arrow
+  let wallCols = 1;
+  const tiles = () => [...wall.children];
+  const neighbours = (i, diagonal) => {
+    const ts = tiles(), r = Math.floor(i / wallCols), c = i % wallCols, out = [];
+    for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+      if (!dr && !dc) continue;
+      if (!diagonal && dr && dc) continue;
+      const rr = r + dr, cc = c + dc;
+      if (rr < 0 || cc < 0 || cc >= wallCols) continue;
+      const t = ts[rr * wallCols + cc]; if (t) out.push(t);
+    }
+    return out;
+  };
+  const weightedPick = list => { const total = list.reduce((a, c) => a + c.w, 0); let x = Math.random() * total; for (const c of list) { x -= c.w; if (x <= 0) return c; } return list[list.length - 1]; };
+  const roll = (t, i, iconOnly) => {   // iconOnly: keep the tile's colour and shape (used while the page is scrolled, so the parallax blend is not reset)
+    const sides = neighbours(i, false).map(n => n.dataset.color);
+    const used = tiles().filter(n => n !== t && n.dataset.color === 'Transparent Ox').length;
+    const colours = WALL_COLORS.filter(c => !sides.includes(c.name) && !(c.max && used >= c.max));
+    const col = weightedPick(colours.length ? colours : WALL_COLORS);
+    const around = neighbours(i, true);
+    const bases = around.map(n => n.dataset.base), fams = around.map(n => n.dataset.fam);
+    let ic, tries = 0;
+    do { ic = pick(wallPool); tries++; } while (tries < 40 && (bases.includes(ic.name.split('-')[0]) || fams.includes(familyOf(ic))));
+    const shape = pick(['', 'round', 'soft']), style = pick(['stroke', 'fill']), weight = pick(WEIGHTS);   // all seven weights
+    if (!iconOnly) {
+      t.className = 'tile-w' + (shape ? ' ' + shape : ''); t.style.setProperty('--c', col.bg); t.style.setProperty('--fg', col.fg);
+      t.dataset.bg = col.bg; t.dataset.fg = col.fg; t.dataset.color = col.name;
+    }
+    t.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + pathOf(ic, weight, style) + '"/></svg>';
+    t.dataset.base = ic.name.split('-')[0]; t.dataset.fam = familyOf(ic);   // no title: nothing happens on hover
+  };
+  const wallGeometry = () => {
+    const cs = getComputedStyle(wall), tile = parseFloat(cs.getPropertyValue('--tile')), gap = parseFloat(cs.getPropertyValue('--wgap'));
+    const band = wall.parentElement, bandH = parseFloat(getComputedStyle(band).getPropertyValue('--band-h'));
+    return { cols: Math.max(1, Math.floor((band.getBoundingClientRect().width - 40 + gap) / (tile + gap))),   // 20px inset each side
+             rows: Math.max(1, Math.floor((bandH - 20 + gap) / (tile + gap))) };                             // full rows that fit the target height
+  };
+  let wallRows = 0;
+  const buildWall = () => {
+    const g = wallGeometry(); wallCols = g.cols; const rows = g.rows; wallRows = rows;
+    wall.style.setProperty('--cols', wallCols);
+    wall.innerHTML = '';
+    for (let i = 0; i < wallCols * rows; i++) wall.appendChild(document.createElement('div'));
+    tiles().forEach((t, i) => {
+      roll(t, i);
+      t.addEventListener('click', () => { location.href = './#' + encodeURIComponent(t.dataset.base); });   // open it in the library
+    });
+  };
+  // Scroll parallax: every tile has its own random depth, sideways drift, spin and fate (grow or shrink).
+  // As the page scrolls the wall drifts DOWN and apart: tiles lag behind the scroll, sink toward the headline and
+  // some overlap it (behind the text), while they spin and grow or shrink. Fully opaque throughout. Off under prefers-reduced-motion.
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionOf = t => {
+    if (!t._m) t._m = { d: 0.6 + Math.random(), x: (Math.random() * 2 - 1) * 1.4, r: (Math.random() * 2 - 1), grow: Math.random() < 0.3, fast: Math.random() < 0.4 };   // fast: some shrinkers go three times quicker
+    return t._m;
+  };
+  let ticking = false, flightDone = false;
+  const parallax = () => {
+    ticking = false;
+    const band = wall.parentElement, h = (band.offsetHeight + 78) * 6;   // the flight takes six band-heights of scroll
+    if (scrollY >= h) { if (flightDone) return; flightDone = true; } else flightDone = false;   // past the end: one last frame, then idle until the user scrolls back up
+    const sy = Math.min(scrollY, h) / 6 * 0.9;                           // a sixth of the speed, less 10%; frozen once the flight is complete (tiles used to keep drifting sideways for the whole page)
+    const p = Math.min(1, Math.max(0, scrollY / h));                     // 0 at the top, 1 when the flight is complete
+    // pass 1: every tile's intended motion
+    const ts = [...wall.children], items = ts.map(t => {
+      const m = motionOf(t), k = Math.min(1, p * m.d * 2.5);   // size changes faster than position
+      const ty = sy * (0.5 + 0.9 * m.d), tx = sy * 0.9 * m.x, rot = sy * 0.12 * m.r;   // tiles sink with the scroll — the deep ones reach the headline
+      const sc = m.grow ? 1 + k * 0.45 : Math.max(0, 1 - k * 1.1 * (m.fast ? 3 : 1));   // growers stay modest (≤1.45×); the rest shrink away, some 3× faster
+      const a = rot * Math.PI / 180, f = Math.abs(Math.cos(a)) + Math.abs(Math.sin(a));   // a rotated square reaches f× its half-size
+      return { t, tx, ty, rot, sc, f, cx: t.offsetLeft + t.offsetWidth / 2 + tx, cy: t.offsetTop + t.offsetHeight / 2 + ty, h: t.offsetWidth / 2 };
+    });
+    // pass 2: no two neighbouring tiles may intersect (user: "icons intersecting each other" is a bug) — where their
+    // boxes would touch, both shrink just enough to keep a hair of space; two rounds settle chains
+    for (let round = 0; round < 2; round++) for (let i = 0; i < items.length; i++) {
+      const a = items[i], r = Math.floor(i / wallCols), c = i % wallCols;
+      for (const [dr, dc] of [[0, 1], [1, -1], [1, 0], [1, 1]]) {   // each pair once: right, and the three below
+        const rr = r + dr, cc = c + dc; if (cc < 0 || cc >= wallCols) continue;
+        const b = items[rr * wallCols + cc]; if (!b) continue;
+        const ea = a.h * a.sc * a.f, eb = b.h * b.sc * b.f, dx = Math.abs(a.cx - b.cx), dy = Math.abs(a.cy - b.cy);
+        if (dx < ea + eb && dy < ea + eb) { const q = Math.max(0, (Math.max(dx, dy) - 2) / (ea + eb)); a.sc *= q; b.sc *= q; }
+      }
+    }
+    for (const it of items) {
+      const t = it.t, sc = it.sc;
+      t.style.transform = 'translate(' + it.tx.toFixed(1) + 'px,' + it.ty.toFixed(1) + 'px) rotate(' + it.rot.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      // shrinking tiles blend into the page colour as they go: full colour at scale 1, page colour at scale 0
+      const keep = Math.round(Math.max(0, Math.min(1, sc)) * 100);
+      t.style.setProperty('--c', keep >= 100 ? t.dataset.bg : 'color-mix(in srgb, ' + t.dataset.bg + ' ' + keep + '%, var(--bg))');
+      t.style.setProperty('--fg', keep >= 100 ? t.dataset.fg : 'color-mix(in srgb, ' + t.dataset.fg + ' ' + keep + '%, var(--bg))');
+      t.style.zIndex = Math.round(sc * 100);   // bigger tiles pass over smaller ones; no shadows (user)
+    }
+  };
+  if (!reduced) window.addEventListener('scroll', () => { if (document.hidden) return parallax(); if (!ticking) { ticking = true; requestAnimationFrame(parallax); } }, { passive: true });
+  buildWall();
+  // Resize: the grid's space-between absorbs small width changes on its own. Only when the number of columns or rows
+  // actually changes do we rebuild — and then once, after the resize has settled — so the wall doesn't flicker.
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { const g = wallGeometry(); if (g.cols !== wallCols || g.rows !== wallRows) buildWall(); }, 150);
+  });
+  let wallSeen = true; new IntersectionObserver(es => es.forEach(e => { wallSeen = e.isIntersecting; })).observe(wall.parentElement);
+  setInterval(() => { if (!wallSeen || document.hidden) return; const n = wall.children.length; if (n) { const i = Math.floor(Math.random() * n); roll(wall.children[i], i, scrollY > 0); } }, 220);   // the wall keeps changing on its own — only while on screen; once scrolled only the ICON changes, the colour stays (user: a re-roll reset the blended background)
+  // feature icons: one library icon in regular FILL above each feature title (pick icons that have a fill variant)
+  document.querySelectorAll('.facts [data-icon]').forEach(f => {
+    if (f.dataset.icon === 'circle') { f.insertAdjacentHTML('afterbegin', '<svg class="f-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>'); return; }   // a plain filled disc (the library's circle is a ring)
+    const ic = icons.find(i => i.name.split('-')[0] === f.dataset.icon); if (!ic) return;
+    // the library's fill shape: Regular, or whichever weight carries it (the eye's fill is stored under Thin in this build)
+    const d = pathOf(ic, 'regular', 'fill') || WEIGHTS.map(w => pathOf(ic, w, 'fill')).find(Boolean) || '';
+    f.insertAdjacentHTML('afterbegin', '<svg class="f-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="' + d + '"/></svg>');
+  });
+  // footer: one random icon in the FILL style (regular), top-left of the footer
+  const fi = document.getElementById('footerIcon'), fIcon = pick(icons.filter(i => pathOf(i, 'regular', 'fill')));
+  if (fi && fIcon) fi.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + pathOf(fIcon, 'regular', 'fill') + '"/></svg>';   // no title: a tooltip would pop up mid-hover
+  // hover: swap to another random fill icon and KEEP it (no return to the load icon — user)
+  if (fi && fIcon) {
+    const fillPool = icons.filter(i => pathOf(i, 'regular', 'fill')); let current = fIcon;
+    fi.addEventListener('mouseenter', () => {
+      if (window.matchMedia('(max-width: 480px)').matches) return;   // the phone uses the tap below (touch fires mouseenter first)
+      swap();
+    });
+    fi.addEventListener('click', () => { if (window.matchMedia('(max-width: 480px)').matches) swap(); });   // phone: a random icon on tap (user)
+    function swap() { const ic = pick(fillPool.filter(i => i !== current)); if (!ic) return; current = ic; fi.querySelector('path').setAttribute('d', pathOf(ic, 'regular', 'fill')); }
+  }
+  const grid = document.getElementById('cards');
+  grid.innerHTML =
+    WEIGHTS.map((w, i) => card(w, i, 'stroke', 11 + i)).join('') +
+    WEIGHTS.map((w, i) => card(w, i, 'fill', 21 + i)).join('');
+  // Entering the grid picks one random icon for this visit. Each cell you hover switches to that icon in the cell's
+  // own weight and style and stays switched, so sweeping left to right repaints the row cell by cell. Half a second
+  // after the pointer LEAVES the grid the arrow comes back everywhere; the next visit picks a new icon.
+  const pool = icons.filter(i => i !== icon && WEIGHTS.every(w => pathOf(i, w, 'stroke') && pathOf(i, w, 'fill')));   // only icons with all 14 variants
+  const cells = [...grid.querySelectorAll('.card')];
+  if (window.revealMore) revealMore(cells);   // the cells reveal one by one
+  const phone = () => window.matchMedia('(max-width: 480px)').matches;   // on the phone a tap just re-rolls that one cell (user); no visit logic, no reset
+  // Icon colour follows the icon: the whole grid shares ONE colour at rest (dealt at load from the light half of the
+  // brand palette — no Black, Dark Blue, Warm Sepia, Transparent Ox, Cool Pewter; no Beige on the light theme),
+  // and each visit deals ONE new colour with its icon, so every cell showing the visit icon shows the visit colour.
+  const CARD_COLORS = WALL_COLORS.filter(c => ['Pink', 'Beige', 'Blue', 'Green', 'Moss Olive', 'Golden Olive', 'Yellow', 'Red'].includes(c.name));
+  const usable = () => CARD_COLORS.filter(c => !(c.name === 'Beige' && document.documentElement.getAttribute('data-theme') === 'light'));
+  const dealColour = avoid => { const free = usable().filter(c => c !== avoid); return pick(free.length ? free : usable()); };
+  const restColour = dealColour(null);
+  let visitColour = null;
+  const tint = (c, col) => c.style.setProperty('--ic', col.bg);
+  cells.forEach(c => tint(c, restColour));
+  const paint = (c, ic) => c.querySelector('path').setAttribute('d', pathOf(ic, c.dataset.w, c.dataset.style));
+  let visitIcon = null, resetTimer = null;
+  const pickVisit = () => { if (!visitIcon && pool.length) { visitIcon = pool[Math.floor(Math.random() * pool.length)]; visitColour = dealColour(restColour); } return visitIcon; };   // one icon + one colour per visit
+  const resetAll = () => { visitIcon = null; visitColour = null; cells.forEach(c => { paint(c, icon); tint(c, restColour); }); };   // the arrow and its colour come back together
+  const armReset = () => { clearTimeout(resetTimer); resetTimer = setTimeout(resetAll, 500); };   // 0.5 s after the pointer leaves the grid
+  cells.forEach(c => {
+    c.addEventListener('mouseenter', () => { if (phone()) return; clearTimeout(resetTimer); paint(c, pickVisit()); tint(c, visitColour); });   // back inside within the second: same icon and colour, no reset
+    c.addEventListener('click', () => { if (phone()) { paint(c, pick(pool)); tint(c, dealColour(null)); jackpot(); return; } paint(c, pickVisit()); tint(c, visitColour); armReset(); });   // tablet touch: the visit logic; phone: a random icon AND colour for this cell (user)
+  });
+  grid.addEventListener('mouseleave', armReset);
+  // Phone game: tap the cells until all 14 share one colour — confetti in the palette colours bursts from the grid (once per
+  // all-same state; it re-arms when the colours differ again). Off under prefers-reduced-motion.
+  let celebrated = true;   // the load state is already all one colour — it only counts once the colours have differed and come back together
+  function jackpot() {
+    const set = new Set(cells.map(c => c.style.getPropertyValue('--ic'))), same = set.size === 1 && !set.has(restColour.bg);   // all one colour, and NOT the colour the page loaded with (user)
+    if (!same) { celebrated = false; return; }
+    if (celebrated || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    celebrated = true;
+    const r = grid.getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + r.height / 2;
+    const layer = document.createElement('div');
+    layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden';
+    document.body.appendChild(layer);
+    for (let i = 0; i < 110; i++) {
+      const d = document.createElement('i'), col = pick(WALL_COLORS).bg, w = 5 + Math.random() * 5, h = w * (1 + Math.random());
+      d.style.cssText = 'position:absolute;left:' + ox + 'px;top:' + oy + 'px;width:' + w + 'px;height:' + h + 'px;background:' + col + ';border-radius:' + (Math.random() < 0.3 ? '50%' : '1px') + ';will-change:transform';
+      layer.appendChild(d);
+      const a = Math.random() * Math.PI * 2, v = 160 + Math.random() * 260, dx = Math.cos(a) * v, dy = Math.sin(a) * v - 120, fall = 360 + Math.random() * 300, spin = (Math.random() * 2 - 1) * 720;
+      d.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: 'translate(' + dx * 0.7 + 'px,' + dy * 0.7 + 'px) rotate(' + spin * 0.5 + 'deg)', opacity: 1, offset: 0.45 },
+        { transform: 'translate(' + dx + 'px,' + (dy + fall) + 'px) rotate(' + spin + 'deg)', opacity: 0 }
+      ], { duration: 1500 + Math.random() * 900, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
+    }
+    setTimeout(() => layer.remove(), 2600);
+  }
+}).catch(() => countersReady());   // without the data the stat rows still count up from their static targets and reveal
+
+// In use — six slides. Fill GALLERY with { type: 'image' | 'video', src, alt, poster } in order; empty
+// slides render as blank tiles so the slider is complete before there are six entries.
+const GALLERY = [   // src = base name; the slider builds a 960 / 1440 / 1920 srcset from it
+  { type: 'image', src: 'media/inuse-01', alt: 'Product interface screens and a map app using Iconoteka icons' },
+  { type: 'image', src: 'media/inuse-02', alt: 'Yellow book cover with a globe icon from Iconoteka' },
+  { type: 'image', src: 'media/inuse-03', alt: 'Festival billboard with large blue and orange pictograms' },
+  { type: 'image', src: 'media/inuse-04', alt: 'Recycling category objects labelled with material icons' },
+  { type: 'image', src: 'media/inuse-05', alt: 'Phone settings screen with coloured icon tiles' },
+  { type: 'image', src: 'media/inuse-06', alt: 'Airport arrivals board with an aeroplane pictogram' },
+];
+const slider = document.getElementById('gallery');
+slider.innerHTML = Array.from({ length: 6 }, (_, i) => {
+  const g = GALLERY[i];
+  if (!g) return '<div class="slot" aria-hidden="true"></div>';
+  const media = g.type === 'video'
+    ? '<video src="' + g.src + '" autoplay muted loop playsinline' + (g.poster ? ' poster="' + g.poster + '"' : '') + '></video>'
+    : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w" sizes="(max-width: 860px) 100vw, min(1152px, 100vw)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; phones get ~60 KB instead of ~200
+  return '<div class="slot">' + media + '</div>';
+}).join('');
+const prevBtn = document.getElementById('slidePrev'), nextBtn = document.getElementById('slideNext');
+let dragX = null, dragLeft = 0, dragged = false, lastX = 0, lastT = 0, vel = 0;
+const slideStep = () => slider.querySelector('.slot').getBoundingClientRect().width + parseFloat(getComputedStyle(slider).columnGap || getComputedStyle(slider).gap || 32);
+// snap after a touch or wheel scroll settles (drag has its own release handler)
+let settle = null; slider.addEventListener('scroll', () => { if (dragX !== null) return; clearTimeout(settle); settle = setTimeout(() => goTo(slideIndex()), 140); }, { passive: true });
+const slideIndex = () => Math.round(slider.scrollLeft / slideStep());
+const goTo = i => slider.scrollTo({ left: Math.max(0, Math.min(5, i)) * slideStep(), behavior: 'smooth' });
+prevBtn.addEventListener('click', () => goTo(slideIndex() - 1));
+nextBtn.addEventListener('click', () => goTo(slideIndex() + 1));
+const syncArrows = () => { const i = slideIndex(); prevBtn.disabled = i <= 0; nextBtn.disabled = i >= 5; };
+slider.addEventListener('scroll', syncArrows, { passive: true }); syncArrows();
+// drag to scroll with the mouse; snapping is suspended while dragging and re-applied on release
+const DRAG_GAIN = 1.4;   // the slides move further than the hand, so a short pull is enough
+slider.addEventListener('mousedown', e => { dragX = e.clientX; dragLeft = slider.scrollLeft; dragged = false; lastX = e.clientX; lastT = performance.now(); vel = 0; slider.classList.add('dragging'); e.preventDefault(); });
+window.addEventListener('mousemove', e => {
+  if (dragX === null) return;
+  const dx = e.clientX - dragX; if (Math.abs(dx) > 3) dragged = true;
+  slider.scrollLeft = dragLeft - dx * DRAG_GAIN;
+  const now = performance.now(); if (now - lastT > 0) vel = (e.clientX - lastX) / (now - lastT); lastX = e.clientX; lastT = now;   // px per ms
+});
+window.addEventListener('mouseup', () => {
+  if (dragX === null) return; dragX = null; slider.classList.remove('dragging');
+  const start = Math.round(dragLeft / slideStep()), moved = slider.scrollLeft - dragLeft;   // + = pulled left = next
+  if (Math.abs(vel) > 0.25) goTo(start + (vel < 0 ? 1 : -1));        // a flick: one slide in the direction of the hand
+  else if (Math.abs(moved) > 40) goTo(start + (moved > 0 ? 1 : -1));   // any real pull (40px of travel) turns one slide, no need to drag half a slide
+  else goTo(start);                                                    // a nudge: stay
+});
+slider.addEventListener('click', e => { if (dragged) { e.preventDefault(); e.stopPropagation(); } }, true);   // a drag is not a click
+
+// Request an icon — same endpoint the library uses for requests
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbypc8jSM4yoJzqBXbdo05pxNupgwz7h4k8ypMtaIFGeCpUvm0tUlAWVy7qIOkdwtGm-sA/exec';
+document.getElementById('requestForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = document.getElementById('requestInput'), btn = document.getElementById('requestBtn');
+  const q = input.value.trim().toLowerCase(); if (!q || btn.disabled) return;
+  // the status shows INSIDE the button (user): Sending… → Sent / Failed, then the default label after 2 s
+  const status = (t, done) => { btn.textContent = t; btn.disabled = true; if (done) setTimeout(() => { btn.textContent = 'Request'; btn.disabled = false; }, 2000); };
+  status('Sending…', false);
+  fetch(SHEET_URL, { method: 'POST', body: JSON.stringify({ type: 'request', query: q, source: 'about', userAgent: navigator.userAgent }) })
+    .then(() => { status('Sent', true); input.value = ''; })
+    .catch(() => status('Failed, try again', true));
+});
+</script>
+<script src="support.js?v=3"></script>
+</body>
+</html>
