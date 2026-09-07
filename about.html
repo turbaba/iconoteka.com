@@ -104,7 +104,7 @@
 html { scroll-behavior: smooth; }
 /* no ligatures or contextual alternates in running text */
 html, body { margin: 0; font-family: 'WebSans', 'Inter', sans-serif; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; font-size: 16px; line-height: 24px; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
-html, body { overflow-x: hidden; }   /* the flying hero tiles must never widen the page (iOS ignores a body-only clip) */
+html, body { overflow-x: clip; }   /* the flying hero tiles must never widen the page. clip, NOT hidden: overflow-x:hidden on html/body turns them into scroll containers in iOS Safari and the sticky header scrolls away for good */
 a { color: inherit; }
 
 /* ── header: same bar as the library ─────────────────────────────────────── */
@@ -177,7 +177,7 @@ main, footer { position: relative; z-index: 1; }
 .half-a p, .half-b p { margin-bottom: var(--stack); }
 /* License and Repository: larger title and text than the feature items */
 .license .half-a, .license .half-b { padding-bottom: var(--block); border-bottom: 1px solid var(--rule); }   /* two rules, one under each half; the halves stretch to one height so the lines align */
-.license h3, .request h3 { font-size: 28px; line-height: 34px; margin-bottom: var(--sp-2); }
+.license h3, .request h3, .support-title { font-size: 28px; line-height: 34px; margin-bottom: var(--sp-2); }   /* Support Project title = the License title (no section number, not counted) */
 .license p, .request p { font-size: 20px; line-height: 30px; max-width: 46ch; }
 /* request: a brand-Blue box, white text (the Blue card's logo-mark rule), input white at 10%, white pill button.
    Exception to the spacing system: 100px above and below (neighbour padding --sec + own padding = --exc) */
@@ -240,13 +240,38 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .card .code { right: 10px; top: 8px; }
 .card .cap { left: 10px; bottom: 8px; }
 
+/* support section: the menu's intro (large body) on the left half, the three brand cards full width; reachable at about.html#support */
+.row.license { padding-bottom: 0; } .row.support { padding-top: calc(var(--block) + 50px); }   /* License/Repository and Support read as ONE group: 98px from the rules to the Support title (--block + 50, user) instead of a full 130px section gap */
+.row[id] { scroll-margin-top: 90px; }   /* anchors land below the sticky header */
+.support-title { grid-column: 1 / 5; margin: 0; }   /* title in the left third … */
+.support-lead { grid-column: 5 / 13; font-size: 20px; line-height: 30px; margin: 0 0 calc(var(--block) - 10px); max-width: none; }   /* … text in the right two thirds (user); cards 38px below (--block − 10, user) */
+#supportCards { max-width: none; justify-self: stretch; gap: var(--gut); --col: calc((100% - 2 * var(--gut)) / 3); grid-template-columns: repeat(3, minmax(0, 1fr)); }   /* three equal cards on the page grid (the panel's pill-width trick is not used here) */
+#supportCards .support-card { border-radius: var(--r-md); padding: 24px; gap: 0; min-height: 0; align-items: stretch; text-align: left; margin: 0; }   /* compact (user) */
+@media (min-width: 1200px) { #supportCards .support-card { aspect-ratio: 1 / 1; } }   /* square cards from 1200 up, where the grid is at its full 1152px and a square (356px) holds the content; narrower desktops and stacked tablet/phone cards keep their natural height */
+#supportCards .support-card h4 { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; justify-content: flex-start; margin: 0 0 var(--sp-1); }
+#supportCards .support-card p { font-size: 16px; line-height: 24px; margin: 0 0 var(--sp-2); }   /* the page's body text */
+#supportCards .support-cta { margin-top: auto; padding-top: 0; }
+#supportCards .support-tiers, #supportCards .support-list { list-style: none; margin: 0 0 var(--sp-2); padding: 0; font-size: 16px; line-height: 24px; }
+#supportCards .support-tiers li { display: grid; grid-template-columns: 1fr auto; column-gap: var(--sp-2); padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .25); }
+#supportCards .support-tiers li:last-child { border-bottom: 1px solid rgba(255, 255, 255, .25); }
+#supportCards .support-tiers .t-price { white-space: nowrap; }   /* no tnum: it widens the spaces around the slash in this face */
+#supportCards .support-tiers .t-note { grid-column: 1 / -1; font-size: 14px; line-height: 21px; opacity: .8; }
+#supportCards .support-list { margin-bottom: 0; }
+#supportCards .support-list li { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "net btn" "addr btn"; column-gap: var(--sp-2); align-items: center; padding: 8px 0; border-top: 1px solid rgba(255, 255, 255, .25); }
+#supportCards .support-list li:last-child { border-bottom: 1px solid rgba(255, 255, 255, .25); }
+#supportCards .support-list .a-net { grid-area: net; } #supportCards .support-list .a-net b { font-weight: 600; }
+#supportCards .support-list .a-addr { grid-area: addr; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 13px; line-height: 20px; opacity: .6; }   /* semi-transparent (user) */
+#supportCards .support-list button { grid-area: btn; height: 32px; padding: 0 14px; border: none; border-radius: var(--r-sm); background: rgba(255, 255, 255, .16); color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: background var(--t-fast), color var(--t-fast); }
+#supportCards .support-list button:hover { background: #ffffff; color: #141414; }
+#supportCards .p-short, #supportCards .a-short { display: none; }   /* the narrow-column forms ("$1/mo", 5…4 address) switch on ≤1100 */
+#supportCards .support-list button.copied { background: var(--brand); color: #141414; }
 /* features 3×2 */
 .facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--block) var(--gut); }   /* 3 × 2, full width; the label's own --stack is the only gap above, as for Author and the timeline */
 .facts .f-icon { width: 64px; height: 64px; fill: var(--fc, currentColor); display: block; margin-bottom: var(--sp-2); position: relative; left: -8px; }   /* brand colour per feature; 8px LEFT = optical compensation (user, 2026-09-06 — an 8px-right try was reversed) */
 .facts [data-icon="grid"] { --fc: #a25624; }   /* Transparent Ox (user swapped it from Blue) */
 .facts [data-icon="eye"] { --fc: #febd32; }   /* Yellow */
 .facts [data-icon="circle"] { --fc: #12ab57; }   /* Green */
-.facts [data-icon="layers"] { --fc: #f04c1a; }   /* Red */
+.facts [data-icon="bar_chart"] { --fc: #f04c1a; }   /* Red */
 .facts [data-icon="user"] { --fc: #673726; }   /* Warm Sepia on the light theme … */
 [data-theme="dark"] .facts [data-icon="user"] { --fc: #ffc3dc; }   /* … Pink on dark, where it reads */
 .facts [data-icon="cube"] { --fc: #979c1a; }   /* Moss Olive */
@@ -335,6 +360,7 @@ footer button.copied { color: var(--brand); }
 }
 @media (max-width: 1100px) {
   .tl .w { grid-column: 7 / 10; } .tl .d { grid-column: 10 / 13; }   /* "7 weights, 2 styles" no longer wraps; the note keeps three columns */
+  #supportCards .p-long, #supportCards .a-long, #supportCards .a-net .net { display: none; } #supportCards .p-short, #supportCards .a-short { display: inline; }   /* narrow cards: "$1/mo", a 5…4 address and the ticker only, so every row stays on one line (user) */
 }
 @media (max-width: 700px) {
   .card .cap .st { display: none; }   /* cells are ~80px: caption = weight name only (the S/F code carries the style) */
@@ -354,6 +380,7 @@ footer button.copied { color: var(--brand); }
   .card:nth-child(8) { grid-column-start: 1; }
   .license .half-a, .license .half-b { grid-column: 1 / -1; }   /* License above Repository, each with its own rule */
   .license .half-a { margin-bottom: var(--block); }
+  #supportCards { grid-template-columns: 1fr; } #supportCards .support-card:last-child { grid-column: auto; }
   .tl li { grid-template-columns: 1fr 2fr; grid-template-areas: "t d" "n d" "v d"; row-gap: 0; align-content: start; }   /* timeline: date, count, version stacked on the left; the note on the right; no weights cell */
   .tl time { grid-area: t; } .tl .n { grid-area: n; } .tl b { grid-area: v; } .tl .d { grid-area: d; } .tl .w { display: none; }
   .f-lib { grid-column: 1 / 4; } .f-sup { grid-column: 4 / 7; } .f-fol { grid-column: 1 / 4; } .f-contact { grid-column: 4 / 7; }   /* footer 2 × 2: Library | Support, Follow | Contact */
@@ -377,6 +404,7 @@ footer button.copied { color: var(--brand); }
   .ver { grid-column: 1 / -1; grid-row: 1; justify-self: stretch; display: flex; justify-content: space-between; margin: 0 0 var(--stack); }   /* above the intro: version at the LEFT, 01 at the right (user) */
   .ver .no { margin-left: 0; }
   .inuse-text { grid-column: 1 / 5; }
+  .support-title { grid-column: 1 / 3; } .support-lead { grid-column: 3 / 7; }   /* tablet: 1/3 + 2/3 of the 6-col grid */
   .slider-nav { grid-column: 5 / 7; }
   .hero-band { --band-h: 360px; }
   .wall { --tile: 68px; --wgap: 14px; }
@@ -394,7 +422,10 @@ footer button.copied { color: var(--brand); }
   .hero-band { --band-h: 300px; }
   .wall { --tile: 60px; --wgap: 12px; }
   .g { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .full, .facts, .stat-block, .inuse-text, .half-a, .half-b { grid-column: 1 / -1; }
+  .full, .facts, .stat-block, .inuse-text, .half-a, .half-b, .support-lead, .support-title { grid-column: 1 / -1; }
+  .support-title { margin-bottom: var(--sp-2); }
+  #supportCards { grid-template-columns: 1fr; } #supportCards .support-card:last-child { grid-column: auto; }
+  #supportCards .support-card { padding: 20px; }
   .footer-icon { grid-column: 1 / -1; grid-row: auto; }
   .footer-copy { grid-column: 1 / -1; grid-row: auto; }
   .footer-copy br { display: none; }   /* © on one line on the phone (user) */
@@ -405,7 +436,7 @@ footer button.copied { color: var(--brand); }
   .card:nth-child(8) { grid-column-start: 1; }
   .card small { font-size: 10px; line-height: 13px; }   /* smaller cell texts on the phone (user) */
   .card .n { left: 6px; top: 5px; } .card .code { right: 6px; top: 5px; } .card .cap { left: 6px; bottom: 5px; }
-  .author .bio, .author-contact, .inuse-text, .request-box .request-body p, .license p { font-size: 16px; line-height: 24px; letter-spacing: 0; }   /* phone: the standard body size for the author, gallery, License/Repository and request copy (user) */
+  .author .bio, .author-contact, .inuse-text, .request-box .request-body p, .license p, .support-lead { font-size: 16px; line-height: 24px; letter-spacing: 0; }   /* phone: the standard body size for the author, gallery, License/Repository and request copy (user) */
   .request-box h3 { font-size: 22px; line-height: 28px; }   /* smaller request title on the phone (user) */
   .slider { grid-row: 1; } .slider-nav { grid-row: 2; justify-content: flex-end; margin-top: var(--block); } .inuse-text { grid-row: 3; margin-top: var(--stack); }   /* arrows above the text, at the right (user) */
   .tl li { display: block; }   /* phone: a small title (date + version) with the note under it; count and weights skipped (user) */
@@ -521,15 +552,24 @@ footer button.copied { color: var(--brand); }
   </div>
 </div>
 
+<!-- support: the Support Project menu's content as a page section, shareable at #support -->
+<div class="row support" id="support">
+  <div class="g">
+    <h3 class="support-title">Support Project</h3>
+    <p class="support-lead" id="supportLead"></p>
+    <div class="support-cards full" id="supportCards"></div>
+  </div>
+</div>
+
 <!-- facts -->
-<div class="row">
+<div class="row" id="features">
   <div class="g">
     <p class="label full">Features<span class="no" aria-hidden="true">02</span></p>
     <div class="facts">
-      <div data-icon="grid"><h3>24-Point Grid</h3><p>All icons are constructed on a 24px grid system, ensuring crisp pixel alignment for straight lines at 24px, 48px, 96px, and larger multiples. This baseline structure guarantees smooth integration alongside other popular icon libraries.</p></div>
-      <div data-icon="eye"><h3>Advanced Optics</h3><p>Advanced optical compensation is applied throughout Iconoteka. Principles such as deliberate overshoots, density-based weight modularity, and optical stroke compensations give the system its refined execution and set it apart from conventional icon sets.</p></div>
       <div data-icon="circle"><h3>Universality</h3><p>Built around geometric principles and high visual clarity, Iconoteka integrates effortlessly into varied digital environments. Its universal design language preserves legibility across products and industries that require high contrast and structural consistency.</p></div>
-      <div data-icon="layers"><h3>Bracketing System</h3><p>A specialized bracketing system ensures structural integrity across all weights, from Thin to Bold. Unlike typical stroke-based icon libraries that simply scale outlines, this technique preserves legibility and visual balance at every weight extreme.</p></div>
+      <div data-icon="eye"><h3>Advanced Optics</h3><p>Advanced optical compensation is applied throughout Iconoteka. Principles such as deliberate overshoots, density-based weight modularity, and optical stroke compensations give the system its refined execution and set it apart from conventional icon sets.</p></div>
+      <div data-icon="grid"><h3>24-Point Grid</h3><p>All icons are constructed on a 24px grid system, ensuring crisp pixel alignment for straight lines at 24px, 48px, 96px, and larger multiples. This baseline structure guarantees smooth integration alongside other popular icon libraries.</p></div>
+      <div data-icon="bar_chart"><h3>Analytics</h3><p>To improve the quality of the library, Iconoteka products collect a small set of anonymous signals: activated icons, searches that return no results, icon requests, and the interface theme. This information helps clarify usage patterns, detect coverage gaps, and continuously refine the system.</p></div>
       <div data-icon="user"><h3>Design Approach</h3><p>Iconoteka is built upon years of multidisciplinary practice across graphic design, iconography, and typeface design. The result is an adaptable, highly organized icon system crafted with meticulous attention to optical balance and long-term utility.</p></div>
       <div data-icon="cube"><h3>System Architecture</h3><p>Through a structured metaphor hierarchy, 5° geometric angle rule, tiered corner rounding, and modular component architecture, Iconoteka guarantees complete structural consistency. This rigor yields a scalable, adaptable library for large-scale production.</p></div>
     </div>
@@ -537,7 +577,7 @@ footer button.copied { color: var(--brand); }
 </div>
 
 <!-- author -->
-<div class="row author">
+<div class="row author" id="author">
   <div class="g">
     <p class="label full">Author<span class="no" aria-hidden="true">03</span></p>
     <div class="photo half-a" id="authorPhoto"><img src="media/turbaba.jpg" alt="Oleg Turbaba" width="800" height="600" loading="lazy" decoding="async"></div>
@@ -567,7 +607,7 @@ footer button.copied { color: var(--brand); }
 </div>
 
 <!-- timeline -->
-<div class="row">
+<div class="row" id="timeline">
   <div class="g">
     <p class="label full">Project Timeline<span class="no" aria-hidden="true">04</span></p>
     <ol class="tl">
@@ -707,14 +747,16 @@ new IntersectionObserver((entries, obs) => { if (entries.some(e => e.isIntersect
 
 // Header: hides while scrolling down, reappears as soon as the user scrolls up (every breakpoint)
 (() => {
-  const hdr = document.querySelector('header'); let last = scrollY, acc = 0;
+  const hdr = document.querySelector('header'); let last = scrollY, down = 0;
+  const show = () => { hdr.classList.remove('hidden'); down = 0; };
   window.addEventListener('scroll', () => {
-    const y = scrollY, dy = y - last; last = y;
-    if (y <= hdr.offsetHeight) { hdr.classList.remove('hidden'); acc = 0; return; }   // near the top it is always shown
-    acc = (dy > 0) === (acc > 0) ? acc + dy : dy;                                    // travel in the current direction
-    if (acc > 12) { hdr.classList.add('hidden'); document.getElementById('burgerMenu').classList.remove('open'); }
-    else if (acc < -4) hdr.classList.remove('hidden');
+    const y = Math.max(0, scrollY), dy = y - last; last = y;   // Math.max: iOS rubber-banding reports negative values
+    if (dy < 0 || y <= hdr.offsetHeight) return show();          // ANY upward movement, or being near the top, shows the header at once (user: always, every breakpoint)
+    down += dy;
+    if (down > 12) { hdr.classList.add('hidden'); document.getElementById('burgerMenu').classList.remove('open'); }
   }, { passive: true });
+  window.addEventListener('resize', show);                       // orientation change / iOS toolbar collapse: never leave it hidden
+  window.addEventListener('touchstart', () => { last = Math.max(0, scrollY); }, { passive: true });   // a new touch starts a fresh measurement
 })();
 
 // Mobile burger (same as the homepage)
@@ -1036,6 +1078,6 @@ document.getElementById('requestForm').addEventListener('submit', e => {
     .catch(() => status('Failed, try again', true));
 });
 </script>
-<script src="support.js?v=3"></script>
+<script src="support.js?v=10"></script>
 </body>
 </html>

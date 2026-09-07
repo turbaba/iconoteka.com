@@ -851,7 +851,7 @@ async function loadIcons() {
     }
     // No hash (or it matched nothing): open a random Popular icon so the panel is never empty
     if (!panelIcon) {
-      const pop = iconsData.filter(i => i.category === 'Popular');
+      const pop = iconsData.filter(i => i.popular);   // Popular is a flag on the real entry (02.00.08)
       if (pop.length) openPanel(pop[Math.floor(Math.random() * pop.length)]);
     }
   } catch(e) {
@@ -863,11 +863,11 @@ function buildSidebar() {
   iconsData.forEach(i => { const c = i.category || 'Other'; map[c] = (map[c] || 0) + 1; });
   const SIDEBAR_PINNED = ['Interface', 'Files & Data', 'Hardware', 'Map'];
   const pinnedEntries = SIDEBAR_PINNED.filter(k => map[k]).map(k => [k, map[k]]);
-  const sorted = [...pinnedEntries, ...Object.entries(map).filter(([name]) => name !== 'Popular' && !SIDEBAR_PINNED.includes(name)).sort(([a],[b]) => a.localeCompare(b))];
-  const total = iconsData.filter(i => i.category !== 'Popular').length;
+  const sorted = [...pinnedEntries, ...Object.entries(map).filter(([name]) => !SIDEBAR_PINNED.includes(name)).sort(([a],[b]) => a.localeCompare(b))];
+  const total = iconsData.length;   // no duplicate Popular entries any more
   const catList = document.getElementById('catList');
   catList.innerHTML = '';
-  const popularCount = iconsData.filter(i => i.category === 'Popular').length;
+  const popularCount = iconsData.filter(i => i.popular).length;
   [['Popular', popularCount], ...sorted].forEach(([name, count]) => {
     const el = document.createElement('div');
     const catKey = name;
@@ -1014,7 +1014,6 @@ function getFiltered() {
   }
   const words = q.split(/\s+/).filter(w => w.length > 0);
   const scored = iconsData
-    .filter(i => i.category !== 'Popular')
     .map(i => {
       // Multi-word: score each word and take the minimum (all words must match)
       if (words.length > 1) {
@@ -1096,7 +1095,7 @@ function render() {
   state.focusedIdx = -1;
   _fastUpdatePending = false;
   const icons = getFiltered();
-  const countable = icons.filter(i => i.category !== 'Popular').length;
+  const countable = icons.length;
   const countEl = document.getElementById('searchCount');
   countEl.textContent = countable;
   countEl.classList.toggle('visible', countable > 0 && !!state.search);
@@ -1117,6 +1116,11 @@ function render() {
   } else {
     const grouped = {};
     icons.forEach(i => { const c = i.category || 'Other'; (grouped[c] = grouped[c] || []).push(i); });
+    // Popular: the curated set from meta.popular (in its order), falling back to the flag; the icons stay in their real categories too
+    const byId = {}; icons.forEach(i => { byId[i.name.split('-')[0]] = i; });
+    let pop = (meta.popular || []).map(id => byId[id]).filter(Boolean);
+    if (!pop.length) pop = icons.filter(i => i.popular);
+    if (pop.length) grouped['Popular'] = pop;
     // Pinned order first, rest alphabetical
     const PINNED = ['Popular', 'Interface', 'Files & Data', 'Hardware', 'Map'];
     const pinned = PINNED.filter(k => grouped[k]).map(k => [k, grouped[k]]);
@@ -1860,7 +1864,7 @@ function requestIcon(query) {
   sendAnalytics({ type: 'request', query: q, userAgent: navigator.userAgent });
   const main = document.getElementById('main');
   const empty = main.querySelector('.empty');
-  if (empty) empty.innerHTML = 'Request sent — we\'ll look into it!';
+  if (empty) { const esc = q.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); empty.innerHTML = '\u201c' + esc + '\u201d added to the request list'; }   // e.g. “Icon Name” added to the request list
 }
 
 function trackDownload(icon, action, sz) {
@@ -1981,11 +1985,11 @@ function buildTabCatDropdown() {
   dropdown.innerHTML = '';
   const map = {};
   iconsData.forEach(i => { const c = i.category || 'Other'; map[c] = (map[c] || 0) + 1; });
-  const total = iconsData.filter(i => i.category !== 'Popular').length;
+  const total = iconsData.length;   // no duplicate Popular entries any more
   const SIDEBAR_PINNED = ['Interface', 'Files & Data', 'Hardware', 'Map'];
   const pinnedEntries = SIDEBAR_PINNED.filter(k => map[k]).map(k => [k, map[k]]);
-  const sorted = [...pinnedEntries, ...Object.entries(map).filter(([name]) => name !== 'Popular' && !SIDEBAR_PINNED.includes(name)).sort(([a],[b]) => a.localeCompare(b))];
-  const popularCount = iconsData.filter(i => i.category === 'Popular').length;
+  const sorted = [...pinnedEntries, ...Object.entries(map).filter(([name]) => !SIDEBAR_PINNED.includes(name)).sort(([a],[b]) => a.localeCompare(b))];
+  const popularCount = iconsData.filter(i => i.popular).length;
   [['Popular', popularCount], ...sorted].forEach(([name, count]) => {
     const catKey = name;
     const btn = document.createElement('button');
@@ -2189,6 +2193,6 @@ loadIcons();
 })();
 
 </script>
-<script src="support.js"></script>
+<script src="support.js?v=10"></script>
 </body>
 </html>

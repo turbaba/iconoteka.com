@@ -5,16 +5,22 @@
 const SUPPORT_WAYS = [
   { key: 'patreon', title: 'Patreon', tag: '',
     text: 'Ongoing support. Choose a comfortable tier and help the project\u2019s development.',
-    cta: 'Subscribe on Patreon', url: 'https://www.patreon.com/c/iconoteka' },
+    cta: 'Subscribe on Patreon', url: 'https://www.patreon.com/c/iconoteka',
+    tiers: [                                     // the campaign's published tiers (About page section only)
+      { name: 'Project Supporter', price: '$1 / month' },
+      { name: 'Contributor',       price: '$10 / month' },
+      { name: 'Partner',           price: '$100 / month' },
+      { name: 'Sponsorship',       price: '$500 / month' },   // listed without its description (user)
+    ] },
   { key: 'kofi', title: 'Ko-fi', tag: '',
     text: 'A one-time tip. A simple way to contribute, with no subscription attached.',
     cta: 'Tip on Ko-fi', url: 'https://ko-fi.com/iconoteka' },
   { key: 'crypto', title: 'Crypto', tag: '',
     text: 'Direct support in crypto, as a one-time transaction. Tap a network to copy the address.',
     addresses: [                                 // paste wallet addresses to switch the buttons on
-      { label: 'BTC',  address: 'bc1qpc5wq2qeepn3dyqx20709duvx7eknlfgegxw83' },
-      { label: 'ETH',  address: '0x15254E45F78A2a7BC8b5A74a36414B35236aea4e' },
-      { label: 'USDT', address: 'TQQ8eVurpxkYNT4bxzLRaitNjtc4eeBDS5' },
+      { label: 'BTC',  network: 'Bitcoin',        address: 'bc1qpc5wq2qeepn3dyqx20709duvx7eknlfgegxw83' },
+      { label: 'ETH',  network: 'Ethereum',       address: '0x15254E45F78A2a7BC8b5A74a36414B35236aea4e' },
+      { label: 'USDT', network: 'Tether, TRC-20', address: 'TQQ8eVurpxkYNT4bxzLRaitNjtc4eeBDS5' },
     ] },
 ];
 
@@ -35,11 +41,9 @@ const SUPPORT_WAYS = [
   };
   const live = (w) => w.url ? w.url.trim() : (w.addresses || []).some(a => a.address && a.address.trim());
 
-  // ── mega-panel (desktop + tablet) ─────────────────────────────────────────
-  if (btn) {
-    const backdrop = document.createElement('div'); backdrop.className = 'support-backdrop'; backdrop.id = 'supportBackdrop';
-    const panel = document.createElement('div'); panel.className = 'support-panel'; panel.id = 'supportPanel'; panel.setAttribute('aria-hidden', 'true');
-    const cards = SUPPORT_WAYS.map(w => {
+  // ── the three cards: used by the header panel and by the About page's Support section ──
+  const INTRO = 'Iconoteka is a free, open-source project. Become a contributor with a subscription or a one-time donation to support its development.';
+  const cardsHTML = () => SUPPORT_WAYS.map(w => {
       let action;
       if (w.addresses) {
         action = '<div class="support-addr">' + w.addresses.map(a => (a.address && a.address.trim())
@@ -52,15 +56,41 @@ const SUPPORT_WAYS = [
       }
       return '<div class="support-card" data-way="' + w.key + '"><h4>' + w.title + (w.tag ? '<small>' + w.tag + '</small>' : '') + '</h4><p>' + w.text + '</p>' + action + '</div>';
     }).join('');
+  const wireCards = root => {
+    root.querySelectorAll('[data-addr]').forEach(b => b.addEventListener('click', () => copyAddr(b.dataset.label, b.dataset.addr, b)));
+    root.querySelectorAll('[data-track]').forEach(a => a.addEventListener('click', () => track(a.dataset.track)));
+    root.querySelectorAll('[data-placeholder]').forEach(b => b.addEventListener('click', () => toast('Coming soon')));
+  };
+  // About page (#support): the same three ways in a DETAILED form — Patreon lists its tiers, Crypto lists every
+  // network with its address and a Copy button; the header panel keeps the compact cards
+  const short = a => a.length > 18 ? a.slice(0, 9) + '…' + a.slice(-6) : a;   // long form
+  const tiny = a => a.slice(0, 5) + '…' + a.slice(-4);                          // narrow columns (≤1100): one line
+  const price = p => '<span class="p-long">' + p + '</span><span class="p-short">' + p.replace(' / month', '/mo') + '</span>';
+  const detailedHTML = () => SUPPORT_WAYS.map(w => {
+    let body = '<p>' + w.text + '</p>', action = '';
+    if (w.tiers) body += '<ul class="support-tiers">' + w.tiers.map(t => '<li><span class="t-name">' + t.name + '</span><span class="t-price">' + price(t.price) + '</span>' + (t.note ? '<span class="t-note">' + t.note + '</span>' : '') + '</li>').join('') + '</ul>';
+    if (w.addresses) body += '<ul class="support-list">' + w.addresses.map(a => (a.address && a.address.trim())
+        ? '<li><span class="a-net"><b>' + a.label + '</b> <span class="net">' + (a.network || '') + '</span></span><code class="a-addr" title="' + a.address.trim() + '"><span class="a-long">' + short(a.address.trim()) + '</span><span class="a-short">' + tiny(a.address.trim()) + '</span></code><button type="button" data-addr="' + a.address.trim() + '" data-label="' + a.label + '">Copy</button></li>'
+        : '<li><span class="a-net"><b>' + a.label + '</b></span><button type="button" data-placeholder="' + a.label + '">Copy</button></li>').join('') + '</ul>';
+    else action = (w.url && w.url.trim())
+        ? '<a class="support-cta" href="' + w.url + '" target="_blank" rel="noopener" data-track="' + w.title + '">' + w.cta + '</a>'
+        : '<button type="button" class="support-cta" data-placeholder="' + w.title + '">' + w.cta + '</button>';
+    return '<div class="support-card" data-way="' + w.key + '"><h4>' + w.title + '</h4>' + body + action + '</div>';
+  }).join('');
+  const sec = document.getElementById('supportCards'), lead = document.getElementById('supportLead');
+  if (lead) lead.textContent = INTRO;
+  if (sec) { sec.innerHTML = detailedHTML(); wireCards(sec); }
+
+  // ── mega-panel (desktop + tablet) ─────────────────────────────────────────
+  if (btn) {
+    const backdrop = document.createElement('div'); backdrop.className = 'support-backdrop'; backdrop.id = 'supportBackdrop';
+    const panel = document.createElement('div'); panel.className = 'support-panel'; panel.id = 'supportPanel'; panel.setAttribute('aria-hidden', 'true');
     panel.innerHTML =
       '<div class="support-inner"><div class="support-grid">' +
-      '<div class="support-intro">' +
-      '<p>Iconoteka is a free, open-source project. Become a contributor with a subscription or a one-time donation to support its development.</p></div>' +
-      '<div class="support-cards">' + cards + '</div></div></div>';
+      '<div class="support-intro"><p>' + INTRO + '</p></div>' +
+      '<div class="support-cards">' + cardsHTML() + '</div></div></div>';
     document.body.appendChild(backdrop); document.body.appendChild(panel);
-    panel.querySelectorAll('[data-addr]').forEach(b => b.addEventListener('click', () => copyAddr(b.dataset.label, b.dataset.addr, b)));
-    panel.querySelectorAll('[data-track]').forEach(a => a.addEventListener('click', () => track(a.dataset.track)));
-    panel.querySelectorAll('[data-placeholder]').forEach(b => b.addEventListener('click', () => toast('Coming soon')));
+    wireCards(panel);
 
     let openTimer = null, closeTimer = null, isOpen = false;
     const place = () => { const h = document.querySelector('header').getBoundingClientRect(); panel.style.top = (h.bottom - 1) + 'px'; backdrop.style.top = h.bottom + 'px'; };
