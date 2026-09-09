@@ -91,16 +91,17 @@
 
 @font-face { font-family: 'WebSans'; src: url('fonts/websans.woff2') format('woff2'); font-weight: 400 600; font-display: swap; }   /* the page's text face: a 122-glyph subset (ASCII + the punctuation the page uses), weights 400–600 only, kern + tnum only, neutral names, no glyph names, no hinting — 11 KB */
 * { box-sizing: border-box; }
-:root { --rule: color-mix(in srgb, var(--text) 30%, transparent); }   /* every page rule: the text colour at 30% */
+:root { --rule: color-mix(in srgb, var(--text) 30%, transparent); --rule-solid: #b8b8b8; }   /* every page rule: the text colour at 30%. --rule-solid is that same value FLATTENED against the page background — opaque, so lines can never double where two of them meet (user) */
+[data-theme="dark"] { --rule-solid: #5e5e5e; }
 /* vertical spacing system — an 8px scale with four roles; only these tokens are used for vertical space
    --major  hero → headline, stat rows → weight grid          130 / 96 / 64
    --sec    section padding (top and bottom), footer padding   65 / 48 / 32  (= --major / 2)
    --block  between blocks inside a section, text → media      48 / 40 / 32
    --stack  label → content, title → text, text → buttons      24 / 24 / 16
    plus two fixed steps: --sp-1 8px (small title → text, list gaps) and --sp-2 16px (large title → text, icon → title, row padding) */
-:root { --sp-1: 8px; --sp-2: 16px; --stack: 24px; --block: 48px; --sec: 65px; --major: 130px; --gut: 42px; --exc: 100px; --display: clamp(30px, 4.2vw, 60px); }   /* --display: headline statement and the stat numbers */   /* --exc: the one exception — the gap above and below the Missing-an-icon block */   /* --sec is half of --major, so every block-to-block gap is --major (130, per user) */
-@media (max-width: 860px) { :root { --stack: 24px; --block: 40px; --sec: 38px; --major: 76px; --gut: 32px; --exc: 74px; } }   /* tablet: section gaps 20px tighter than before (76 / 38, user) */
-@media (max-width: 480px) { :root { --stack: 16px; --block: 32px; --sec: 32px; --major: 64px; --gut: 20px; --exc: 50px; } }
+:root { --sp-1: 8px; --sp-2: 16px; --stack: 24px; --block: 48px; --sec: 65px; --major: 130px; --gut: 22px; --exc: 100px; --display: clamp(30px, 4.2vw, 60px); }   /* --display: headline statement and the stat numbers */   /* --exc: the one exception — the gap above and below the Missing-an-icon block */   /* --sec is half of --major, so every block-to-block gap is --major (130, per user) */
+@media (max-width: 860px) { :root { --stack: 24px; --block: 40px; --sec: 38px; --major: 76px; --gut: 12px; --exc: 74px; } }   /* tablet: section gaps 20px tighter than before (76 / 38, user) */
+@media (max-width: 480px) { :root { --stack: 16px; --block: 32px; --sec: 32px; --major: 64px; --gut: 8px; --exc: 50px; } }
 html { scroll-behavior: smooth; }
 /* no ligatures or contextual alternates in running text */
 html, body { margin: 0; font-family: 'WebSans', 'Inter', sans-serif; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; font-size: 16px; line-height: 24px; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
@@ -167,9 +168,9 @@ main, footer { position: relative; z-index: 1; }
 /* BETA badge shown again (user 2026-09-06) */
 
 /* ── page grid ────────────────────────────────────────────────────────────── */
-/* Every block is a full-width row; content sits on a 12-column grid, 32px gutters, 1152px max */
+/* Every block is a full-width row; content sits on a 12-column grid, 22px gutters, 1252px max */
 .row { padding: var(--sec) var(--pad); }
-.g   { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); row-gap: 0; max-width: 1152px; margin: 0 auto; }
+.g   { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); row-gap: 0; max-width: 1252px; margin: 0 auto; }   /* 1152 + 100: 50px off each side margin (user took half of the 100 back) */
 .g > * { min-width: 0; }
 .full { grid-column: 1 / -1; }
 .half-a { grid-column: 1 / 7; }
@@ -232,8 +233,8 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .stat-block p { grid-column: 7 / 13; align-self: start; margin: 3px 0 0; padding-top: var(--sp-2); border-top: 1px solid var(--rule); font-size: 20px; line-height: 30px; }   /* same large body size as License / Repository */
 
 /* weight grid: 7×2 stroked cells (1px lines, shared): number top-left, code (TS, RF…) top-right, name bottom-left, icon in a dealt palette colour */
-.cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; padding: 1px; }   /* 1px gaps + 1px padding hold the lines, which each cell draws itself (box-shadow) so the cells can reveal one by one without a tinted block behind them */
-.card { position: relative; aspect-ratio: 1; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px var(--rule); }   /* the grid lines: text colour at 30% */
+.cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-right: 1px solid var(--rule-solid); border-bottom: 1px solid var(--rule-solid); }   /* every line is drawn ONCE and is OPAQUE: each cell owns its top and left border, the grid closes the right and bottom. (Cell box-shadows doubled up in the 1px gaps, so shared lines came out ~51% against 30% outer ones.) */
+.card { position: relative; aspect-ratio: 1; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--rule-solid); border-left: 1px solid var(--rule-solid); }   /* the grid lines: 30% flattened to an opaque grey, one border per edge */
 .card svg { width: 54%; height: 54%; fill: var(--ic, currentColor); display: block; position: relative; top: -3px; }   /* was -5px; moved 2px down (user) */   /* --ic: a brand colour dealt at random (light palette), re-dealt on hover with the icon; switches instantly, no fade (user) */
 .card small { position: absolute; font-size: 12px; line-height: 16px; font-weight: 500; }   /* text colour (the grey try was reverted for the grid — user) */
 .card .n { left: 10px; top: 8px; font-feature-settings: "liga" 0, "calt" 0, "tnum" 1; }
@@ -294,7 +295,8 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .pkg-links a:hover { background: var(--ink); color: var(--bg); } .pkg.pkg-dark .pkg-links a:hover { color: #061584; } .pkg-links a:active { opacity: .6; }
 .pkg-links { display: flex; align-items: center; gap: var(--sp-1); margin-top: var(--sp-2); }
 /* features 3×2 */
-.facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--block) var(--gut); }   /* 3 × 2, full width; the label's own --stack is the only gap above, as for Author and the timeline */
+.facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--block) var(--gut); }
+.facts h3, .facts p { padding-right: 30px; }   /* the text stops 30px short of its column, so with the smaller gutters the columns of copy stay well apart (user) */   /* 3 × 2, full width; the label's own --stack is the only gap above, as for Author and the timeline */
 .facts .f-icon { width: 64px; height: 64px; fill: var(--fc, currentColor); display: block; margin-bottom: var(--sp-2); position: relative; left: -8px; }   /* brand colour per feature; 8px LEFT = optical compensation (user, 2026-09-06 — an 8px-right try was reversed) */
 .facts [data-icon="grid"] { --fc: #a25624; }   /* Transparent Ox (user swapped it from Blue) */
 .facts [data-icon="eye"] { --fc: #febd32; }   /* Yellow */
@@ -323,8 +325,8 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 /* author: 4:3 portrait on the left half, text and links on the right half */
 .photo { aspect-ratio: 4 / 3; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
 .author .half-a, .author .half-b { margin-top: 0; }   /* the label's --stack already separates them */
-.author .half-b { display: flex; flex-direction: column; justify-content: space-between; }   /* text at the top, links at the bottom */
-.author .bio, .author-contact { font-size: 24px; line-height: 32px; letter-spacing: -.01em; }   /* author copy: one step above the large body */
+.author .half-b { display: flex; flex-direction: column; justify-content: space-between; margin-top: -6px; }   /* the bio's CAP HEIGHT lines up with the photo's top edge (measured in a render, not derived: -9 overshot by 3px) */   /* text at the top, links at the bottom */
+.author .bio, .author-contact { font-size: 24px; line-height: 32px; letter-spacing: -.01em; }   /* author copy: one step above the large body (a 20% larger try was reverted) */
 .author .bio { margin: 0 0 var(--stack); }
 .half-b .author-contact { margin: 0 0 var(--block); }   /* .half-b prefix: outranks the generic `.half-b p` margin */
 .author .half-b .links { margin-top: auto; align-items: center; }   /* links stay at the bottom */
@@ -346,6 +348,7 @@ button.primary:disabled { cursor: default; opacity: 1; }   /* while it shows a s
 .tl li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut);   /* the page's 12 columns, so the cells sit on the grid lines */ padding: var(--sp-2) 0; border-bottom: 1px solid var(--rule); font-size: 16px; line-height: 24px; }
 .tl li:last-child { border-bottom: none; }   /* no rule under the last timeline row */
 .tl time { grid-column: 1 / 3; color: var(--text); }
+.tl time .m-short { display: none; }   /* wide screens spell the month out; the 3-letter form takes over when the column gets tight (user) */
 .tl b { grid-column: 3 / 5; }
 .tl .n { grid-column: 5 / 7; }
 .tl .w { grid-column: 7 / 9; }
@@ -354,6 +357,18 @@ button.primary:disabled { cursor: default; opacity: 1; }   /* while it shows a s
 .tl b .v { font-feature-settings: "liga" 0, "calt" 0, "tnum" 1; }
 .tl .d strong { font-weight: inherit; }
 .tl .n { color: var(--text); }
+/* the weights numbers also read as a dot matrix — one column per weight, one row per style. It lives in the
+   COUNT cell, right-aligned, so it ends on the line that closes column 6 and leads into the weights text;
+   every cell's text keeps its own grid line (user) */
+.tl .n { display: flex; align-items: flex-start; gap: 10px; }   /* flex-start: the count sits on the row's first line like every other cell (centring dropped it to the middle of tall rows) */
+.tl .n .dots { display: inline-grid; grid-auto-flow: column; grid-template-rows: repeat(var(--rows), 3px); grid-auto-columns: 3px; gap: 2px; flex: none; margin-left: auto; height: 24px; align-content: center; }   /* one line tall, matrix centred on it */
+.tl .n .dots i { display: block; width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+/* the icon count also reads as a progress bar in the VERSION cell, right-aligned so it ends on the line
+   closing column 4 and leads into the count text; 1 298 icons = full (user) */
+.tl b { display: flex; align-items: flex-start; }   /* no gap: the "v" and the number are separate flex items and a gap would split them */
+.tl b .bar { flex: none; margin-left: auto; padding-left: 10px; box-sizing: content-box; width: 33px; height: 24px; display: flex; align-items: center; }   /* 33px = the 7×2 dot matrix's width (7×3 + 6×2), so bar and matrix read as one family */
+.tl b .bar span { display: block; height: 8px; width: 100%; border-radius: 1.5px; background: var(--rule-solid); }   /* 8px = the matrix's height (2×3 + 2); 1.5px radius = ONE DOT's radius (user) */
+.tl b .bar span i { display: block; height: 100%; width: var(--pct); min-width: 2px; border-radius: 1.5px; background: currentColor; }
 
 footer { border-top: 1px solid var(--border);   /* same line as the header */ padding: var(--sec) var(--pad) calc(var(--sec) + 20px);   /* double space before the footer: one --major above its rule, then the usual padding */ font-size: 14px; line-height: 21px; color: var(--text); }
 footer .g { row-gap: var(--block); align-items: start; }
@@ -373,20 +388,24 @@ footer button { font: inherit; color: inherit; background: none; border: none; p
 footer button.copied { color: var(--brand); }
 .footer-copy { grid-column: 1 / 3; grid-row: 1; white-space: nowrap; color: var(--text-muted); align-self: end; }   /* grey ©, on the groups' row, its baseline on the last links (Download Press Kit, X) */
 
-/* wide screens: the 1152px column looked narrow past ~1600px, so the layout widens in two steps (user) */
+/* wide screens: the column widens in two more steps past 1600 / 2000 (user) */
 @media (min-width: 1600px) {
-  .g { max-width: 1440px; }
-  :root { --gut: 52px; --display: clamp(30px, 4.2vw, 72px); }
+  .g { max-width: 1540px; }
+  :root { --gut: 32px; --display: clamp(30px, 4.2vw, 72px); }
   .wall { --tile: 88px; --wgap: 18px; }
   .hero-band { --band-h: 480px; }
 }
 @media (min-width: 2000px) {
-  .g { max-width: 1680px; }
-  :root { --gut: 60px; --display: clamp(30px, 4.2vw, 84px); }
+  .g { max-width: 1780px; }
+  :root { --gut: 40px; --display: clamp(30px, 4.2vw, 84px); }
   .wall { --tile: 100px; --wgap: 20px; }
   .hero-band { --band-h: 540px; }
 }
+@media (max-width: 1200px) {
+  .tl time .m-long { display: none; } .tl time .m-short { display: inline; }   /* "26 September 2026" no longer fits the two-column date cell */
+}
 @media (max-width: 1100px) {
+  .tl .n .dots, .tl b .bar { display: none; }   /* no room for the matrix or the bar once the columns narrow (user) */
   .tl .w { grid-column: 7 / 10; } .tl .d { grid-column: 10 / 13; }   /* "7 weights, 2 styles" no longer wraps; the note keeps three columns */
   .packages-cards { grid-template-columns: 1fr 1fr; }   /* packages: 4 → 2/2 (user); the title/intro follow the card halves */
   .packages .support-title { grid-column: 1 / 7; } .packages .support-lead { grid-column: 7 / 13; }
@@ -411,7 +430,7 @@ footer button.copied { color: var(--brand); }
   .license .half-a, .license .half-b { grid-column: 1 / -1; }   /* License above Repository, each with its own rule */
   .license .half-a { margin-bottom: var(--block); }
   #supportCards { grid-template-columns: 1fr; } #supportCards .support-card:last-child { grid-column: auto; }
-  .packages-cards { grid-template-columns: 1fr 1fr; }   /* tablet: still 2 × 2 */
+  .packages-cards { grid-template-columns: 1fr; }   /* tablet: one card per row (user) */
   .packages .support-title { grid-column: 1 / 4; } .packages .support-lead { grid-column: 4 / 7; }
   .tl li { grid-template-columns: 1fr 2fr; grid-template-areas: "t d" "n d" "v d"; row-gap: 0; align-content: start; }   /* timeline: date, count, version stacked on the left; the note on the right; no weights cell */
   .tl time { grid-area: t; } .tl .n { grid-area: n; } .tl b { grid-area: v; } .tl .d { grid-area: d; } .tl .w { display: none; }
@@ -431,6 +450,7 @@ footer button.copied { color: var(--brand); }
   .half-a { grid-column: 1 / 4; }
   .half-b { grid-column: 4 / 7; }
   .author .half-a, .author .half-b { grid-column: 1 / -1; }   /* portrait above the text: the 24px bio is too narrow in half the width */
+  .author .half-b { margin-top: 0; }   /* stacked: there is no photo edge beside the bio to align its cap height to */
   .author .photo { margin-bottom: var(--block); }
   .statement { grid-column: 1 / -1; grid-row: 2; }
   .ver { grid-column: 1 / -1; grid-row: 1; justify-self: stretch; display: flex; justify-content: space-between; margin: 0 0 var(--stack); }   /* above the intro: version at the LEFT, 01 at the right (user) */
@@ -466,6 +486,7 @@ footer button.copied { color: var(--brand); }
   .half-a { margin-bottom: var(--block); }
   .slider-nav { grid-column: 1 / -1; }
   .facts { grid-template-columns: 1fr; row-gap: var(--block); }
+  .facts h3, .facts p { padding-right: 0; }   /* one column on the phone: no inset */
   .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }   /* 4-3-4-3 on the phone too (user) */
   .card:nth-child(8) { grid-column-start: 1; }
   .card small { font-size: 10px; line-height: 13px; }   /* smaller cell texts on the phone (user) */
@@ -593,9 +614,9 @@ footer button.copied { color: var(--brand); }
     <p class="support-lead">An MCP server for AI assistants and icon components for React, Vue and Svelte, all on npm under the MIT license. For bug reports or integration help, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
     <div class="packages-cards" id="packagesCards">
       <div class="pkg pkg-dark">
-        <div class="pkg-mark pkg-mark-row" role="img" aria-label="Works with Claude, Cursor, Copilot and Gemini"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/></svg><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.922 16.997C23.061 18.492 18.063 22.02 12 22.02 5.937 22.02.939 18.492.078 16.997A.641.641 0 0 1 0 16.741v-2.869a.883.883 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.098 10.098 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952C7.255 2.937 9.248 1.98 11.978 1.98c2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.841.841 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256Zm-11.75-5.992h-.344a4.359 4.359 0 0 1-.355.508c-.77.947-1.918 1.492-3.508 1.492-1.725 0-2.989-.359-3.782-1.259a2.137 2.137 0 0 1-.085-.104L4 11.746v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.359 4.359 0 0 1-.355-.508Zm2.328 3.25c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm-5 0c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm3.313-6.185c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"/></svg><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg></div>
+        <div class="pkg-mark pkg-mark-row" role="img" aria-label="Works with Claude, Cursor, Codex, Copilot and Gemini"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.922 16.997C23.061 18.492 18.063 22.02 12 22.02 5.937 22.02.939 18.492.078 16.997A.641.641 0 0 1 0 16.741v-2.869a.883.883 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.098 10.098 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952C7.255 2.937 9.248 1.98 11.978 1.98c2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.841.841 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256Zm-11.75-5.992h-.344a4.359 4.359 0 0 1-.355.508c-.77.947-1.918 1.492-3.508 1.492-1.725 0-2.989-.359-3.782-1.259a2.137 2.137 0 0 1-.085-.104L4 11.746v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.359 4.359 0 0 1-.355-.508Zm2.328 3.25c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm-5 0c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm3.313-6.185c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"/></svg><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg></div>
         <h4>Iconoteka MCP</h4>
-        <p>Works in any MCP client: Claude, Cursor, Copilot and others. Runs offline, the icon data ships with it.</p>
+        <p>Works in any MCP client: Claude, Cursor, Codex, Copilot and others. Runs offline, the icon data ships with it.</p>
         <button type="button" class="cmd" data-copy="npx -y iconoteka-mcp" title="Copy"><code>npx -y iconoteka-mcp</code><span class="cmd-hint">Copy</span></button>
         <div class="pkg-links"><a href="https://www.npmjs.com/package/iconoteka-mcp" target="_blank" rel="noopener">npm</a><a href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-mcp" target="_blank" rel="noopener">GitHub</a></div>
       </div>
@@ -683,19 +704,19 @@ footer button.copied { color: var(--brand); }
   <div class="g">
     <p class="label full">Project Timeline<span class="no" aria-hidden="true">04</span></p>
     <ol class="tl">
-      <li><time>Sep 2026</time><b>v<span class="v">2.0.1</span></b><span class="n">1 298 icons</span><span class="w">7 weights, 2 styles</span><span class="d"><strong>Version 2 release.</strong> Fully reworked icon library, 7 weights in 2 styles, new website, Figma plugin, MIT license, GitHub repository</span></li>
-      <li><time>26 Aug 2026</time><b></b><span class="n">1 298 icons</span><span class="w">7 weights, 2 styles</span><span class="d">Every icon redrawn from scratch as clean vectors: seven weights, stroke and fill</span></li>
-      <li><time>15 Mar 2021</time><b>v<span class="v">1.0.2</span></b><span class="n">1 040 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Updated icons</span></li>
-      <li><time>17 Jun 2019</time><b>v<span class="v">1.0.1</span></b><span class="n">388 icons</span><span class="w">4 weights, 2 styles</span><span class="d">iconoteka.com launched</span></li>
-      <li><time>14 Jun 2019</time><b></b><span class="n">388 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Public beta released</span></li>
-      <li><time>9 Mar 2019</time><b>v<span class="v">1.0.0</span></b><span class="n">237 icons</span><span class="w">4 weights, 2 styles</span><span class="d">8 styles, global rework, revisions, Sport and Nature added</span></li>
-      <li><time>28 Jul 2018</time><b>v<span class="v">0.2.0</span></b><span class="n">716 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Bold stroke and fill, rework</span></li>
-      <li><time>3 Jun 2018</time><b>v<span class="v">0.1.4</span></b><span class="n">715 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Bold stroke and fill styles</span></li>
-      <li><time>24 Apr 2018</time><b>v<span class="v">0.1.3</span></b><span class="n">309 icons</span><span class="w">2 weights</span><span class="d">New categories added</span></li>
-      <li><time>4 Mar 2018</time><b>v<span class="v">0.1.2</span></b><span class="n">227 icons</span><span class="w">2 weights</span><span class="d">All icons categorised</span></li>
-      <li><time>3 Mar 2018</time><b>v<span class="v">0.1.1</span></b><span class="n">226 icons</span><span class="w">2 weights</span><span class="d">First public version</span></li>
-      <li><time>20 Sep 2017</time><b></b><span class="n">13 icons</span><span class="w"></span><span class="d">Started the project</span></li>
-      <li><time>24 May 2016</time><b></b><span class="n">3 icons</span><span class="w"></span><span class="d">Idea was born</span></li>
+      <li><time><span class="m-long">September 2026</span><span class="m-short">Sep 2026</span></time><b>v<span class="v">2.0.1</span></b><span class="n">1 298 icons</span><span class="w">7 weights, 2 styles</span><span class="d"><strong>Version 2 release.</strong> Fully reworked icon library, 7 weights in 2 styles, MIT license, GitHub repository, new website, Figma plugin, npm packages and an MCP server.</span></li>
+      <li><time><span class="m-long">26 August 2026</span><span class="m-short">26 Aug 2026</span></time><b></b><span class="n">1 298 icons</span><span class="w">7 weights, 2 styles</span><span class="d">Every icon redrawn from scratch as clean vectors: seven weights, stroke and fill.</span></li>
+      <li><time><span class="m-long">15 March 2021</span><span class="m-short">15 Mar 2021</span></time><b>v<span class="v">1.0.2</span></b><span class="n">1 040 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Updated icons.</span></li>
+      <li><time><span class="m-long">17 June 2019</span><span class="m-short">17 Jun 2019</span></time><b>v<span class="v">1.0.1</span></b><span class="n">388 icons</span><span class="w">4 weights, 2 styles</span><span class="d">iconoteka.com launched.</span></li>
+      <li><time><span class="m-long">14 June 2019</span><span class="m-short">14 Jun 2019</span></time><b></b><span class="n">388 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Public beta released.</span></li>
+      <li><time><span class="m-long">9 March 2019</span><span class="m-short">9 Mar 2019</span></time><b>v<span class="v">1.0.0</span></b><span class="n">237 icons</span><span class="w">4 weights, 2 styles</span><span class="d">8 styles, global rework, revisions, Figures and Organizations categories added.</span></li>
+      <li><time><span class="m-long">28 July 2018</span><span class="m-short">28 Jul 2018</span></time><b>v<span class="v">0.2.0</span></b><span class="n">716 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Bold stroke and fill, rework.</span></li>
+      <li><time><span class="m-long">3 June 2018</span><span class="m-short">3 Jun 2018</span></time><b>v<span class="v">0.1.4</span></b><span class="n">715 icons</span><span class="w">4 weights, 2 styles</span><span class="d">Bold stroke and fill styles.</span></li>
+      <li><time><span class="m-long">24 April 2018</span><span class="m-short">24 Apr 2018</span></time><b>v<span class="v">0.1.3</span></b><span class="n">309 icons</span><span class="w">2 weights</span><span class="d">New categories added.</span></li>
+      <li><time><span class="m-long">4 March 2018</span><span class="m-short">4 Mar 2018</span></time><b>v<span class="v">0.1.2</span></b><span class="n">227 icons</span><span class="w">2 weights</span><span class="d">All icons categorised.</span></li>
+      <li><time><span class="m-long">3 March 2018</span><span class="m-short">3 Mar 2018</span></time><b>v<span class="v">0.1.1</span></b><span class="n">226 icons</span><span class="w">2 weights</span><span class="d">First public version.</span></li>
+      <li><time><span class="m-long">20 September 2017</span><span class="m-short">20 Sep 2017</span></time><b></b><span class="n">13 icons</span><span class="w"></span><span class="d">Started the project.</span></li>
+      <li><time><span class="m-long">24 May 2016</span><span class="m-short">24 May 2016</span></time><b></b><span class="n">3 icons</span><span class="w"></span><span class="d">Idea was born.</span></li>
     </ol>
   </div>
 </div>
@@ -837,6 +858,29 @@ document.querySelectorAll('.pkg .cmd').forEach(b => b.addEventListener('click', 
   navigator.clipboard.writeText(b.dataset.copy).then(() => { hint.textContent = 'Copied'; b.classList.add('copied'); setTimeout(() => { hint.textContent = 'Copy'; b.classList.remove('copied'); }, 1600); })
     .catch(() => showToast('Copy failed'));
 }));
+
+// Timeline: draw the weights cell's numbers as a dot matrix — columns = weights, rows = styles
+document.querySelectorAll('.tl li').forEach(li => {
+  const w = li.querySelector('.w'), n = li.querySelector('.n');
+  const m = w && n && w.textContent.match(/(\d+)\s*weights?(?:,\s*(\d+)\s*styles?)?/);
+  if (!m) return;
+  const weights = +m[1], styles = m[2] ? +m[2] : 1;
+  const dots = document.createElement('span');
+  dots.className = 'dots'; dots.style.setProperty('--rows', styles); dots.setAttribute('aria-hidden', 'true');
+  dots.innerHTML = '<i></i>'.repeat(weights * styles);
+  n.appendChild(dots);   // the count cell ends at column 6, so the matrix lands just before the weights text
+});
+// …and the icon count as a progress bar in the version cell, which ends on the line closing column 4
+document.querySelectorAll('.tl li').forEach(li => {
+  const n = li.querySelector('.n'), b = li.querySelector('b');
+  if (!n || !b) return;
+  const count = +n.textContent.replace(/[^0-9]/g, '');
+  if (!count) return;
+  const bar = document.createElement('span');
+  bar.className = 'bar'; bar.setAttribute('aria-hidden', 'true');
+  bar.innerHTML = '<span><i style="--pct:' + (Math.min(1, count / 1298) * 100).toFixed(1) + '%"></i></span>';
+  b.appendChild(bar);
+});
 
 // Mobile burger (same as the homepage)
 const burgerBtn = document.getElementById('burgerBtn');
