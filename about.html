@@ -775,6 +775,17 @@ footer button.copied { color: var(--brand); }
 <div class="grid-overlay" id="gridOverlay" hidden aria-hidden="true"><div class="g"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
 
 <script>
+// Deep links (about.html#packages, /packages/, /support/): the hero wall, the weight grid and the feature icons are
+// built after icons.json loads, which pushes the target section down after the browser has already jumped to it.
+// Land on the hash again once that content exists — unless the visitor has already started scrolling.
+let userScrolled = false;
+['wheel', 'touchmove', 'keydown', 'mousedown'].forEach(ev => addEventListener(ev, () => { userScrolled = true; }, { passive: true, once: true }));
+function landOnHash() {
+  if (userScrolled || !location.hash) return;
+  const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (el) el.scrollIntoView({ block: 'start', behavior: 'instant' });   // instant: html has scroll-behavior:smooth
+}
+addEventListener('load', landOnHash);   // images and fonts can still shift layout after the data arrives
 let toastTimer = null;
 function showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('visible'), 1800); }
 
@@ -1139,6 +1150,7 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     }
     setTimeout(() => layer.remove(), 2600);
   }
+  landOnHash();   // the wall, grid and feature icons now exist above the linked section
 }).catch(() => countersReady());   // without the data the stat rows still count up from their static targets and reveal
 
 // In use — six slides. Fill GALLERY with { type: 'image' | 'video', src, alt, poster } in order; empty
