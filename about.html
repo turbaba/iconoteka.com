@@ -243,6 +243,7 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 /* support section: the menu's intro (large body) on the left half, the three brand cards full width; reachable at about.html#support */
 /* Support sits after Author now (user 2026-09-09); the License/Support grouping is gone */
 .row[id] { scroll-margin-top: 90px; }   /* anchors land below the sticky header */
+#gallery { scroll-margin-top: 138px; }   /* /gallery/ and #gallery land on the slider itself (its row has no label), with the same 48px of air a section label gets */
 .support-title { grid-column: 1 / 5; margin: 0; }   /* title in the left third … */
 .support-lead { grid-column: 5 / 13; font-size: 20px; line-height: 30px; margin: 0 0 calc(var(--block) - 10px); max-width: none; }   /* … text in the right two thirds (user); cards 38px below (--block − 10, user) */
 #supportCards { max-width: none; justify-self: stretch; gap: var(--gut); --col: calc((100% - 2 * var(--gut)) / 3); grid-template-columns: repeat(3, minmax(0, 1fr)); }   /* three equal cards on the page grid (the panel's pill-width trick is not used here) */
