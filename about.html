@@ -7,14 +7,14 @@
 <meta name="description" content="Iconoteka is a free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid by Oleg Turbaba. MIT licensed."/>
 <meta property="og:title" content="About Iconoteka"/>
 <meta property="og:description" content="A free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
-<meta property="og:image" content="https://beta.iconoteka.com/preview.png?v=2"/>
+<meta property="og:image" content="https://beta.iconoteka.com/iconoteka-preview.png"/>
 <meta property="og:url" content="https://beta.iconoteka.com/about.html"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Iconoteka"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="About Iconoteka"/>
 <meta name="twitter:description" content="A free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
-<meta name="twitter:image" content="https://beta.iconoteka.com/preview.png?v=2"/>
+<meta name="twitter:image" content="https://beta.iconoteka.com/iconoteka-preview.png"/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -676,7 +676,7 @@ footer button.copied { color: var(--brand); }
 <div class="row author" id="author">
   <div class="g">
     <p class="label full">Author<span class="no" aria-hidden="true">03</span></p>
-    <div class="photo half-a" id="authorPhoto"><img src="media/turbaba.jpg" alt="Oleg Turbaba" width="800" height="600" loading="lazy" decoding="async"></div>
+    <div class="photo half-a" id="authorPhoto"><img src="media/iconoteka-author-oleg-turbaba.jpg" alt="Oleg Turbaba" width="800" height="600" loading="lazy" decoding="async"></div>
     <div class="half-b">
       <p class="bio">Oleg Turbaba is a multidisciplinary designer specializing in the intersection of brand identity, digital products, and visual experiences. Brand Design Director at <a class="handle nobr" href="https://clay.global" target="_blank" rel="noopener">Clay Global</a> and author of Iconoteka.</p>
       <p class="author-contact">For enquiries, collaborations, interviews, or sponsorships, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
@@ -699,7 +699,7 @@ footer button.copied { color: var(--brand); }
   </div>
 </div>
 
-<!-- in use: six 16:9 slots for photos or videos of Iconoteka in the wild -->
+<!-- in use: 16:9 slides of Iconoteka in the wild, shuffled on every load -->
 <div class="row inuse">
   <div class="g">
     <div class="slider full" id="gallery"></div>
@@ -1233,20 +1233,20 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
   landOnHash();   // the wall, grid and feature icons now exist above the linked section
 }).catch(() => countersReady());   // without the data the stat rows still count up from their static targets and reveal
 
-// In use — six slides. Fill GALLERY with { type: 'image' | 'video', src, alt, poster } in order; empty
-// slides render as blank tiles so the slider is complete before there are six entries.
+// In use — one slide per GALLERY entry { type: 'image' | 'video', src, alt, poster }, in a new random order on every
+// load (user). Images come from the Gallery section of the Iconoteka Brand file in Figma.
 const GALLERY = [   // src = base name; the slider builds a 960 / 1440 / 1920 srcset from it
-  { type: 'image', src: 'media/inuse-01', alt: 'Product interface screens and a map app using Iconoteka icons' },
-  { type: 'image', src: 'media/inuse-02', alt: 'Yellow book cover with a globe icon from Iconoteka' },
-  { type: 'image', src: 'media/inuse-03', alt: 'Festival billboard with large blue and orange pictograms' },
-  { type: 'image', src: 'media/inuse-04', alt: 'Recycling category objects labelled with material icons' },
-  { type: 'image', src: 'media/inuse-05', alt: 'Phone settings screen with coloured icon tiles' },
-  { type: 'image', src: 'media/inuse-06', alt: 'Airport arrivals board with an aeroplane pictogram' },
+  { type: 'image', src: 'media/iconoteka-gallery-interface', alt: 'Layered product interface screens with navigation, search and map icons' },
+  { type: 'image', src: 'media/iconoteka-gallery-book-cover', alt: 'Yellow book cover with a globe icon' },
+  { type: 'image', src: 'media/iconoteka-gallery-festival-billboard', alt: 'Festival billboard with a speaker and a bicycle pictogram' },
+  { type: 'image', src: 'media/iconoteka-gallery-smart-home-app', alt: 'Smart home app on a phone with lights, security and energy tiles' },
+  { type: 'image', src: 'media/iconoteka-gallery-city-guide', alt: 'Colourful city guide tiles for museums, food, coffee, parks and more' },
+  { type: 'image', src: 'media/iconoteka-gallery-recycling', alt: 'Waste sorting bins labelled with icons for residual waste, food and plastic' },
+  { type: 'image', src: 'media/iconoteka-gallery-travel-cards', alt: 'Travel story cards with large droplet, crescent, wine glass and tulip artwork' },
 ];
-const slider = document.getElementById('gallery');
-slider.innerHTML = Array.from({ length: 6 }, (_, i) => {
-  const g = GALLERY[i];
-  if (!g) return '<div class="slot" aria-hidden="true"></div>';
+for (let i = GALLERY.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [GALLERY[i], GALLERY[j]] = [GALLERY[j], GALLERY[i]]; }   // Fisher–Yates shuffle
+const slider = document.getElementById('gallery'), lastSlide = GALLERY.length - 1;
+slider.innerHTML = GALLERY.map(g => {
   const media = g.type === 'video'
     ? '<video src="' + g.src + '" autoplay muted loop playsinline' + (g.poster ? ' poster="' + g.poster + '"' : '') + '></video>'
     : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w" sizes="(max-width: 860px) 100vw, min(1152px, 100vw)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; phones get ~60 KB instead of ~200
@@ -1258,10 +1258,10 @@ const slideStep = () => slider.querySelector('.slot').getBoundingClientRect().wi
 // snap after a touch or wheel scroll settles (drag has its own release handler)
 let settle = null; slider.addEventListener('scroll', () => { if (dragX !== null) return; clearTimeout(settle); settle = setTimeout(() => goTo(slideIndex()), 140); }, { passive: true });
 const slideIndex = () => Math.round(slider.scrollLeft / slideStep());
-const goTo = i => slider.scrollTo({ left: Math.max(0, Math.min(5, i)) * slideStep(), behavior: 'smooth' });
+const goTo = i => slider.scrollTo({ left: Math.max(0, Math.min(lastSlide, i)) * slideStep(), behavior: 'smooth' });
 prevBtn.addEventListener('click', () => goTo(slideIndex() - 1));
 nextBtn.addEventListener('click', () => goTo(slideIndex() + 1));
-const syncArrows = () => { const i = slideIndex(); prevBtn.disabled = i <= 0; nextBtn.disabled = i >= 5; };
+const syncArrows = () => { const i = slideIndex(); prevBtn.disabled = i <= 0; nextBtn.disabled = i >= lastSlide; };
 slider.addEventListener('scroll', syncArrows, { passive: true }); syncArrows();
 // drag to scroll with the mouse; snapping is suspended while dragging and re-applied on release
 const DRAG_GAIN = 1.4;   // the slides move further than the hand, so a short pull is enough
