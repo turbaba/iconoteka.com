@@ -27,7 +27,7 @@
 :root {
   --bg: #ffffff;
   --surface: #f7f7f7;
-  --surface2: #efefef;
+  --surface2: #f4f4f4;   /* grey cards (Packages, Support), lightened from #efefef (user 2026-09-15) */
   --border: #ededed;
   --text: #141414;
   --text-muted: #63626d;
@@ -91,8 +91,8 @@
 
 @font-face { font-family: 'WebSans'; src: url('fonts/websans.woff2') format('woff2'); font-weight: 400 600; font-display: swap; }   /* the page's text face: a 122-glyph subset (ASCII + the punctuation the page uses), weights 400–600 only, kern + tnum only, neutral names, no glyph names, no hinting — 11 KB */
 * { box-sizing: border-box; }
-:root { --rule: color-mix(in srgb, var(--text) 30%, transparent); --rule-solid: #b8b8b8; }   /* every page rule: the text colour at 30%. --rule-solid is that same value FLATTENED against the page background — opaque, so lines can never double where two of them meet (user) */
-[data-theme="dark"] { --rule-solid: #5e5e5e; }
+:root { --rule: color-mix(in srgb, var(--text) 20%, transparent); --rule-solid: #d0d0d0; --bar-track: #e4e4e4; --text-soft: #75747d; }   /* every page rule: the text colour at 30%. --rule-solid is that same value FLATTENED against the page background — opaque, so lines can never double where two of them meet (user) */
+[data-theme="dark"] { --rule: color-mix(in srgb, var(--text) 30%, transparent); --rule-solid: #5e5e5e; --bar-track: #5e5e5e; --text-soft: var(--text-muted); }   /* light theme (user 2026-09-15): lines at 20% (#d0d0d0 flattened), a paler progress-bar track, and --text-soft #75747d for the small grey labels (4.6:1 on white, still AA); dark keeps its values */
 /* vertical spacing system — an 8px scale with four roles; only these tokens are used for vertical space
    --major  hero → headline, stat rows → weight grid          130 / 96 / 64
    --sec    section padding (top and bottom), footer padding   65 / 48 / 32  (= --major / 2)
@@ -124,7 +124,7 @@ header .support-btn { font: inherit; font-size: 14px; font-weight: 600; }
 .headline .g { padding-bottom: var(--block); border-bottom: 1px solid var(--rule); }   /* rule under the headline, layout width only */
 .row.headline + .row { padding-top: calc(var(--major) - var(--block)); }   /* rule-terminated blocks keep a --major (128) gap to the next content, like License */
 .nobr { white-space: nowrap; }
-.ver { grid-column: 10 / 13; justify-self: end; align-self: start; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; line-height: 16px; font-weight: 500; margin-top: 4px; font-feature-settings: normal; color: var(--text-muted); }   /* small mono library version, same size as the weight-grid labels, top aligned with the headline's caps */
+.ver { grid-column: 10 / 13; justify-self: end; align-self: start; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; line-height: 16px; font-weight: 500; margin-top: 4px; font-feature-settings: normal; color: var(--text-soft); }   /* small mono library version, same size as the weight-grid labels, top aligned with the headline's caps */
 .statement { grid-column: 1 / 10; margin: 0; font-size: var(--display); line-height: 1.1; letter-spacing: -.02em; font-weight: 400; }
 /* the wall: as many colour tiles as fit the band, each a random icon on a random brand colour and shape.
    Tiles change one by one on their own, change under the pointer, and open the icon in the library on click */
@@ -155,8 +155,7 @@ main, footer { position: relative; z-index: 1; }
 .burger-btn { transition: opacity var(--t-fast); } .burger-btn:hover { opacity: .8; }
 /* pressed state for every control on the page: a deeper dim than the hover (the wall tiles have no hover by design and stay as they are) */
 .header-link:active, .logo-wrap a:active, .burger-btn:active, .burger-link:active, .button:active, .links a:active, .handle:active,
-.slider-nav button:active:not(:disabled), button.primary:active:not(:disabled), footer a:active, footer button:active, .footer-icon:active,
-.card:active svg { opacity: .6; }
+.slider-nav button:active:not(:disabled), button.primary:active:not(:disabled), footer a:active, footer button:active, .footer-icon:active { opacity: .6; }
 .burger-menu { display: none; position: fixed; background: var(--ui-panel); border-radius: var(--r-md); box-shadow: var(--shadow-md); padding: 8px; z-index: 1000; flex-direction: column; gap: 2px; width: 272px; }
 .burger-menu.open { display: flex; }
 .burger-link { font-size: 14px; font-weight: 600; color: var(--text); text-decoration: none; padding: 14px 12px; border-radius: var(--r-sm); }
@@ -194,9 +193,9 @@ main, footer { position: relative; z-index: 1; }
 
 p { margin: 0 0 var(--stack); }
 p:last-child { margin-bottom: 0; }
-.label { font-size: 14px; line-height: 21px; font-weight: 500; color: var(--text-muted); margin: 0 0 var(--stack); }   /* small captions are grey (user): section labels, their numbers, the version, the grid-cell texts — same grey as the footer titles */
+.label { font-size: 14px; line-height: 21px; font-weight: 500; color: var(--text-soft); margin: 0 0 var(--stack); }   /* small captions are grey (user): section labels, their numbers, the version, the grid-cell texts — same grey as the footer titles */
 .label.full { display: flex; justify-content: space-between; align-items: baseline; }   /* section number at the right edge */
-.no { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; line-height: 16px; font-weight: 500; font-feature-settings: normal; color: var(--text-muted); }   /* section numbers 01–04: the version's mono style */
+.no { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; line-height: 16px; font-weight: 500; font-feature-settings: normal; color: var(--text-soft); }   /* section numbers 01–04: the version's mono style */
 .ver .no { margin-left: 16px; }   /* 01 sits after the version, at the right edge */
 h2.huge { font-size: var(--display); line-height: 1; letter-spacing: -.02em; font-weight: 600; margin: 0 0 var(--block) -0.04em; }   /* same size as the headline statement */
 h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 var(--sp-1); }
@@ -378,7 +377,7 @@ button.primary:disabled { cursor: default; opacity: 1; }   /* while it shows a s
    closing column 4 and leads into the count text; the largest count in the timeline = full */
 .tl b { display: flex; align-items: flex-start; }   /* no gap: the "v" and the number are separate flex items and a gap would split them */
 .tl b .bar { flex: none; margin-left: auto; padding-left: 10px; box-sizing: content-box; width: 33px; height: 24px; display: flex; align-items: center; }   /* 33px = the 7×2 dot matrix's width (7×3 + 6×2), so bar and matrix read as one family */
-.tl b .bar span { display: block; height: 8px; width: 100%; border-radius: 1.5px; background: var(--rule-solid); }   /* 8px = the matrix's height (2×3 + 2); 1.5px radius = ONE DOT's radius (user) */
+.tl b .bar span { display: block; height: 8px; width: 100%; border-radius: 1.5px; background: var(--bar-track); }   /* 8px = the matrix's height (2×3 + 2); 1.5px radius = ONE DOT's radius (user) */
 .tl b .bar span i { display: block; height: 100%; width: var(--pct); min-width: 2px; border-radius: 1.5px; background: currentColor; }
 
 footer { border-top: 1px solid var(--border);   /* same line as the header */ padding: var(--sec) var(--pad) calc(var(--sec) + 20px);   /* double space before the footer: one --major above its rule, then the usual padding */ font-size: 14px; line-height: 21px; color: var(--text); }
@@ -386,13 +385,13 @@ footer .g { row-gap: var(--block); align-items: start; }
 /* footer on the 12 page columns, one row: icon top-left and © bottom-left (1–2), columns 3–4 empty, Library (5–6), Support (7–8), Follow (9–10), Contact (11–12) */
 .footer-icon { grid-column: 1 / 3; grid-row: 1; align-self: start; justify-self: start; width: 48px; color: var(--text); height: 48px; position: relative; left: -6px; top: -3px; }   /* 48px box = the hover target is the mark itself, not the whole cell */   /* optical compensation: the glyph's own side bearings make it look inset */
 .footer-icon svg { width: 48px; height: 48px; fill: currentColor; display: block; }
-.footer-icon, .card { cursor: pointer; }   /* they react to a click / tap */
+.footer-icon { cursor: pointer; }   /* it reacts to a click / tap; the weight grid cells are not clickable (user), they only react to hover */
 .f-lib { grid-column: 5 / 7; } .f-sup { grid-column: 7 / 9; } .f-fol { grid-column: 9 / 11; } .f-contact { grid-column: 11 / 13; }   /* icon + © in 1–4, groups from column 5, Contact two columns (user) */
 .f-contact p { margin: 0; font-size: 14px; line-height: 21px; }
-.footer-group h4 { font-size: 14px; line-height: 21px; font-weight: 500; color: var(--text-muted); margin: 0 0 var(--sp-2); }   /* grey titles, 16px to the links (links are 8px apart) */
+.footer-group h4 { font-size: 14px; line-height: 21px; font-weight: 500; color: var(--text-soft); margin: 0 0 var(--sp-2); }   /* grey titles, 16px to the links (links are 8px apart) */
 .footer-group nav { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-1); }
-.footer-crypto-label { color: var(--text-muted); position: relative; top: 3px; }   /* "Crypto:" — plain grey text, not a link; nudged 4px down visually, the next line does not move */
-.footer-crypto { display: flex; gap: 14px; }
+.footer-crypto-label { color: var(--text-soft); position: relative; top: 3px; }   /* "Crypto:" — plain grey text, not a link; nudged 4px down visually, the next line does not move */
+.footer-crypto { display: flex; gap: 10px; }   /* BTC ETH USDT a little closer (user) */
 footer a { text-decoration: none; }
 footer a:hover, footer button:hover { opacity: .8; }
 footer button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; text-align: left; }
@@ -1202,7 +1201,7 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
   const armReset = () => { clearTimeout(resetTimer); resetTimer = setTimeout(resetAll, 500); };   // 0.5 s after the pointer leaves the grid
   cells.forEach(c => {
     c.addEventListener('mouseenter', () => { if (phone()) return; clearTimeout(resetTimer); paint(c, pickVisit()); tint(c, visitColour); });   // back inside within the second: same icon and colour, no reset
-    c.addEventListener('click', () => { if (phone()) { paint(c, pick(pool)); tint(c, dealColour(null)); jackpot(); return; } paint(c, pickVisit()); tint(c, visitColour); armReset(); });   // tablet touch: the visit logic; phone: a random icon AND colour for this cell (user)
+    c.addEventListener('click', () => { if (!phone()) return; paint(c, pick(pool)); tint(c, dealColour(null)); jackpot(); });   // phone only: a tap re-rolls this cell for the colour game (user); on larger screens the cells are not clickable (user), hover does the work
   });
   grid.addEventListener('mouseleave', armReset);
   // Phone game: tap the cells until all 14 share one colour — confetti in the palette colours bursts from the grid (once per
@@ -1235,23 +1234,28 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
 
 // In use — one slide per GALLERY entry { type: 'image' | 'video', src, alt, poster }, in a new random order on every
 // load (user). Images come from the Gallery section of the Iconoteka Brand file in Figma.
-const GALLERY = [   // src = base name; the slider builds a 960 / 1440 / 1920 srcset from it
+const GALLERY = [   // image src = base name, the slider builds a 960 / 1440 / 1920 srcset from it; video src = the .mp4 itself, with a poster frame
   { type: 'image', src: 'media/iconoteka-gallery-interface', alt: 'Layered product interface screens with navigation, search and map icons' },
   { type: 'image', src: 'media/iconoteka-gallery-book-cover', alt: 'Yellow book cover with a globe icon' },
   { type: 'image', src: 'media/iconoteka-gallery-festival-billboard', alt: 'Festival billboard with a speaker and a bicycle pictogram' },
   { type: 'image', src: 'media/iconoteka-gallery-smart-home-app', alt: 'Smart home app on a phone with lights, security and energy tiles' },
   { type: 'image', src: 'media/iconoteka-gallery-city-guide', alt: 'Colourful city guide tiles for museums, food, coffee, parks and more' },
-  { type: 'image', src: 'media/iconoteka-gallery-recycling', alt: 'Waste sorting bins labelled with icons for residual waste, food and plastic' },
+  { type: 'video', src: 'media/iconoteka-gallery-recycling.mp4', poster: 'media/iconoteka-gallery-recycling-poster.jpg', alt: 'Waste sorting bins labelled with icons for residual waste, food and plastic' },
   { type: 'image', src: 'media/iconoteka-gallery-travel-cards', alt: 'Travel story cards with large droplet, crescent, wine glass and tulip artwork' },
 ];
 for (let i = GALLERY.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [GALLERY[i], GALLERY[j]] = [GALLERY[j], GALLERY[i]]; }   // Fisher–Yates shuffle
 const slider = document.getElementById('gallery'), lastSlide = GALLERY.length - 1;
 slider.innerHTML = GALLERY.map(g => {
   const media = g.type === 'video'
-    ? '<video src="' + g.src + '" autoplay muted loop playsinline' + (g.poster ? ' poster="' + g.poster + '"' : '') + '></video>'
+    ? '<video src="' + g.src + '" muted loop playsinline preload="none"' + (g.poster ? ' poster="' + g.poster + '"' : '') + ' aria-label="' + (g.alt || '') + '"></video>'   // no autoplay attribute: it would download at page load; the observer below plays it near the viewport
     : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w" sizes="(max-width: 860px) 100vw, min(1152px, 100vw)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; phones get ~60 KB instead of ~200
   return '<div class="slot">' + media + '</div>';
 }).join('');
+// Videos load and play only while the gallery is near the screen, and pause when it leaves; with reduced motion they keep the poster
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+  const videos = [...slider.querySelectorAll('video')];
+  if (videos.length) new IntersectionObserver(([e]) => videos.forEach(v => e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { rootMargin: '300px 0px' }).observe(slider);
+}
 const prevBtn = document.getElementById('slidePrev'), nextBtn = document.getElementById('slideNext');
 let dragX = null, dragLeft = 0, dragged = false, lastX = 0, lastT = 0, vel = 0;
 const slideStep = () => slider.querySelector('.slot').getBoundingClientRect().width + parseFloat(getComputedStyle(slider).columnGap || getComputedStyle(slider).gap || 32);
