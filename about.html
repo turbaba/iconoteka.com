@@ -1413,6 +1413,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObse
   const videos = [...slider.querySelectorAll('video')];
   if (videos.length) new IntersectionObserver(([e]) => videos.forEach(v => e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { rootMargin: '300px 0px' }).observe(slider);
 }
+// Lazy loading alone leaves the next slide's peeking edge blank: a slide to the right is off-screen, so the browser
+// waits. Keep the current slide and its two neighbours ready, so a slide is already there when it arrives.
+const slots = [...slider.children];
+const warm = i => { for (let k = Math.max(0, i - 1); k <= Math.min(slots.length - 1, i + 2); k++) { const img = slots[k].querySelector('img[loading="lazy"]'); if (img) img.loading = 'eager'; } };
 const prevBtn = document.getElementById('slidePrev'), nextBtn = document.getElementById('slideNext');
 let dragX = null, dragLeft = 0, dragged = false, lastX = 0, lastT = 0, vel = 0;
 const slideStep = () => slider.querySelector('.slot').getBoundingClientRect().width + parseFloat(getComputedStyle(slider).columnGap || getComputedStyle(slider).gap || 32);
@@ -1420,10 +1424,12 @@ const slideStep = () => slider.querySelector('.slot').getBoundingClientRect().wi
 let settle = null; slider.addEventListener('scroll', () => { if (dragX !== null) return; clearTimeout(settle); settle = setTimeout(() => goTo(slideIndex()), 140); }, { passive: true });
 const slideIndex = () => Math.round(slider.scrollLeft / slideStep());
 const goTo = i => slider.scrollTo({ left: Math.max(0, Math.min(lastSlide, i)) * slideStep(), behavior: 'smooth' });
-prevBtn.addEventListener('click', () => goTo(slideIndex() - 1));
-nextBtn.addEventListener('click', () => goTo(slideIndex() + 1));
-const syncArrows = () => { const i = slideIndex(); prevBtn.disabled = i <= 0; nextBtn.disabled = i >= lastSlide; };
+prevBtn.addEventListener('click', () => { const i = slideIndex() - 1; warm(i); goTo(i); });
+nextBtn.addEventListener('click', () => { const i = slideIndex() + 1; warm(i); goTo(i); });
+const syncArrows = () => { const i = slideIndex(); prevBtn.disabled = i <= 0; nextBtn.disabled = i >= lastSlide; warm(i); };
 slider.addEventListener('scroll', syncArrows, { passive: true }); syncArrows();
+if ('IntersectionObserver' in window) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { warm(slideIndex()); o.disconnect(); } }, { rootMargin: '600px 0px' }).observe(slider);   // the first slides load as the gallery comes up the page, before anyone swipes
+else warm(0);
 // drag to scroll with the mouse; snapping is suspended while dragging and re-applied on release
 const DRAG_GAIN = 1.4;   // the slides move further than the hand, so a short pull is enough
 slider.addEventListener('mousedown', e => { dragX = e.clientX; dragLeft = slider.scrollLeft; dragged = false; lastX = e.clientX; lastT = performance.now(); vel = 0; slider.classList.add('dragging'); e.preventDefault(); });
