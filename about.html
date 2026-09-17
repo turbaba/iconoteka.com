@@ -1402,7 +1402,7 @@ const slider = document.getElementById('gallery'), lastSlide = GALLERY.length - 
 slider.innerHTML = GALLERY.map(g => {
   const media = g.type === 'video'
     ? '<video src="' + g.src + '" muted loop playsinline preload="none"' + (g.poster ? ' poster="' + g.poster + '"' : '') + ' aria-label="' + (g.alt || '') + '"></video>'   // no autoplay attribute: it would download at page load; the observer below plays it near the viewport
-    : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w" sizes="(max-width: 860px) 100vw, min(1152px, 100vw)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; phones get ~60 KB instead of ~200
+    : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w, ' + g.src + '-2880.jpg 2880w" sizes="(min-width: 2000px) 1780px, (min-width: 1600px) 1540px, (min-width: 1300px) 1252px, calc(100vw - 48px)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; sizes = the real slide width (the old min(1152px) sent retina screens an upscaled 1920); quality 90, 4:4:4
   return '<div class="slot">' + media + '</div>';
 }).join('');
 // Videos load and play only while the gallery is near the screen, and pause when it leaves; with reduced motion they keep the poster
