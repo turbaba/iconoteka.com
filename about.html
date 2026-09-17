@@ -1236,7 +1236,6 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
 // In use — one slide per GALLERY entry { type: 'image' | 'video', src, alt, poster }, in a new random order on every
 // load (user). Images come from the Gallery section of the Iconoteka Brand file in Figma.
 const GALLERY = [   // image src = base name, the slider builds a 960 / 1440 / 1920 srcset from it; video src = the .mp4 itself, with a poster frame
-  { type: 'image', src: 'media/iconoteka-gallery-interface', alt: 'Layered product interface screens with navigation, search and map icons' },
   { type: 'image', src: 'media/iconoteka-gallery-book-cover', alt: 'Yellow book cover with a globe icon' },
   { type: 'image', src: 'media/iconoteka-gallery-festival-cyclist', alt: 'Cargo bike rider passing a festival hoarding with a large bicycle pictogram' },
   { type: 'image', src: 'media/iconoteka-gallery-smart-home-app', alt: 'Smart home app on a phone with lights, security and energy tiles' },
