@@ -273,28 +273,48 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 #supportCards .p-short, #supportCards .a-short { display: none; }   /* the narrow-column forms ("$1/mo", 5…4 address) switch on ≤1100 */
 #supportCards .support-list button.copied { background: var(--brand); color: #141414; }   /* copied still flashes brand pink here (the support panel's own signal) */
 /* packages: MCP card dark blue, three grey cards, install command with Copy, npm + GitHub links */
-.packages .support-title { grid-column: 1 / 4; } .packages .support-lead { grid-column: 4 / 13; margin-bottom: calc(var(--block) - 10px); }   /* on the card grid: title = one card wide, text = three cards wide (user); one paragraph incl. the get-in-touch line */
-.packages-cards { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gut); }
-.pkg { --ink: var(--text); --line: color-mix(in srgb, var(--text) 6%, transparent); --line-hover: color-mix(in srgb, var(--text) 10%, transparent); --btn: color-mix(in srgb, var(--text) 12%, transparent); background: var(--surface2); color: var(--text); border-radius: var(--r-md); padding: 24px; display: flex; flex-direction: column; min-width: 0; }   /* grey cards (user) */
-.pkg.pkg-dark { --ink: #ffffff; --line: rgba(255, 255, 255, .08); --line-hover: rgba(255, 255, 255, .13); --btn: rgba(255, 255, 255, .16); background: #061584; color: #ffffff; }   /* the MCP card, first: brand Dark Blue (user: a dark colour, MCP is the priority) */
-/* logomarks: the framework's own mark, and on the MCP card the assistants it works with (white on the dark
-   card). Single-path 24px marks from simple-icons (CC0); they paint with currentColor. */
-.pkg-mark { display: flex; align-items: center; gap: 12px; margin-bottom: calc(var(--sp-2) + 4px); color: var(--ink); }   /* 20px down to the title (user) */
-.pkg-mark svg { width: 29px; height: 29px; fill: currentColor; display: block; flex: none; }   /* 20% larger than 24 (user) */
-.pkg-mark svg.mark-lg { width: 31.5px; height: 31.5px; }   /* Copilot and Gemini draw smaller inside the 24-unit box — +20% then −10% (user) */
-.pkg-mark-row .mcp-tab:last-child svg { position: relative; left: -3px; }   /* Gemini: its four-point star reads inset, so 3px left (user) */
-/* MCP card: the marks are tabs — the active assistant is full white, the rest sit back; each swaps the setup below */
-.mcp-tab { display: flex; align-items: center; padding: 0; margin: 0; border: 0; background: none; color: inherit; cursor: pointer; opacity: .4; transition: opacity var(--t-fast); border-radius: var(--r-sm); }
-.mcp-tab:hover { opacity: .75; } .mcp-tab[aria-selected="true"] { opacity: 1; }
-.mcp-tab:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-.pkg .cmd-where { font-size: 13px; line-height: 20px; height: 20px; margin: 0 0 var(--sp-1); opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: auto; }   /* where the snippet goes: always one line, so switching never changes the card */
-.pkg .cmd-where + .cmd { margin-top: 0; }
-#mcpCmd { height: 80px; min-height: 0; }   /* the same box as the other package cards, whatever the assistant (user: the box must not change size) */
-#mcpCmd code { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }   /* the preview is short by design; the clamp is only a safety net at narrow widths */
+.packages .support-title { grid-column: 1 / 7; } .packages .support-lead { grid-column: 7 / 13; margin-bottom: calc(var(--block) - 10px); }
+.packages .support-title, .packages .support-lead { align-self: baseline; }   /* "Packages" and the first line of the text share one baseline (user) */   /* title over the MCP card, text over the Components card: each half the width, like the cards (user) */
+.packages-cards { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gut); }   /* two cards side by side, MCP and Components, the same structure (user) */
+.pkg { --ink: var(--text); --field: color-mix(in srgb, var(--text) 3.5%, transparent); --line: color-mix(in srgb, var(--text) 6%, transparent); --line-hover: color-mix(in srgb, var(--text) 10%, transparent); --btn: color-mix(in srgb, var(--text) 12%, transparent); background: var(--surface2); color: var(--text); border-radius: var(--r-md); padding: 24px; display: flex; flex-direction: column; min-width: 0; }   /* grey cards (user) */
+.pkg.pkg-dark { --ink: #ffffff; --field: rgba(255, 255, 255, .045); --line: rgba(255, 255, 255, .08); --line-hover: rgba(255, 255, 255, .13); --btn: rgba(255, 255, 255, .16); background: #061584; color: #ffffff; }   /* the MCP card, first: brand Dark Blue (user: a dark colour, MCP is the priority) */
+.mcp-mark { display: flex; align-items: center; }   /* hidden source marks, cloned into the tabs */
+/* MCP section: a tab per assistant (mark + name), then three steps on the card grid — copy, where it goes, what to ask */
+.mcp-card { grid-column: span 6; scroll-margin-top: 110px; }   /* /mcp/ and #mcp land on the card */
+.mcp-card { display: flex; flex-direction: column; gap: var(--stack); }
+.mcp-head { display: flex; justify-content: space-between; align-items: center; gap: var(--gut); margin-top: var(--sp-2); }   /* 40px under the tab row on desktop (card gap 24 + 16, user) */ .pkg .mcp-head h4 { font-size: 28px; line-height: 34px; margin: 0; }   /* title only, npm and GitHub at the right (user) */
+.mcp-head .pkg-links { margin-top: 0; flex: none; }
+
+.pkg-dark .mcp-list .no { color: #ffffff; }
+.mcp-tabs { position: relative; display: flex; gap: var(--tab-gap, 34px); box-shadow: inset 0 -1px 0 var(--btn); margin-top: -8px; }   /* a tab row on one baseline rule; always fits: tabRow() tightens the gap, then the text and marks, when the card is narrow (user: no scrolling) */
+.mcp-tabs.wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; } .mcp-tabs.wrap .mcp-tab { width: 100%; }   /* last resort on the narrowest phones: a tidy 3-column grid instead of hidden tabs */
+.mcp-tabs.names2 .mcp-tab { flex: 0 1 min-content; white-space: normal; text-align: center; }   /* tight: each tab as wide as its longest word, so two-word names take two lines (user) */
+.mcp-tab { flex: none; padding: 12px 0 14px; display: inline-flex; flex-direction: column; align-items: center; gap: 8px; border: none; border-radius: 0; background: none; color: var(--ink); opacity: .6; font: inherit; font-size: var(--tab-font, 16px); line-height: 20px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: opacity var(--t-fast), box-shadow var(--t-fast); }   /* the mark above the name (user) */
+.mcp-tab-mark { width: var(--tab-mark, 24px); height: var(--tab-mark, 24px); display: flex; align-items: center; justify-content: center; } .mcp-tab-mark svg { width: var(--tab-mark, 24px); height: var(--tab-mark, 24px); fill: currentColor; display: block; } .mcp-tab-mark svg.mark-lg { width: calc(var(--tab-mark, 24px) + 2px); height: calc(var(--tab-mark, 24px) + 2px); }   /* the slot stays for every tab, so the names share one line */
+.mcp-title { display: flex; align-items: center; } .mcp-title-mark { display: none; }   /* title text on the step text's left edge; the marks live in the tabs again (user) */
+
+.mcp-tab:hover { opacity: .85; }
+.mcp-tab[aria-selected="true"] { opacity: 1; box-shadow: inset 0 -2px 0 var(--ink); }   /* the chosen tab: full colour, underlined */
+.mcp-tab:active { opacity: .6; } .mcp-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.mcp-body { display: flex; flex-direction: column; gap: var(--sp-2); } .mcp-list { display: contents; }   /* half-width card: the steps and the snippet share one column */
+.mcp-list li:nth-child(1) { order: 1; } .mcp-body .step-box-1 { order: 2; } .mcp-list li:nth-child(2) { order: 3; } .mcp-body .step-box-2 { order: 4; } .mcp-list li:nth-child(3) { order: 5; }   /* each snippet follows the step it belongs to */
+.mcp-list { list-style: none; margin: 0; padding: 0; gap: var(--sp-2); }
+.mcp-list li { display: grid; grid-template-columns: 28px minmax(0, 1fr); }   /* number, then the step text (user: closer) */
+.mcp-list .no { font-size: 12px; line-height: 24px; color: var(--ink); }   /* 01 02 03 on the step title's line, in the text colour (user) */
+.pkg .mcp-list h4 { font-size: 16px; line-height: 24px; margin: 0; }
+.pkg .mcp-list p { font-size: 16px; line-height: 24px; margin: 0; }
+.mcp-list p code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 14px; overflow-wrap: anywhere; }   /* file paths inside the step text */
+.mcp-list .pkg-links { margin-top: var(--sp-1); } .mcp-list .pkg-links[hidden] { display: none; }   /* .pkg-links is a flex row, which would otherwise override hidden */
+.pkg .mcp-body .cmd { width: auto; margin: 0 0 0 28px; min-height: 0; align-content: flex-start; padding-right: 36px; }   /* the copy icon keeps its own corner */   /* snippets line up with the step text, not the 01 02 03 numbers (user) */
+.pkg .mcp-body .cmd code { font-size: 12px; }
+.inline-copy { cursor: pointer; color: var(--ink); background: var(--line); border-radius: var(--r-xs); padding: 3px 5px 3px 6px; margin: 0 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background var(--t-fast); }   /* a soft rectangle under the icon and text; each wrapped line gets its own */   /* the example request, copyable right inside the sentence: copy icon + text in the card's own colour on a soft rectangle (user) */
+.inline-copy:hover { background: var(--btn); } .inline-copy:active { opacity: .6; } .inline-copy:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 2px; }
+.inline-copy-icon { display: inline-block; vertical-align: -1.92px; margin-left: 5px; } .inline-copy-icon svg { width: 15.36px; height: 15.36px; fill: currentColor; display: block; }   /* after the text; the copy glyph's ink (y 3–21 of 24) equals the 16px face's cap height, 11.52px, and sits on the baseline (user) */
+.inline-copy-icon .i-done { display: none; } .inline-copy.copied .inline-copy-icon .i-copy { display: none; } .inline-copy.copied .inline-copy-icon .i-done { display: block; }   /* snippets at 12px: the Claude Code command stays on one line under the indented text */
 .pkg h4 { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 var(--sp-1); overflow-wrap: anywhere; }
 .support-title .pkg-beta { display: inline-flex; vertical-align: middle; margin-left: 10px; top: -6px; font-family: 'Inter', sans-serif; font-feature-settings: normal; font-variant-ligatures: normal; }   /* the header's BETA badge itself (user: same as the one by the logo) — .beta-badge carries every other value; display overrides its display:none, and Inter matches the header's letterforms (the title would pass the page face down) */
 .pkg p { font-size: 16px; line-height: 24px; margin: 0 0 var(--stack); }
-.pkg .cmd { position: relative; margin-top: auto; min-height: 80px; display: flex; flex-wrap: wrap; align-content: space-between; align-items: center; justify-content: space-between; gap: 4px var(--sp-2); width: 100%; text-align: left; border: none; background: var(--line); color: inherit; border-radius: var(--r-sm); padding: 8px 12px; cursor: pointer; font: inherit; transition: background var(--t-fast); }   /* the whole row copies the command */
+.pkg .cmd { position: relative; margin-top: auto; min-height: 80px; display: flex; flex-wrap: wrap; align-content: space-between; align-items: center; justify-content: space-between; gap: 4px var(--sp-2); width: 100%; text-align: left; border: none; background: var(--field); color: inherit; border-radius: var(--r-sm); padding: 8px 12px; cursor: pointer; font: inherit; transition: background var(--t-fast); }   /* the whole row copies the command */
 .pkg .cmd:hover { background: var(--line-hover); } .pkg .cmd:active { opacity: .6; }
 .pkg .cmd code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 13px; line-height: 20px; overflow-wrap: anywhere; white-space: pre-wrap; }   /* wraps rather than clips; pre-wrap keeps the JSON snippets' line breaks and indent */
 .pkg .cmd .cmd-hint { position: absolute; right: 10px; bottom: 9px; display: flex; opacity: .7; transition: opacity var(--t-fast); }   /* always the bottom-right corner, never beside a short command (user) */
@@ -342,6 +362,7 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .half-b .author-contact { margin: 0 0 var(--block); }   /* .half-b prefix: outranks the generic `.half-b p` margin */
 .author .half-b .links { margin-top: auto; align-items: center; }   /* links stay at the bottom */
 .author-links .site { margin-left: auto; border-radius: 999px; }   /* the website button sits at the right edge, fully rounded */
+.author-links.site-wrapped .site { margin-left: 0; }   /* when it drops to its own line it starts at the left, under Instagram (user) */
 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* request form */
@@ -416,10 +437,11 @@ footer button.copied { color: var(--brand); }
   .tl time .m-long { display: none; } .tl time .m-short { display: inline; }   /* "26 September 2026" no longer fits the two-column date cell */
 }
 @media (max-width: 1100px) {
+  .packages .support-title { grid-column: 1 / 7; } .packages .support-lead { grid-column: 7 / 13; }
+}
+@media (max-width: 1100px) {
   .tl .n .dots, .tl b .bar { display: none; }   /* no room for the matrix or the bar once the columns narrow (user) */
   .tl .w { grid-column: 7 / 10; } .tl .d { grid-column: 10 / 13; }   /* "7 weights, 2 styles" no longer wraps; the note keeps three columns */
-  .packages-cards { grid-template-columns: 1fr 1fr; }   /* packages: 4 → 2/2 (user); the title/intro follow the card halves */
-  .packages .support-title { grid-column: 1 / 7; } .packages .support-lead { grid-column: 7 / 13; }
   #supportCards .p-long, #supportCards .a-long, #supportCards .a-net .net { display: none; } #supportCards .p-short, #supportCards .a-short { display: inline; }   /* narrow cards: "$1/mo", a 5…4 address and the ticker only, so every row stays on one line (user) */
 }
 @media (max-width: 700px) {
@@ -441,8 +463,9 @@ footer button.copied { color: var(--brand); }
   .license .half-a, .license .half-b { grid-column: 1 / -1; }   /* License above Repository, each with its own rule */
   .license .half-a { margin-bottom: var(--block); }
   #supportCards { grid-template-columns: 1fr; } #supportCards .support-card:last-child { grid-column: auto; }
-  .packages-cards { grid-template-columns: 1fr; }   /* tablet: one card per row (user) */
+  .packages-cards { grid-template-columns: 1fr; } .mcp-card { grid-column: auto; }   /* tablet: one card under the other */
   .packages .support-title { grid-column: 1 / 4; } .packages .support-lead { grid-column: 4 / 7; }
+  .mcp-head { flex-direction: column; align-items: flex-start; } 
   .tl li { grid-template-columns: 1fr 2fr; grid-template-areas: "t d" "n d" "v d"; row-gap: 0; align-content: start; }   /* timeline: date, count, version stacked on the left; the note on the right; no weights cell */
   .tl time { grid-area: t; } .tl .n { grid-area: n; } .tl b { grid-area: v; } .tl .d { grid-area: d; } .tl .w { display: none; }
   .f-lib { grid-column: 1 / 4; } .f-sup { grid-column: 4 / 7; } .f-fol { grid-column: 1 / 4; } .f-contact { grid-column: 4 / 7; }   /* footer 2 × 2: Library | Support, Follow | Contact */
@@ -486,11 +509,13 @@ footer button.copied { color: var(--brand); }
   .wall { --tile: 60px; --wgap: 12px; }
   .g { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .full, .facts, .stat-block, .inuse-text, .half-a, .half-b, .support-lead, .support-title { grid-column: 1 / -1; }
-  .packages .support-title, .packages .support-lead { grid-column: 1 / -1; }   /* .packages specificity: without this the ≤1100 rule (cols 7–13) still applies here and grows the 4-column phone grid to 12, squeezing the cards to 60px */
+  .packages .support-title, .packages .support-lead { grid-column: 1 / -1; } .mcp-head { flex-direction: column; align-items: flex-start; }   /* .packages specificity: without this the ≤1100 rule (cols 7–13) still applies here and grows the 4-column phone grid to 12, squeezing the cards to 60px */
+ .pkg.mcp-card { padding: 16px; } .pkg #mcpSetupCmd { padding: 8px 32px 8px 10px; }   /* phone: 8px more width, so the settings block keeps its lines */
+  #mcpSetupCmd code { font-size: 12px; }   /* the settings block keeps its lines on a phone-width card */
   .support-title { margin-bottom: var(--sp-2); }
   #supportCards { grid-template-columns: 1fr; } #supportCards .support-card:last-child { grid-column: auto; }
   #supportCards .support-card { padding: 20px; }
-  .packages-cards { grid-template-columns: 1fr; } .pkg { padding: 20px; }
+  .packages-cards { grid-template-columns: 1fr; } .mcp-card { grid-column: auto; } .pkg { padding: 20px; }
   .footer-icon { grid-column: 1 / -1; grid-row: auto; }
   .footer-copy { grid-column: 1 / -1; grid-row: auto; }
   .footer-copy br { display: none; }   /* © on one line on the phone (user) */
@@ -624,34 +649,38 @@ footer button.copied { color: var(--brand); }
     <h3 class="support-title">Packages<span class="beta-badge pkg-beta">Beta</span></h3>
     <p class="support-lead">An MCP server for AI assistants and icon components for React, Vue and Svelte, all on npm under the MIT license. For bug reports or integration help, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
     <div class="packages-cards" id="packagesCards">
-      <div class="pkg pkg-dark">
-        <div class="pkg-mark pkg-mark-row" role="tablist" aria-label="Setup for your AI assistant"><button type="button" role="tab" class="mcp-tab" data-client="claude" aria-label="Claude Code" aria-selected="true" tabindex="0"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg></button><button type="button" role="tab" class="mcp-tab" data-client="cursor" aria-label="Cursor" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/></svg></button><button type="button" role="tab" class="mcp-tab" data-client="codex" aria-label="Codex" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg></button><button type="button" role="tab" class="mcp-tab" data-client="copilot" aria-label="GitHub Copilot" aria-selected="false" tabindex="-1"><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.922 16.997C23.061 18.492 18.063 22.02 12 22.02 5.937 22.02.939 18.492.078 16.997A.641.641 0 0 1 0 16.741v-2.869a.883.883 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.098 10.098 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952C7.255 2.937 9.248 1.98 11.978 1.98c2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.841.841 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256Zm-11.75-5.992h-.344a4.359 4.359 0 0 1-.355.508c-.77.947-1.918 1.492-3.508 1.492-1.725 0-2.989-.359-3.782-1.259a2.137 2.137 0 0 1-.085-.104L4 11.746v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.359 4.359 0 0 1-.355-.508Zm2.328 3.25c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm-5 0c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm3.313-6.185c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"/></svg></button><button type="button" role="tab" class="mcp-tab" data-client="gemini" aria-label="Gemini CLI" aria-selected="false" tabindex="-1"><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg></button></div>
-        <h4>Iconoteka MCP</h4>
-        <p>Works in any MCP client: Claude, Cursor, Codex, Copilot and others. Runs offline, the icon data ships with it.</p>
-        <p class="cmd-where" id="mcpWhere">Run in a terminal for Claude Code</p>
-        <button type="button" class="cmd" id="mcpCmd" data-copy="claude mcp add --scope user iconoteka -- npx -y iconoteka-mcp" title="claude mcp add --scope user iconoteka -- npx -y iconoteka-mcp" aria-label="Copy setup for Claude Code"><code>claude mcp add --scope user iconoteka …</code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
-        <div class="pkg-links"><a href="https://www.npmjs.com/package/iconoteka-mcp" target="_blank" rel="noopener">npm</a><a href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-mcp" target="_blank" rel="noopener">GitHub</a></div>
+      <div class="pkg pkg-dark mcp-card" id="mcp">
+        <div class="mcp-tabs" id="mcpTabs" role="tablist" aria-label="Choose your AI assistant"></div>
+        <div hidden id="mcpMarks"><span class="mcp-mark" data-client="claude"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg></span><span class="mcp-mark" data-client="cursor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/></svg></span><span class="mcp-mark" data-client="codex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg></span><span class="mcp-mark" data-client="copilot"><svg class="mark-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.922 16.997C23.061 18.492 18.063 22.02 12 22.02 5.937 22.02.939 18.492.078 16.997A.641.641 0 0 1 0 16.741v-2.869a.883.883 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.098 10.098 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952C7.255 2.937 9.248 1.98 11.978 1.98c2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.841.841 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256Zm-11.75-5.992h-.344a4.359 4.359 0 0 1-.355.508c-.77.947-1.918 1.492-3.508 1.492-1.725 0-2.989-.359-3.782-1.259a2.137 2.137 0 0 1-.085-.104L4 11.746v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.359 4.359 0 0 1-.355-.508Zm2.328 3.25c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm-5 0c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm3.313-6.185c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"/></svg></span></div>
+        <div class="mcp-head">
+          <h4 class="mcp-title"><span class="mcp-title-mark" id="mcpTitleMark" aria-hidden="true"></span><span id="mcpTitleText">MCP for Claude Code</span></h4>
+          <div class="pkg-links"><a href="https://www.npmjs.com/package/iconoteka-mcp" target="_blank" rel="noopener">npm</a><a href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-mcp" target="_blank" rel="noopener">GitHub</a></div>
+        </div>
+        <div class="mcp-body" id="mcpPanel" role="tabpanel" aria-label="Setup for Claude Code">
+          <ol class="mcp-list">
+            <li><span class="no" aria-hidden="true">01</span><div><h4 id="mcpS1t">Copy the Command</h4><p id="mcpS1d">One command adds Iconoteka to Claude Code for all your projects.</p></div></li>
+            <li><span class="no" aria-hidden="true">02</span><div><h4 id="mcpS2t">Run It in Your Terminal</h4><p id="mcpS2d">Then start a new Claude Code session, and the Iconoteka tools are ready.</p><div class="pkg-links" id="mcpInstallWrap" hidden><a id="mcpInstall" href="#">Install</a></div></div></li>
+            <li><span class="no" aria-hidden="true">03</span><div><h4>Ask for an Icon</h4><p>Try <span class="inline-copy" role="button" tabindex="0" data-copy="Add a notification bell icon in medium weight to the header." aria-label="Copy the example request: Add a notification bell icon in medium weight to the header.">Add a notification bell icon in medium weight to the header.<span class="inline-copy-icon" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></span> Your assistant finds the icon in Iconoteka and pastes the SVG, which takes the colour of your text.</p></div></li>
+          </ol>
+          <button type="button" class="cmd step-box-1" id="mcpSetupCmd" data-copy="claude mcp add --scope user iconoteka -- npx -y iconoteka-mcp" aria-label="Copy setup for Claude Code"><code>claude mcp add --scope user iconoteka -- npx -y iconoteka-mcp</code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
+        </div>
       </div>
-      <div class="pkg">
-        <div class="pkg-mark" role="img" aria-label="React"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg></div>
-        <h4>React</h4>
-        <p>One module per icon, so bundlers keep only what you import. Weight, variant and size as props.</p>
-        <button type="button" class="cmd" data-copy="npm install iconoteka-react" title="Copy" aria-label="Copy npm install iconoteka-react"><code>npm install iconoteka-react</code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
-        <div class="pkg-links"><a href="https://www.npmjs.com/package/iconoteka-react" target="_blank" rel="noopener">npm</a><a href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-react" target="_blank" rel="noopener">GitHub</a></div>
-      </div>
-      <div class="pkg">
-        <div class="pkg-mark" role="img" aria-label="Vue.js"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z"/></svg></div>
-        <h4>Vue</h4>
-        <p>Vue 3 components for script setup. Tree-shakeable, with the same three props.</p>
-        <button type="button" class="cmd" data-copy="npm install iconoteka-vue" title="Copy" aria-label="Copy npm install iconoteka-vue"><code>npm install iconoteka-vue</code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
-        <div class="pkg-links"><a href="https://www.npmjs.com/package/iconoteka-vue" target="_blank" rel="noopener">npm</a><a href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-vue" target="_blank" rel="noopener">GitHub</a></div>
-      </div>
-      <div class="pkg">
-        <div class="pkg-mark" role="img" aria-label="Svelte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.354 21.125a4.44 4.44 0 0 1-4.765-1.767 4.109 4.109 0 0 1-.703-3.107 3.898 3.898 0 0 1 .134-.522l.105-.321.287.21a7.21 7.21 0 0 0 2.186 1.092l.208.063-.02.208a1.253 1.253 0 0 0 .226.83 1.337 1.337 0 0 0 1.435.533 1.231 1.231 0 0 0 .343-.15l5.59-3.562a1.164 1.164 0 0 0 .524-.778 1.242 1.242 0 0 0-.211-.937 1.338 1.338 0 0 0-1.435-.533 1.23 1.23 0 0 0-.343.15l-2.133 1.36a4.078 4.078 0 0 1-1.135.499 4.44 4.44 0 0 1-4.765-1.766 4.108 4.108 0 0 1-.702-3.108 3.855 3.855 0 0 1 1.742-2.582l5.589-3.563a4.072 4.072 0 0 1 1.135-.499 4.44 4.44 0 0 1 4.765 1.767 4.109 4.109 0 0 1 .703 3.107 3.943 3.943 0 0 1-.134.522l-.105.321-.286-.21a7.204 7.204 0 0 0-2.187-1.093l-.208-.063.02-.207a1.255 1.255 0 0 0-.226-.831 1.337 1.337 0 0 0-1.435-.532 1.231 1.231 0 0 0-.343.15L8.62 9.368a1.162 1.162 0 0 0-.524.778 1.24 1.24 0 0 0 .211.937 1.338 1.338 0 0 0 1.435.533 1.235 1.235 0 0 0 .344-.151l2.132-1.36a4.067 4.067 0 0 1 1.135-.498 4.44 4.44 0 0 1 4.765 1.766 4.108 4.108 0 0 1 .702 3.108 3.857 3.857 0 0 1-1.742 2.583l-5.589 3.562a4.072 4.072 0 0 1-1.135.499m10.358-17.95C18.484-.015 14.082-.96 10.9 1.068L5.31 4.63a6.412 6.412 0 0 0-2.896 4.295 6.753 6.753 0 0 0 .666 4.336 6.43 6.43 0 0 0-.96 2.396 6.833 6.833 0 0 0 1.168 5.167c2.229 3.19 6.63 4.135 9.812 2.108l5.59-3.562a6.41 6.41 0 0 0 2.896-4.295 6.756 6.756 0 0 0-.665-4.336 6.429 6.429 0 0 0 .958-2.396 6.831 6.831 0 0 0-1.167-5.168Z"/></svg></div>
-        <h4>Svelte</h4>
-        <p>Icons paint with currentColor, so they follow the text colour. Extra attributes pass through.</p>
-        <button type="button" class="cmd" data-copy="npm install iconoteka-svelte" title="Copy" aria-label="Copy npm install iconoteka-svelte"><code>npm install iconoteka-svelte</code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
-        <div class="pkg-links"><a href="https://www.npmjs.com/package/iconoteka-svelte" target="_blank" rel="noopener">npm</a><a href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-svelte" target="_blank" rel="noopener">GitHub</a></div>
+      <div class="pkg mcp-card" id="components">
+        <div class="mcp-tabs" id="wrapTabs" role="tablist" aria-label="Choose your framework"></div>
+        <div hidden id="wrapMarks"><span class="mcp-mark" data-client="react"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg></span><span class="mcp-mark" data-client="vue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z"/></svg></span><span class="mcp-mark" data-client="svelte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.354 21.125a4.44 4.44 0 0 1-4.765-1.767 4.109 4.109 0 0 1-.703-3.107 3.898 3.898 0 0 1 .134-.522l.105-.321.287.21a7.21 7.21 0 0 0 2.186 1.092l.208.063-.02.208a1.253 1.253 0 0 0 .226.83 1.337 1.337 0 0 0 1.435.533 1.231 1.231 0 0 0 .343-.15l5.59-3.562a1.164 1.164 0 0 0 .524-.778 1.242 1.242 0 0 0-.211-.937 1.338 1.338 0 0 0-1.435-.533 1.23 1.23 0 0 0-.343.15l-2.133 1.36a4.078 4.078 0 0 1-1.135.499 4.44 4.44 0 0 1-4.765-1.766 4.108 4.108 0 0 1-.702-3.108 3.855 3.855 0 0 1 1.742-2.582l5.589-3.563a4.072 4.072 0 0 1 1.135-.499 4.44 4.44 0 0 1 4.765 1.767 4.109 4.109 0 0 1 .703 3.107 3.943 3.943 0 0 1-.134.522l-.105.321-.286-.21a7.204 7.204 0 0 0-2.187-1.093l-.208-.063.02-.207a1.255 1.255 0 0 0-.226-.831 1.337 1.337 0 0 0-1.435-.532 1.231 1.231 0 0 0-.343.15L8.62 9.368a1.162 1.162 0 0 0-.524.778 1.24 1.24 0 0 0 .211.937 1.338 1.338 0 0 0 1.435.533 1.235 1.235 0 0 0 .344-.151l2.132-1.36a4.067 4.067 0 0 1 1.135-.498 4.44 4.44 0 0 1 4.765 1.766 4.108 4.108 0 0 1 .702 3.108 3.857 3.857 0 0 1-1.742 2.583l-5.589 3.562a4.072 4.072 0 0 1-1.135.499m10.358-17.95C18.484-.015 14.082-.96 10.9 1.068L5.31 4.63a6.412 6.412 0 0 0-2.896 4.295 6.753 6.753 0 0 0 .666 4.336 6.43 6.43 0 0 0-.96 2.396 6.833 6.833 0 0 0 1.168 5.167c2.229 3.19 6.63 4.135 9.812 2.108l5.59-3.562a6.41 6.41 0 0 0 2.896-4.295 6.756 6.756 0 0 0-.665-4.336 6.429 6.429 0 0 0 .958-2.396 6.831 6.831 0 0 0-1.167-5.168Z"/></svg></span></div>
+        <div class="mcp-head">
+          <h4 class="mcp-title"><span class="mcp-title-mark" id="wrapTitleMark" aria-hidden="true"></span><span id="wrapTitleText">Components for React</span></h4>
+          <div class="pkg-links"><a id="wrapNpm" href="https://www.npmjs.com/package/iconoteka-react" target="_blank" rel="noopener">npm</a><a id="wrapGit" href="https://github.com/turbaba/Iconoteka/tree/main/packages/iconoteka-react" target="_blank" rel="noopener">GitHub</a></div>
+        </div>
+        <div class="mcp-body" id="wrapPanel" role="tabpanel" aria-label="Setup for React">
+          <ol class="mcp-list">
+            <li><span class="no" aria-hidden="true">01</span><div><h4>Install the Package</h4><p id="wrapS1d">Add <code>iconoteka-react</code> to your project.</p></div></li>
+            <li><span class="no" aria-hidden="true">02</span><div><h4>Import an Icon</h4><p>Each icon is a component named after it, like <code>Bell</code>, <code>Settings</code> or <code>Close</code>.</p></div></li>
+            <li><span class="no" aria-hidden="true">03</span><div><h4>Set Weight, Style and Size</h4><p>Pass <code>weight</code> from thin to bold, <code>variant</code> stroke or fill, and <code>size</code>. Icons take the colour of your text.</p></div></li>
+          </ol>
+          <button type="button" class="cmd step-box-1" id="wrapInstallCmd" data-copy="npm install iconoteka-react" aria-label="Copy npm install iconoteka-react"><code>npm install iconoteka-react</code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
+          <button type="button" class="cmd step-box-2" id="wrapUsageCmd" data-copy="" aria-label="Copy the React example"><code></code><span class="cmd-hint" aria-hidden="true"><svg class="i-copy" viewBox="0 0 24 24"><path d="M9.35 4.8V14.7H19.15V4.8H9.35ZM7.5 3H21V16.5H7.5V3ZM4.85 19.2H16.5V21H3V7.5H4.85V19.2Z"/></svg><svg class="i-done" viewBox="0 0 24 24"><path d="M9.50078 19.3749L0.925781 10.7999L2.30078 9.3999L9.50078 16.6749L21.7008 4.3999L23.0758 5.7999L9.50078 19.3749Z"/></svg></span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -875,34 +904,86 @@ new IntersectionObserver((entries, obs) => { if (entries.some(e => e.isIntersect
   window.addEventListener('touchstart', () => { last = Math.max(0, scrollY); }, { passive: true });   // a new touch starts a fresh measurement
 })();
 
-// MCP card: one setup per assistant. The box stays one fixed size (user), so it shows a SHORT PREVIEW, while Copy
-// takes the full snippet — verbatim from the iconoteka-mcp README — and hovering the box shows it in full.
-// The existing copy handler reads data-copy at click time, so switching a tab only swaps text.
-(() => {
-  const JSON_SERVERS = `{
-  "mcpServers": {
-    "iconoteka": {
-      "command": "npx",
-      "args": ["-y", "iconoteka-mcp"]
-    }
+// Tab rows (MCP and Components cards) always fit their card: when a row is too wide, the gap tightens first,
+// then two-word names (Claude Code, VS Code, Other Apps) break onto two lines (user), then the names and marks shrink; both rows always use the same step so the cards match.
+// Only if the smallest step still overflows (narrow phones) does that row become a 3-column grid. No scrolling (user).
+const TAB_STEPS = [[34, 16, 24, 0], [30, 16, 24, 0], [26, 16, 24, 0], [22, 16, 24, 0], [22, 16, 24, 1], [18, 16, 24, 1], [14, 16, 24, 1], [14, 15, 22, 1], [12, 14, 20, 1], [10, 13, 18, 1], [8, 12, 18, 1]];   // gap, name size, mark size, two-line names
+const tabRows = [];
+let tabRowsW = '';
+const setTabStep = (row, i) => { const [g, f, m, two] = TAB_STEPS[i]; row.style.setProperty('--tab-gap', g + 'px'); row.style.setProperty('--tab-font', f + 'px'); row.style.setProperty('--tab-mark', m + 'px'); row.classList.toggle('names2', !!two); };
+const tabsFit = row => { const r = row.getBoundingClientRect().right; return [...row.children].every(t => t.getBoundingClientRect().right <= r + .5); };
+function fitTabRows(force) {
+  const key = tabRows.map(r => r.clientWidth).join(); if (!force && key === tabRowsW) return; tabRowsW = key;
+  let need = 0; const wraps = new Set();
+  tabRows.forEach(row => {
+    row.classList.remove('wrap');
+    let i = 0; for (; i < TAB_STEPS.length; i++) { setTabStep(row, i); if (tabsFit(row)) break; }
+    if (i === TAB_STEPS.length) { wraps.add(row); i = TAB_STEPS.length - 1; }
+    need = Math.max(need, i);
+  });
+  tabRows.forEach(row => { setTabStep(row, need); row.classList.toggle('wrap', wraps.has(row)); });
+}
+function tabRow(row) {
+  tabRows.push(row);
+  if (tabRows.length === 1) {
+    if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => fitTabRows()); ro.observe(document.body); } else addEventListener('resize', () => fitTabRows());
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitTabRows(true));
   }
-}`;
-  const MCP_SETUP = {
-    claude:  { where: 'Run in a terminal for Claude Code',  preview: 'claude mcp add --scope user iconoteka …',  cmd: 'claude mcp add --scope user iconoteka -- npx -y iconoteka-mcp' },
-    cursor:  { where: 'Add to ~/.cursor/mcp.json',          preview: '{ "mcpServers": { "iconoteka": … } }',     cmd: JSON_SERVERS },
-    codex:   { where: 'Run in a terminal for Codex',        preview: 'codex mcp add iconoteka -- npx -y …',      cmd: 'codex mcp add iconoteka -- npx -y iconoteka-mcp' },
-    copilot: { where: 'Run in a terminal for VS Code',      preview: `code --add-mcp '{"name":"iconoteka", …}'`, cmd: `code --add-mcp '{"name":"iconoteka","command":"npx","args":["-y","iconoteka-mcp"]}'` },
-    gemini:  { where: 'Add to ~/.gemini/settings.json',     preview: '{ "mcpServers": { "iconoteka": … } }',     cmd: JSON_SERVERS },
+  fitTabRows(true);
+}
+
+// MCP section: one tab per assistant, each with its own three steps. Snippets are verbatim from the iconoteka-mcp
+// README; the marks are cloned from the Packages card. The copy handler reads data-copy at click time, so a tab
+// switch only swaps text. Cursor and VS Code also get their official one-click install links.
+(() => {
+  const tabsEl = document.getElementById('mcpTabs'), panel = document.getElementById('mcpPanel'), box = document.getElementById('mcpSetupCmd');
+  if (!tabsEl || !panel || !box) return;
+  const CFG = { command: 'npx', args: ['-y', 'iconoteka-mcp'] };
+  const JSON_SERVERS = '{\n  "mcpServers": {\n    "iconoteka": {\n      "command": "npx",\n      "args": ["-y", "iconoteka-mcp"]\n    }\n  }\n}';
+  const CMD = 'Copy the Command', SET = 'Copy the Settings', TERM = 'Run It in Your Terminal';   // titles in title case (user)
+  const MCP = [
+    { id: 'claude-code', name: 'Claude Code', mark: 'claude', t1: CMD, d1: 'One command adds Iconoteka to Claude Code for all your projects.', cmd: 'claude mcp add --scope user iconoteka -- npx -y iconoteka-mcp',
+      t2: TERM, d2: 'Then start a new Claude Code session, and the Iconoteka tools are ready.' },
+    { id: 'claude', name: 'Claude', mark: 'claude', t1: SET, d1: 'The server entry for the Claude desktop app.', cmd: JSON_SERVERS,
+      t2: 'Add It to Claude', d2: 'In the Claude desktop app, open Settings, Developer, Edit Config. Paste the block into <code>claude_desktop_config.json</code> (next to any servers already there), save, and restart Claude.' },
+    { id: 'cursor', name: 'Cursor', mark: 'cursor', t1: SET, d1: 'The server entry for Cursor.', cmd: JSON_SERVERS,
+      t2: 'Add It to Cursor', d2: 'Paste the block into <code>~/.cursor/mcp.json</code>, or <code>.cursor/mcp.json</code> in a project. Or install it in one click.',
+      install: { label: 'Add to Cursor', href: 'cursor://anysphere.cursor-deeplink/mcp/install?name=iconoteka&config=' + btoa(JSON.stringify(CFG)) } },
+    { id: 'vscode', name: 'VS Code', mark: 'copilot', t1: CMD, d1: 'One command adds Iconoteka to VS Code for GitHub Copilot.', cmd: `code --add-mcp '{"name":"iconoteka","command":"npx","args":["-y","iconoteka-mcp"]}'`,
+      t2: TERM, d2: 'Copilot uses Iconoteka in agent mode. Or install it in one click.',
+      install: { label: 'Add to VS Code', href: 'vscode:mcp/install?' + encodeURIComponent(JSON.stringify({ name: 'iconoteka', ...CFG })) } },
+    { id: 'codex', name: 'Codex', mark: 'codex', t1: CMD, d1: 'One command adds Iconoteka to Codex.', cmd: 'codex mcp add iconoteka -- npx -y iconoteka-mcp',
+      t2: TERM, d2: 'Codex saves it to <code>~/.codex/config.toml</code> and loads it in every new session.' },
+    { id: 'other', name: 'Other Apps', mark: null, t1: SET, d1: 'Most MCP apps read this same entry.', cmd: JSON_SERVERS,
+      t2: 'Add It to Your App', d2: 'Gemini CLI reads it from <code>~/.gemini/settings.json</code>, Windsurf from <code>~/.codeium/windsurf/mcp_config.json</code>. Zed keeps servers under <code>context_servers</code> in its <code>settings.json</code>. Other apps: paste it into their MCP settings.' },
+  ];
+  const $ = id => document.getElementById(id), code = box.querySelector('code'), wrap = $('mcpInstallWrap'), inst = $('mcpInstall');
+  tabsEl.innerHTML = MCP.map((c, i) => '<button type="button" role="tab" class="mcp-tab" id="mcp-tab-' + c.id + '" data-client="' + c.id + '" aria-controls="mcpPanel" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '"><span class="mcp-tab-mark" data-mark="' + (c.mark || '') + '" aria-hidden="true"></span>' + c.name + '</button>').join('');
+  const tabs = [...tabsEl.children]; tabRow(tabsEl);
+  tabs.forEach(t => {   // each tab shows its assistant's mark above the name; Other Apps keeps an empty slot (user)
+    const holder = t.querySelector('.mcp-tab-mark'), src = holder.dataset.mark && document.querySelector('#mcpMarks .mcp-mark[data-client="' + holder.dataset.mark + '"] svg');
+    if (src) holder.appendChild(src.cloneNode(true));
+  });
+  const show = (id, focus) => {
+    const c = MCP.find(x => x.id === id); if (!c) return;
+    tabs.forEach(t => { const on = t.dataset.client === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+    panel.setAttribute('aria-labelledby', 'mcp-tab-' + id); panel.removeAttribute('aria-label');
+    const mk = c.mark && document.querySelector('#mcpMarks .mcp-mark[data-client="' + c.mark + '"] svg');
+    $('mcpTitleMark').replaceChildren(...(mk ? [mk.cloneNode(true)] : [])); $('mcpTitleText').textContent = 'MCP for ' + c.name;
+    $('mcpS1t').textContent = c.t1; $('mcpS1d').textContent = c.d1; $('mcpS2t').textContent = c.t2; $('mcpS2d').innerHTML = c.d2;
+    code.textContent = c.cmd; box.dataset.copy = c.cmd; box.setAttribute('aria-label', 'Copy setup for ' + c.name); box.classList.remove('copied');
+    wrap.hidden = !c.install; if (c.install) { inst.textContent = c.install.label; inst.href = c.install.href; }
   };
-  const tabs = [...document.querySelectorAll('.mcp-tab')], box = document.getElementById('mcpCmd'), where = document.getElementById('mcpWhere');
-  if (!tabs.length || !box || !where) return;
-  const code = box.querySelector('code'), hint = box.querySelector('.cmd-hint');
-  const show = (k, focus) => {
-    const set = MCP_SETUP[k]; if (!set) return;
-    tabs.forEach(t => { const on = t.dataset.client === k; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
-    where.textContent = set.where; code.textContent = set.preview; box.dataset.copy = set.cmd; box.title = set.cmd;
-    box.setAttribute('aria-label', 'Copy setup for ' + tabs.find(t => t.dataset.client === k).getAttribute('aria-label'));
-    box.classList.remove('copied');
+  // Keep the page still when switching (wider than 860px, where the cards share a row): the body gets the min-height of its tallest version at this width
+  // (texts and snippets differ per assistant). Re-measured when the width changes; the fonts settle first.
+  let lockedW = 0;
+  const lockHeights = () => {
+    const w = panel.clientWidth; if (!w || w === lockedW) return; lockedW = w;
+    if (matchMedia('(max-width: 860px)').matches) { panel.style.minHeight = panel.closest('.mcp-card').querySelector('.mcp-head').style.minHeight = ''; return; }   // stacked (≤860): the tabs sit above the content, so nothing they touch moves, and a lock would leave a tall empty card
+    const current = (tabs.find(t => t.getAttribute('aria-selected') === 'true') || tabs[0]).dataset.client;
+    const head = $('mcpTitleText').closest('.mcp-head'); panel.style.minHeight = head.style.minHeight = ''; let max = 0, maxH = 0;
+    MCP.forEach(c => { show(c.id); max = Math.max(max, panel.offsetHeight); maxH = Math.max(maxH, head.offsetHeight); });
+    show(current); panel.style.minHeight = max + 'px'; head.style.minHeight = maxH + 'px';   // the title row too: a longer name can wrap in a narrow card
   };
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => show(t.dataset.client));
@@ -911,6 +992,57 @@ new IntersectionObserver((entries, obs) => { if (entries.some(e => e.isIntersect
       e.preventDefault(); show(tabs[(i + d + tabs.length) % tabs.length].dataset.client, true);
     });
   });
+  show('claude-code');   // fills the title mark (tablet and phone never run the height lock, which also renders it)
+  lockHeights();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { lockedW = 0; lockHeights(); });
+  if ('ResizeObserver' in window) new ResizeObserver(lockHeights).observe(panel); else addEventListener('resize', lockHeights);
+})();
+
+// Components card: the same structure as the MCP card, one tab per framework. Install and usage snippets are verbatim
+// from each package's README; npm and GitHub follow the chosen framework.
+(() => {
+  const tabsEl = document.getElementById('wrapTabs'), panel = document.getElementById('wrapPanel');
+  if (!tabsEl || !panel) return;
+  const FW = [   // <\/script> is escaped: a literal closing tag would end this inline script
+    { id: 'react', name: 'React', usage: 'import { Bell } from "iconoteka-react";\n\n<Bell weight="bold" variant="fill" size={32} />' },
+    { id: 'vue', name: 'Vue', usage: '<script setup>\nimport { Bell } from "iconoteka-vue";\n<\/script>\n\n<template>\n  <Bell weight="bold" variant="fill" :size="32" />\n</template>' },
+    { id: 'svelte', name: 'Svelte', usage: '<script>\n  import { Bell } from "iconoteka-svelte";\n<\/script>\n\n<Bell weight="bold" variant="fill" size={32} />' },
+  ];
+  const $ = id => document.getElementById(id), inst = $('wrapInstallCmd'), use = $('wrapUsageCmd');
+  tabsEl.innerHTML = FW.map((c, i) => '<button type="button" role="tab" class="mcp-tab" id="wrap-tab-' + c.id + '" data-client="' + c.id + '" aria-controls="wrapPanel" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '"><span class="mcp-tab-mark" aria-hidden="true"></span>' + c.name + '</button>').join('');
+  const tabs = [...tabsEl.children]; tabRow(tabsEl);
+  tabs.forEach(t => { const src = document.querySelector('#wrapMarks .mcp-mark[data-client="' + t.dataset.client + '"] svg'); if (src) t.querySelector('.mcp-tab-mark').appendChild(src.cloneNode(true)); });   // marks above the names (user)
+  const show = (id, focus) => {
+    const c = FW.find(x => x.id === id); if (!c) return; const pkg = 'iconoteka-' + id, cmd = 'npm install ' + pkg;
+    tabs.forEach(t => { const on = t.dataset.client === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+    panel.setAttribute('aria-labelledby', 'wrap-tab-' + id); panel.removeAttribute('aria-label');
+    const mk = document.querySelector('#wrapMarks .mcp-mark[data-client="' + id + '"] svg');
+    $('wrapTitleMark').replaceChildren(...(mk ? [mk.cloneNode(true)] : [])); $('wrapTitleText').textContent = 'Components for ' + c.name;
+    $('wrapS1d').innerHTML = 'Add <code>' + pkg + '</code> to your project.';
+    inst.querySelector('code').textContent = cmd; inst.dataset.copy = cmd; inst.setAttribute('aria-label', 'Copy ' + cmd); inst.classList.remove('copied');
+    use.querySelector('code').textContent = c.usage; use.dataset.copy = c.usage; use.setAttribute('aria-label', 'Copy the ' + c.name + ' example'); use.classList.remove('copied');
+    $('wrapNpm').href = 'https://www.npmjs.com/package/' + pkg; $('wrapGit').href = 'https://github.com/turbaba/Iconoteka/tree/main/packages/' + pkg;
+  };
+  let lockedW = 0;   // same height lock as the MCP card
+  const lockHeights = () => {
+    const w = panel.clientWidth; if (!w || w === lockedW) return; lockedW = w;
+    if (matchMedia('(max-width: 860px)').matches) { panel.style.minHeight = panel.closest('.mcp-card').querySelector('.mcp-head').style.minHeight = ''; return; }
+    const current = (tabs.find(t => t.getAttribute('aria-selected') === 'true') || tabs[0]).dataset.client;
+    const head = $('wrapTitleText').closest('.mcp-head'); panel.style.minHeight = head.style.minHeight = ''; let max = 0, maxH = 0;
+    FW.forEach(c => { show(c.id); max = Math.max(max, panel.offsetHeight); maxH = Math.max(maxH, head.offsetHeight); });
+    show(current); panel.style.minHeight = max + 'px'; head.style.minHeight = maxH + 'px';   // the title row too: a longer name can wrap in a narrow card
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => show(t.dataset.client));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      e.preventDefault(); show(tabs[(i + d + tabs.length) % tabs.length].dataset.client, true);
+    });
+  });
+  show('react');
+  lockHeights();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { lockedW = 0; lockHeights(); });
+  if ('ResizeObserver' in window) new ResizeObserver(lockHeights).observe(panel); else addEventListener('resize', lockHeights);
 })();
 
 // BETA pill in the Packages title: land it on the same sub-pixel phase as the header's pill. Both are the same
@@ -943,8 +1075,26 @@ new IntersectionObserver((entries, obs) => { if (entries.some(e => e.isIntersect
   matchMedia('(resolution: ' + (devicePixelRatio || 1) + 'dppx)').addEventListener?.('change', snap);   // moved to a screen with another pixel density
 })();
 
+// Author links: turbaba.com sits at the right end of the row, but when the row breaks and it drops to a line of its
+// own, it moves to the left edge. Flexbox cannot tell a wrapped item from a first-line one, so measure it.
+(() => {
+  const box = document.querySelector('.author-links'), site = box && box.querySelector('.site');
+  if (!site) return;
+  const check = () => box.classList.toggle('site-wrapped', site.offsetTop > box.firstElementChild.offsetTop + 2);   // the auto margin never changes where the row breaks, so no loop
+  check();
+  if ('ResizeObserver' in window) new ResizeObserver(check).observe(box); else addEventListener('resize', check);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+})();
+
+// Inline copy (the example request in the MCP card's step 03)
+document.querySelectorAll('.inline-copy').forEach(b => {   // a span with role=button, so the request wraps with the sentence (a real button would break onto its own line)
+  const copy = () => navigator.clipboard.writeText(b.dataset.copy).then(() => { b.classList.add('copied'); setTimeout(() => b.classList.remove('copied'), 1600); }).catch(() => showToast('Copy failed'));
+  b.addEventListener('click', copy);
+  b.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copy(); } });
+});
+
 // Packages: copy the install command
-document.querySelectorAll('.pkg .cmd').forEach(b => b.addEventListener('click', () => {
+document.querySelectorAll('.pkg button.cmd').forEach(b => b.addEventListener('click', () => {
   const hint = b.querySelector('.cmd-hint');
   navigator.clipboard.writeText(b.dataset.copy).then(() => { const label = b.getAttribute('aria-label'); b.classList.add('copied'); b.setAttribute('aria-label', 'Copied'); setTimeout(() => { b.classList.remove('copied'); if (b.getAttribute('aria-label') === 'Copied') b.setAttribute('aria-label', label); }, 1600); })
     .catch(() => showToast('Copy failed'));
@@ -1025,6 +1175,7 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
   const arrow = (name, fallback) => { const ic = icons.find(i => i.name.split('-')[0] === name); return ic ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + pathOf(ic, 'regular', 'stroke') + '"/></svg>' : fallback; };
   document.getElementById('slidePrev').innerHTML = arrow('arrow_left', '←');
   document.getElementById('slideNext').innerHTML = arrow('arrow_right', '→');
+  const otherMark = document.querySelector('#mcp-tab-other .mcp-tab-mark'); if (otherMark && !otherMark.firstChild) otherMark.innerHTML = arrow('more', '');   // Other Apps: Iconoteka's own "more" icon in its mark slot (user)
   // Header wall of tiles — the Brand file's "icons grid rules":
   //   colours: the 13 starred palette colours; Beige 1.5× as often as the rest, Transparent Ox only three times
   //   in the whole grid, everything else about equally; no same colour up / down / left / right;
@@ -1236,12 +1387,13 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
 // In use — one slide per GALLERY entry { type: 'image' | 'video', src, alt, poster }, in a new random order on every
 // load (user). Images come from the Gallery section of the Iconoteka Brand file in Figma.
 const GALLERY = [   // image src = base name, the slider builds a 960 / 1440 / 1920 srcset from it; video src = the .mp4 itself, with a poster frame
+  { type: 'image', src: 'media/iconoteka-gallery-bank-app', alt: 'Three phone screens of a banking app with balance, cards and savings goals using category and action icons' },
   { type: 'image', src: 'media/iconoteka-gallery-book-cover', alt: 'Yellow book cover with a globe icon' },
   { type: 'image', src: 'media/iconoteka-gallery-festival-cyclist', alt: 'Cargo bike rider passing a festival hoarding with a large bicycle pictogram' },
   { type: 'image', src: 'media/iconoteka-gallery-smart-home-app', alt: 'Smart home app on a phone with lights, security and energy tiles' },
   { type: 'image', src: 'media/iconoteka-gallery-city-guide', alt: 'Colourful city guide tiles for museums, food, coffee, parks and more' },
   { type: 'video', src: 'media/iconoteka-gallery-recycling.mp4', poster: 'media/iconoteka-gallery-recycling-poster.jpg', alt: 'Waste sorting bins labelled with icons for residual waste, food and plastic' },
-  { type: 'video', src: 'media/iconoteka-gallery-icon-pillows.mp4', poster: 'media/iconoteka-gallery-icon-pillows-poster.jpg', alt: 'Soft blue and orange pillows stitched with a user icon and a headphones icon' },
+  { type: 'image', src: 'media/iconoteka-gallery-icon-pillows', alt: 'Soft blue and orange pillows stitched with a user icon and a headphones icon' },
   { type: 'image', src: 'media/iconoteka-gallery-project-app', alt: 'Dark project management app with sidebar navigation, board tabs and task icons' },
   { type: 'image', src: 'media/iconoteka-gallery-travel-cards', alt: 'Travel story cards with large droplet, crescent, wine glass and tulip artwork' },
 ];
