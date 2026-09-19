@@ -42,9 +42,9 @@ header.support-open { border-bottom-color: transparent; }   /* no line between h
 .support-card h4 small { font-size: 11px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; color: var(--text-dim); }
 .support-card p { font-size: clamp(13px, 0.9vw, 16px); line-height: 1.5; color: var(--text-muted); margin: 0 0 auto; }
 .support-card h4 + p { margin-top: 0; }   /* title → text = the 8px flex gap */
-.support-cta { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; box-sizing: border-box; padding: 0 14px; margin-top: 16px;
+.support-cta { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; min-height: 32px; flex: none; box-sizing: border-box; padding: 0 14px; margin-top: 16px;
                border-radius: var(--r-sm); background: var(--text); color: var(--bg); font-family: inherit; font-size: 14px; font-weight: 500; line-height: 1; letter-spacing: .01em; text-decoration: none;
-               border: none; cursor: pointer; transition: opacity var(--t-fast); align-self: flex-start; white-space: nowrap; }   /* the About page's button style one size down (user "make them smaller"): 32px, 14px sides, 6px radius, 14px/500 in the page's font */
+               border: none; cursor: pointer; transition: opacity var(--t-fast); align-self: flex-start; white-space: nowrap; }   /* the About page's button style one size down (user "make them smaller"): 32px, 14px sides, 6px radius, 14px/500 in the page's font */   /* flex: none + min-height: the card is a column flex container, and Safari shrinks a flex item below its height where Chrome does not -- without this the pill collapses to about 20px */
 .support-cta:hover { opacity: .85; }
 .support-addr { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
 .support-addr button { height: 32px; padding: 0 14px; border-radius: var(--r-sm); border: none; background: var(--ui-surface);

@@ -11,7 +11,7 @@
   if (saved === 'granted') tell('granted');
 
   const css = `
-.consent { position: fixed; left: 0; right: 0; bottom: 20px; margin: 0 auto; z-index: 60; width: max-content; max-width: calc(100vw - 40px); display: flex; align-items: center; gap: 18px; background: var(--ui-surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--r-md, 10px); box-shadow: var(--shadow-lg); padding: 14px 14px 14px 18px; font-size: 13px; line-height: 19px; }
+.consent { position: fixed; left: 0; right: 0; bottom: 20px; margin: 0 auto; z-index: 1500; width: max-content; max-width: calc(100vw - 40px); display: flex; align-items: center; gap: 18px; background: var(--ui-surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--r-md, 10px); box-shadow: var(--shadow-lg); padding: 14px 14px 14px 18px; font-size: 13px; line-height: 19px; }
 .consent-text { display: flex; flex-direction: column; gap: 2px; max-width: 440px; }
 .consent strong { font-size: 14px; font-weight: 600; line-height: 20px; }
 .consent p { margin: 0; color: var(--text-muted); }
@@ -38,8 +38,8 @@
     if (!styled) { const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style); styled = true; }
     box = document.createElement('div');
     box.className = 'consent'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Cookies');
-    box.innerHTML = '<div class="consent-text"><strong>Iconoteka uses cookies</strong><p>Google Analytics counts visits: the pages you open, the site you came from, your country and browser. Icon downloads and empty searches are counted separately, without cookies. <a href="/about.html#privacy">More</a></p></div>'
-      + '<div class="consent-row"><button type="button" class="yes">Accept</button><button type="button" class="no">Decline</button></div>';
+    box.innerHTML = '<div class="consent-text"><strong>Iconoteka uses cookies</strong><p>Google Analytics counts visits: the pages you open, the site you came from, your country and browser. Icon downloads and empty searches are counted separately, without cookies. <a href="/about.html#privacy">Learn more</a></p></div>'
+      + '<div class="consent-row"><button type="button" class="no">Decline</button><button type="button" class="yes">Accept</button></div>';
     document.body.appendChild(box);
     sit();
     // About loads a webfont: the first measurement uses fallback metrics, so re-sit once the real face is in.

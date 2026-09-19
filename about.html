@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>About Iconoteka, an open-source library of 1,300 icons</title>
+<title>About Iconoteka</title>
 <meta name="description" content="Iconoteka is a free, open-source library of 1,300 icons in 7 weights, drawn on a 24-point grid by Oleg Turbaba. MIT licensed."/>
-<meta property="og:title" content="About Iconoteka, an open-source library of 1,300 icons"/>
+<meta property="og:title" content="About Iconoteka, 1,300 open-source icons in 7 weights and 2 styles"/>
 <meta property="og:description" content="A free, open-source library of 1,300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 <meta property="og:image" content="https://iconoteka.com/iconoteka-preview.png"/>
 <meta property="og:image:width" content="1200"/>
@@ -17,7 +17,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Iconoteka"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="About Iconoteka, an open-source library of 1,300 icons"/>
+<meta name="twitter:title" content="About Iconoteka, 1,300 open-source icons in 7 weights and 2 styles"/>
 <meta name="twitter:description" content="A free, open-source library of 1,300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 <meta name="twitter:image" content="https://iconoteka.com/iconoteka-preview.png"/>
 <!-- Google Analytics 4 -->
@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <link rel="preload" href="fonts/websans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="support.css?v=10">
+<link rel="stylesheet" href="support.css?v=11">
 <style>
 :root {
   --bg: #ffffff;
@@ -157,7 +157,7 @@ main, footer { position: relative; z-index: 1; }
 .logo-wrap a:hover { opacity: .8; }
 #logomark { color: var(--logomark-color); }
 .logo { font-weight: 550; font-size: 23px; letter-spacing: -0.3px; }
-.beta-badge { font-size: 8.5px; font-weight: 700; background: var(--brand); color: #141414; height: 14px; padding: 0 6px 0 7.4px; line-height: 1;
+.beta-badge { font-size: 8.5px; font-weight: 700; background: var(--brand); color: #141414; height: 14px; padding: 0 6px 0 6.6px; line-height: 1;
               border-radius: var(--r-pill); letter-spacing: .6px; text-transform: uppercase; display: inline-flex; align-items: center; position: relative; top: -2px; }
 .header-nav { display: flex; align-items: center; gap: 32px; justify-content: flex-end; position: relative; top: -1px; }
 .header-link { font-size: 14px; font-weight: 600; text-decoration: none; transition: color var(--t-fast); }
@@ -192,7 +192,7 @@ main, footer { position: relative; z-index: 1; }
 /* License and Repository: larger title and text than the feature items */
 .license .half-a, .license .half-b { padding-bottom: var(--block); border-bottom: 1px solid var(--rule); }   /* two rules, one under each half; the halves stretch to one height so the lines align */
 #privacy { padding-top: 0; color: var(--text-soft); }   /* the quiet legal block: grey like the section labels, and half the usual gap above (--major down to --sec) */
-#privacy h3 { font-size: 14px; line-height: 21px; margin-bottom: var(--stack); }   /* one title over both halves, so the two columns start at the same line */
+#privacy h3 { font-size: 14px; line-height: 21px; margin-bottom: var(--stack); display: flex; justify-content: space-between; align-items: baseline; }   /* section number at the right edge, like the .label rows above */   /* one title over both halves, so the two columns start at the same line */
 #privacy strong { font-weight: 600; }   /* lead-ins take the site's heading weight, not the browser's 700 */
 #privacy p { font-size: 14px; line-height: 21px; }   /* no width cap: each half fills its column, so equal copy gives equal height */
 #privacy .half-a p { padding-right: var(--gut); }   /* two gutters between the columns: at 14px one gutter reads as a word space, not a column break. Left edges stay on the grid */
@@ -251,8 +251,8 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .stat-block p { grid-column: 7 / 13; align-self: start; margin: 3px 0 0; padding-top: var(--sp-2); border-top: 1px solid var(--rule); font-size: 20px; line-height: 30px; }   /* same large body size as License / Repository */
 
 /* weight grid: 7×2 stroked cells (1px lines, shared): number top-left, code (TS, RF…) top-right, name bottom-left, icon in a dealt palette colour */
-.cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-right: 1px solid var(--rule-solid); border-bottom: 1px solid var(--rule-solid); }   /* every line is drawn ONCE and is OPAQUE: each cell owns its top and left border, the grid closes the right and bottom. (Cell box-shadows doubled up in the 1px gaps, so shared lines came out ~51% against 30% outer ones.) */
-.card { position: relative; aspect-ratio: 1; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--rule-solid); border-left: 1px solid var(--rule-solid); }   /* the grid lines: 30% flattened to an opaque grey, one border per edge */
+.cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }   /* no border on the grid itself: when a row is short (4-3-4-3 on narrow screens) a container border would box in the empty cells and read as one big rectangle. Each cell closes itself instead. */
+.card { position: relative; aspect-ratio: 1; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; border: 1px solid var(--rule-solid); margin: 0 -1px -1px 0; }   /* every cell is a complete square; the -1px margins overlap neighbouring borders so shared lines stay 1px and are drawn once, and an empty grid area is simply empty */
 .card svg { width: 54%; height: 54%; fill: var(--ic, currentColor); display: block; position: relative; top: -3px; }   /* was -5px; moved 2px down (user) */   /* --ic: a brand colour dealt at random (light palette), re-dealt on hover with the icon; switches instantly, no fade (user) */
 .card small { position: absolute; font-size: 12px; line-height: 16px; font-weight: 500; }   /* text colour (the grey try was reverted for the grid — user) */
 .card .n { left: 10px; top: 8px; font-feature-settings: "liga" 0, "calt" 0, "tnum" 1; }
@@ -273,7 +273,8 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 #supportCards .support-card[data-way] h4, #supportCards .support-card[data-way] h4 small, #supportCards .support-card[data-way] p { color: var(--text); }
 #supportCards .support-card[data-way] .support-cta, #supportCards .support-list button { background: var(--line); color: var(--text); }
 #supportCards .support-card[data-way] .support-cta:hover, #supportCards .support-list button:hover { background: var(--text); color: var(--bg); }
-@media (min-width: 1100px) { #supportCards .support-card { aspect-ratio: 4 / 5; } }   /* 4:5 portrait cards (user) — 356×445 at 1280. Measured floor: below 1100 the taller table-to-button gap no longer fits a 4:5 box, so those widths keep the natural (equalised) height, as do the stacked tablet/phone ones */
+@media (min-width: 1280px) { #supportCards .support-card { aspect-ratio: 4 / 5; } }   /* 4:5 portrait cards (user). Measured floor: at 1200 and below the content no longer fits a 4:5 box */
+@media (min-width: 1400px) { #supportCards .support-card { aspect-ratio: 1; } }   /* once the column is wide enough that a square still holds the content, stop growing taller -- a 4:5 card reaches ~700px of mostly empty space on a big screen (user). max-height cannot do this: with an aspect-ratio set, capping the height just makes the card narrower */
 #supportCards .support-card h4 { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; justify-content: flex-start; margin: 0 0 var(--sp-1); }
 #supportCards .support-card p { font-size: 16px; line-height: 24px; margin: 0 0 var(--block); }   /* the page's body text; a block gap down to the tier / address table (user) */
 #supportCards .support-cta { margin-top: auto; padding-top: 0; }
@@ -307,7 +308,7 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .pkg-dark .mcp-list .no { color: #ffffff; }
 .mcp-tabs { position: relative; display: flex; gap: var(--tab-gap, 34px); box-shadow: inset 0 -1px 0 var(--btn); margin-top: -8px; }   /* a tab row on one baseline rule; always fits: tabRow() tightens the gap, then the text and marks, when the card is narrow (user: no scrolling) */
 .mcp-tabs.wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; } .mcp-tabs.wrap .mcp-tab { width: 100%; }   /* last resort on the narrowest phones: a tidy 3-column grid instead of hidden tabs */
-.mcp-tabs.names2 .mcp-tab { flex: 0 1 min-content; white-space: normal; text-align: center; }   /* tight: each tab as wide as its longest word, so two-word names take two lines (user) */
+.mcp-tabs.names2 .mcp-tab { flex: 0 1 min-content; white-space: normal; text-align: center; line-height: 1.15; }   /* two-line names set tighter than the 20px single line, and proportional so it holds as the step shrinks the font (user) */   /* tight: each tab as wide as its longest word, so two-word names take two lines (user) */
 .mcp-tab { flex: none; padding: 12px 0 14px; display: inline-flex; flex-direction: column; align-items: center; gap: 8px; border: none; border-radius: 0; background: none; color: var(--ink); opacity: .6; font: inherit; font-size: var(--tab-font, 16px); line-height: 20px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: opacity var(--t-fast), box-shadow var(--t-fast); }   /* the mark above the name (user) */
 .mcp-tab-mark { width: var(--tab-mark, 24px); height: var(--tab-mark, 24px); display: flex; align-items: center; justify-content: center; } .mcp-tab-mark svg { width: var(--tab-mark, 24px); height: var(--tab-mark, 24px); fill: currentColor; display: block; } .mcp-tab-mark svg.mark-lg { width: calc(var(--tab-mark, 24px) + 2px); height: calc(var(--tab-mark, 24px) + 2px); }   /* the slot stays for every tab, so the names share one line */
 .mcp-title { display: flex; align-items: center; } .mcp-title-mark { display: none; }   /* title text on the step text's left edge; the marks live in the tabs again (user) */
@@ -331,7 +332,7 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .inline-copy-icon { display: inline-block; vertical-align: -1.92px; margin-left: 5px; } .inline-copy-icon svg { width: 15.36px; height: 15.36px; fill: currentColor; display: block; }   /* after the text; the copy glyph's ink (y 3–21 of 24) equals the 16px face's cap height, 11.52px, and sits on the baseline (user) */
 .inline-copy-icon .i-done { display: none; } .inline-copy.copied .inline-copy-icon .i-copy { display: none; } .inline-copy.copied .inline-copy-icon .i-done { display: block; }   /* snippets at 12px: the Claude Code command stays on one line under the indented text */
 .pkg h4 { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 var(--sp-1); overflow-wrap: anywhere; }
-.support-title .pkg-beta { display: inline-flex; vertical-align: middle; margin-left: 10px; top: -6px; font-family: 'Inter', sans-serif; font-feature-settings: normal; font-variant-ligatures: normal; }   /* the header's BETA badge itself (user: same as the one by the logo) — .beta-badge carries every other value; display overrides its display:none, and Inter matches the header's letterforms (the title would pass the page face down) */
+.support-title .pkg-beta { display: inline-flex; vertical-align: middle; margin-left: 10px; top: -3px; will-change: transform; font-family: 'Inter', sans-serif; font-feature-settings: normal; font-variant-ligatures: normal; }   /* the header's BETA badge itself (user: same as the one by the logo) — .beta-badge carries every other value; display overrides its display:none, and Inter matches the header's letterforms (the title would pass the page face down) */   /* will-change: its own compositor layer, so the pill rasterises at its own origin instead of snapping to whatever sub-pixel row the heading lands on. Measured: the gap to the baseline is 3.188px at every width, so the wobble was rounding, not layout. Trade-off: composited text loses sub-pixel antialiasing, so watch whether BETA looks thinner */
 .pkg p { font-size: 16px; line-height: 24px; margin: 0 0 var(--stack); }
 .pkg .cmd { position: relative; margin-top: auto; min-height: 80px; display: flex; flex-wrap: wrap; align-content: space-between; align-items: center; justify-content: space-between; gap: 4px var(--sp-2); width: 100%; text-align: left; border: none; background: var(--field); color: inherit; border-radius: var(--r-sm); padding: 8px 12px; cursor: pointer; font: inherit; transition: background var(--t-fast); }   /* the whole row copies the command */
 .pkg .cmd:hover { background: var(--line-hover); } .pkg .cmd:active { opacity: .6; }
@@ -365,11 +366,11 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .slider-nav button:hover:not(:disabled) { opacity: .7; }
 .slider-nav button svg { width: 28px; height: 28px; fill: currentColor; display: block; }
 .slider-nav button:disabled { opacity: .3; cursor: default; }
-.slider { display: flex; gap: var(--gut); overflow-x: auto; scrollbar-width: none; cursor: grab; user-select: none;
+.slider { display: flex; align-items: flex-start; gap: var(--gut); overflow-x: auto; scrollbar-width: none; cursor: grab; user-select: none;
           margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%); }   /* runs edge to edge, so slides leave the screen on the left too; snapping is done in JS */
 .slider.dragging { cursor: grabbing; }
 .slider::-webkit-scrollbar { display: none; }
-.slider .slot { flex: 0 0 100%; aspect-ratio: 16 / 9; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
+.slider .slot { flex: 0 0 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
 .slider .slot img, .slider .slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* author: 4:3 portrait on the left half, text and links on the right half */
@@ -437,7 +438,8 @@ footer a { text-decoration: none; }
 footer a:hover, footer button:hover { opacity: .8; }
 footer button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; text-align: left; }
 footer button.copied { color: var(--brand); }
-.footer-copy { grid-column: 1 / 3; grid-row: 1; white-space: nowrap; color: var(--text-muted); align-self: end; }   /* grey ©, on the groups' row, its baseline on the last links (Download Press Kit, X) */
+.footer-copy { grid-column: 1 / 3; grid-row: 1; white-space: nowrap; color: var(--text-muted); align-self: end; }
+.footer-copy a { color: inherit; text-decoration: none; }   /* the name links out, but the line reads as plain copy: no underline, no colour change (user) */   /* grey ©, on the groups' row, its baseline on the last links (Download Press Kit, X) */
 
 /* wide screens: the column widens in two more steps past 1600 / 2000 (user) */
 @media (min-width: 1600px) {
@@ -595,7 +597,7 @@ footer button.copied { color: var(--brand); }
       "url": "https://turbaba.com",
       "sameAs": [
         "https://www.behance.net/turbaba",
-        "https://www.linkedin.com/in/oleg-turbaba-35438828/",
+        "https://www.linkedin.com/in/turbaba/",
         "https://www.instagram.com/turbaba/"
       ]
     },
@@ -629,7 +631,7 @@ footer button.copied { color: var(--brand); }
       "@type": "AboutPage",
       "@id": "https://iconoteka.com/about.html#page",
       "url": "https://iconoteka.com/about.html",
-      "name": "About Iconoteka, an open-source library of 1,300 icons",
+      "name": "About Iconoteka, 1,300 open-source icons in 7 weights and 2 styles",
       "description": "A free, open-source library of 1,300 icons in 7 weights and 2 styles, drawn on a 24-point grid and released under the MIT license.",
       "inLanguage": "en",
       "isPartOf": {
@@ -673,7 +675,7 @@ footer button.copied { color: var(--brand); }
     <a class="burger-link" href="https://www.figma.com/community/plugin/1675995752572535073/iconoteka" target="_blank" rel="noopener">Figma Plugin</a>
     <a class="burger-link" href="about.html">About</a>
     <hr class="burger-sep">
-    <div class="burger-ver"><br>Made by Oleg Turbaba</div>
+    <div class="burger-ver"><br>Made by <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener" class="footer-link">Oleg Turbaba</a></div>
   </div>
 </header>
 <div class="hero-band">
@@ -694,7 +696,7 @@ footer button.copied { color: var(--brand); }
 <div class="row weights">
   <div class="g">
     <div class="stat-block">
-      <h2 class="huge"><span class="num" id="iconCount" data-target="1300">1,300</span> Icons</h2>
+      <h2 class="huge"><span class="num" id="iconCount" data-target="1300" data-from="1250">1,300</span> Icons</h2>
       <p>Iconoteka's extensive icon library supports a wide range of use cases, from rapid prototyping to real-world wayfinding systems.</p>
     </div>
     <div class="stat-block">
@@ -706,7 +708,7 @@ footer button.copied { color: var(--brand); }
       <p>Stroke and fill styles work seamlessly together, allowing instant switches from lightweight outline icons to heavy filled variants across all seven weights.</p>
     </div>
     <div class="stat-block">
-      <h2 class="huge"><span class="num" id="shapeCount" data-target="14970">14,970</span> Shapes</h2>
+      <h2 class="huge"><span class="num" id="shapeCount" data-target="14970" data-from="13500">14,970</span> Shapes</h2>
       <p>Combining a wide range of icons multiplied by 7 weights in both fill and stroke styles, Iconoteka offers a massive library to choose from. This enables complete coverage for almost any use case, whether for personal projects, UX/UI design, or software development.</p>
     </div>
     <div class="cards full" id="cards"></div>
@@ -801,7 +803,7 @@ footer button.copied { color: var(--brand); }
       <p class="author-contact">For enquiries, collaborations, interviews, or sponsorships, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
       <div class="links author-links">
         <a class="ghost" href="https://www.instagram.com/turbaba/" target="_blank" rel="noopener">Instagram</a>
-        <a class="ghost" href="https://www.linkedin.com/in/oleg-turbaba-35438828/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="ghost" href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener">LinkedIn</a>
         <a class="ghost" href="https://www.behance.net/turbaba" target="_blank" rel="noopener">Behance</a>
         <a class="ghost site" href="https://turbaba.com" target="_blank" rel="noopener">turbaba.com</a>
       </div>
@@ -871,7 +873,7 @@ footer button.copied { color: var(--brand); }
 <!-- privacy: what the site records and how to change the cookie choice, shareable at #privacy -->
 <div class="row" id="privacy">
   <div class="g">
-    <h3 class="full">Privacy</h3>
+    <h3 class="full">Privacy<span class="no" aria-hidden="true">05</span></h3>
     <div class="half-a">
       <p><strong>What's Recorded:</strong> Google Analytics counts visits and stores a cookie to do it, recording the pages you open, the site you arrived from, your country, and your browser and device type. It runs only after you accept, and what it gathers is anonymous. Separately, and without a cookie, Iconoteka logs which icons get downloaded and which searches come up empty, together with your browser's user-agent string.</p>
     </div>
@@ -913,7 +915,7 @@ footer button.copied { color: var(--brand); }
       <h4>Contact</h4>
       <p>For enquiries, collaborations, interviews, or sponsorships, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
     </div>
-    <div class="footer-copy">© 2016–2026 Oleg Turbaba.<br> All rights reserved.</div>
+    <div class="footer-copy">© 2016–2026 <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener">Oleg Turbaba</a>.<br> All rights reserved.</div>
   </div>
 </footer>
 <div id="toast"></div>
@@ -965,14 +967,16 @@ function showToast(msg) { const t = document.getElementById('toast'); if (!t) re
   window.addEventListener('scroll', () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) targets.forEach(el => el.classList.add('in')); }, { passive: true });
 })();
 
-// Counters: the four stat numbers count up from 0 ONE AFTER ANOTHER the first time the block scrolls into
-// view (1.4 s each, eased, staggered by 1 s; instant under prefers-reduced-motion).
+// Counters: the four stat numbers count up ONE AFTER ANOTHER the first time the block scrolls into
+// view (1.4 s each, eased, staggered by 1 s; instant under prefers-reduced-motion). data-from sets the
+// starting value: the two large counts run their last stretch instead of spinning up from zero (user).
 const fmt = n => Math.round(n).toLocaleString('en-US');   /* comma as the thousands separator, matching the page copy (user) */
 const nums = [...document.querySelectorAll('.stat-block .num')];
 let countersData = false, countersSeen = false, countersDone = false;
 const runCounters = () => {
   if (countersDone || !countersData || !countersSeen) return; countersDone = true;
   const targets = nums.map(n => +n.dataset.target);
+  const froms = nums.map(n => +n.dataset.from || 0);
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) { nums.forEach((n, i) => n.textContent = fmt(targets[i])); document.querySelectorAll('.stat-block').forEach(b => b.classList.add('in')); return; }
   const dur = 1400, stagger = 1000;   // each number takes 1.4 s; the next one starts 1 s after the previous began
   const blocks = [...document.querySelectorAll('.stat-block')];
@@ -982,7 +986,7 @@ const runCounters = () => {
     let running = false;
     nums.forEach((n, i) => {
       const p = Math.min(1, Math.max(0, (now - t0 - i * stagger) / dur)), e = 1 - Math.pow(1 - p, 3);   // ease-out cubic
-      n.textContent = fmt(targets[i] * e);
+      n.textContent = fmt(froms[i] + (targets[i] - froms[i]) * e);
       if (p < 1) running = true;
     });
     if (running) requestAnimationFrame(tick);
@@ -990,7 +994,7 @@ const runCounters = () => {
   requestAnimationFrame(tick);
 };
 const countersReady = () => { countersData = true; runCounters(); };
-nums.forEach(n => n.textContent = '0');
+nums.forEach(n => n.textContent = fmt(+n.dataset.from || 0));   // show the starting value before the flight begins
 new IntersectionObserver((entries, obs) => { if (entries.some(e => e.isIntersecting)) { countersSeen = true; runCounters(); if (countersDone) obs.disconnect(); } }, { threshold: 0 })
   .observe(document.querySelector('.stat-block'));   // fires as soon as the first row shows
 
@@ -1016,6 +1020,17 @@ const tabRows = [];
 let tabRowsW = '';
 const setTabStep = (row, i) => { const [g, f, m, two] = TAB_STEPS[i]; row.style.setProperty('--tab-gap', g + 'px'); row.style.setProperty('--tab-font', f + 'px'); row.style.setProperty('--tab-mark', m + 'px'); row.classList.toggle('names2', !!two); };
 const tabsFit = row => { const r = row.getBoundingClientRect().right; return [...row.children].every(t => t.getBoundingClientRect().right <= r + .5); };
+// Once the step is chosen, hand the leftover width back to the gaps so a full row reaches both edges --
+// but never open a gap wider than this, or a short row (React / Vue / Svelte) ends up stranded at the corners.
+const GAP_MAX = 40;
+const spreadGap = row => {
+  if (row.classList.contains('wrap')) return;
+  const kids = [...row.children]; if (kids.length < 2) return;
+  const base = parseFloat(getComputedStyle(row).columnGap) || 0;
+  const content = kids.reduce((w, t) => w + t.getBoundingClientRect().width, 0);
+  const gap = Math.max(base, Math.min(GAP_MAX, (row.clientWidth - content) / (kids.length - 1)));
+  row.style.setProperty('--tab-gap', Math.floor(gap) + 'px');
+};
 function fitTabRows(force) {
   const key = tabRows.map(r => r.clientWidth).join(); if (!force && key === tabRowsW) return; tabRowsW = key;
   let need = 0; const wraps = new Set();
@@ -1026,6 +1041,7 @@ function fitTabRows(force) {
     need = Math.max(need, i);
   });
   tabRows.forEach(row => { setTabStep(row, need); row.classList.toggle('wrap', wraps.has(row)); });
+  tabRows.forEach(spreadGap);
 }
 function tabRow(row) {
   tabRows.push(row);
@@ -1230,7 +1246,7 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
   const icons = data.icons || [];
   const ver = data.meta && data.meta.version ? 'v' + data.meta.version.split('.').map(x => String(+x)).join('.') : '';   // 02.00.05 → v2.0.5, the timeline's form
   if (ver) document.getElementById('libVer').textContent = ver;
-  const bv = document.querySelector('.burger-ver'); if (bv) bv.innerHTML = '<span><span class="ver-num">' + ver + '</span><br>Made by Oleg Turbaba</span>';   // the burger's footer line, as on the homepage
+  const bv = document.querySelector('.burger-ver'); if (bv) bv.innerHTML = '<span><span class="ver-num">' + ver + '</span><br>Made by <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener" class="footer-link">Oleg Turbaba</a></span>';   // the burger's footer line, as on the homepage
   const uniq = new Set(icons.map(i => i.name.split('-')[0])).size;
   document.getElementById('iconCount').dataset.target = uniq;   // the counter below writes the text
   const icon = icons.find(i => i.name.split('-')[0] === SAMPLE) || icons.find(i => WEIGHTS.every(w => i.variants[w] && i.variants[w].stroke && i.variants[w].fill));
@@ -1300,7 +1316,7 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     do { ic = pick(wallPool); tries++; } while (tries < 40 && (bases.includes(ic.name.split('-')[0]) || fams.includes(familyOf(ic))));
     const shape = pick(['', 'round', 'soft']), style = pick(['stroke', 'fill']), weight = pick(WEIGHTS);   // all seven weights
     if (!iconOnly) {
-      t.className = 'tile-w' + (shape ? ' ' + shape : ''); t.style.setProperty('--c', col.bg); t.style.setProperty('--fg', col.fg);
+      t.className = 'tile-w' + (shape ? ' ' + shape : ''); t.style.setProperty('--c', col.bg); t.style.setProperty('--fg', col.fg); t._keep = 100;
       t.dataset.bg = col.bg; t.dataset.fg = col.fg; t.dataset.color = col.name;
     }
     t.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + pathOf(ic, weight, style) + '"/></svg>';
@@ -1331,20 +1347,20 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     if (!t._m) t._m = { d: 0.6 + Math.random(), x: (Math.random() * 2 - 1) * 1.4, r: (Math.random() * 2 - 1), grow: Math.random() < 0.3, fast: Math.random() < 0.4 };   // fast: some shrinkers go three times quicker
     return t._m;
   };
-  let ticking = false, flightDone = false;
-  const parallax = () => {
-    ticking = false;
-    const band = wall.parentElement, h = (band.offsetHeight + 78) * 6;   // the flight takes six band-heights of scroll
-    if (scrollY >= h) { if (flightDone) return; flightDone = true; } else flightDone = false;   // past the end: one last frame, then idle until the user scrolls back up
-    const sy = Math.min(scrollY, h) / 6 * 0.9;                           // a sixth of the speed, less 10%; frozen once the flight is complete (tiles used to keep drifting sideways for the whole page)
-    const p = Math.min(1, Math.max(0, scrollY / h));                     // 0 at the top, 1 when the flight is complete
+  let bandH = 0;   // the band's height only changes on resize; reading it every frame forced a layout
+  const flightLen = () => ((bandH || (bandH = wall.parentElement.offsetHeight)) + 78) * 6;   // six band-heights of scroll
+  const parallax = pos => {
+    const h = flightLen();
+    const sy = Math.min(pos, h) / 6 * 0.9;                               // a sixth of the speed, less 10%; frozen once the flight is complete (tiles used to keep drifting sideways for the whole page)
+    const p = Math.min(1, Math.max(0, pos / h));                         // 0 at the top, 1 when the flight is complete
     // pass 1: every tile's intended motion
     const ts = [...wall.children], items = ts.map(t => {
       const m = motionOf(t), k = Math.min(1, p * m.d * 2.5);   // size changes faster than position
       const ty = sy * (0.5 + 0.9 * m.d), tx = sy * 0.9 * m.x, rot = sy * 0.12 * m.r;   // tiles sink with the scroll — the deep ones reach the headline
       const sc = m.grow ? 1 + k * 0.45 : Math.max(0, 1 - k * 1.1 * (m.fast ? 3 : 1));   // growers stay modest (≤1.45×); the rest shrink away, some 3× faster
       const a = rot * Math.PI / 180, f = Math.abs(Math.cos(a)) + Math.abs(Math.sin(a));   // a rotated square reaches f× its half-size
-      return { t, tx, ty, rot, sc, f, cx: t.offsetLeft + t.offsetWidth / 2 + tx, cy: t.offsetTop + t.offsetHeight / 2 + ty, h: t.offsetWidth / 2 };
+      const g = t._g || (t._g = { ox: t.offsetLeft + t.offsetWidth / 2, oy: t.offsetTop + t.offsetHeight / 2, h: t.offsetWidth / 2 });   /* cached: transforms do not move the layout box, so this is the same every frame */
+      return { t, tx, ty, rot, sc, f, cx: g.ox + tx, cy: g.oy + ty, h: g.h };
     });
     // pass 2: no two neighbouring tiles may intersect (user: "icons intersecting each other" is a bug) — where their
     // boxes would touch, both shrink just enough to keep a hair of space; two rounds settle chains
@@ -1359,22 +1375,45 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     }
     for (const it of items) {
       const t = it.t, sc = it.sc;
-      t.style.transform = 'translate(' + it.tx.toFixed(1) + 'px,' + it.ty.toFixed(1) + 'px) rotate(' + it.rot.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
-      // shrinking tiles blend into the page colour as they go: full colour at scale 1, page colour at scale 0
+      const tf = 'translate(' + it.tx.toFixed(1) + 'px,' + it.ty.toFixed(1) + 'px) rotate(' + it.rot.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      if (t._tf !== tf) { t.style.transform = tf; t._tf = tf; }
+      // shrinking tiles blend into the page colour as they go: full colour at scale 1, page colour at scale 0.
+      // keep is a whole percent, so most frames leave most tiles unchanged -- skipping those saves a
+      // color-mix() parse per tile per frame, which is what made the flight stutter in Safari.
       const keep = Math.round(Math.max(0, Math.min(1, sc)) * 100);
-      t.style.setProperty('--c', keep >= 100 ? t.dataset.bg : 'color-mix(in srgb, ' + t.dataset.bg + ' ' + keep + '%, var(--bg))');
-      t.style.setProperty('--fg', keep >= 100 ? t.dataset.fg : 'color-mix(in srgb, ' + t.dataset.fg + ' ' + keep + '%, var(--bg))');
-      t.style.zIndex = Math.round(sc * 100);   // bigger tiles pass over smaller ones; no shadows (user)
+      if (t._keep !== keep) {
+        t._keep = keep;
+        t.style.setProperty('--c', keep >= 100 ? t.dataset.bg : 'color-mix(in srgb, ' + t.dataset.bg + ' ' + keep + '%, var(--bg))');
+        t.style.setProperty('--fg', keep >= 100 ? t.dataset.fg : 'color-mix(in srgb, ' + t.dataset.fg + ' ' + keep + '%, var(--bg))');
+      }
+      const z = Math.round(sc * 100);   // bigger tiles pass over smaller ones; no shadows (user)
+      if (t._z !== z) { t.style.zIndex = z; t._z = z; }
     }
   };
-  if (!reduced) window.addEventListener('scroll', () => { if (document.hidden) return parallax(); if (!ticking) { ticking = true; requestAnimationFrame(parallax); } }, { passive: true });
+  // Safari scrolls on the compositor while this runs on the main thread, so reading scrollY per event and
+  // jumping straight to it steps visibly -- worst with a wheel mouse, whose scroll arrives in big discrete
+  // chunks. Ease a carried position toward the scroll instead: the wall glides to each new position over a
+  // few frames rather than snapping, and the loop stops as soon as it has caught up.
+  let raf = 0, cur = 0;
+  const loop = () => {
+    raf = 0;
+    const target = Math.min(scrollY, flightLen());
+    const d = target - cur;
+    cur = Math.abs(d) < 0.5 ? target : cur + d * 0.22;
+    parallax(cur);
+    if (cur !== target) raf = requestAnimationFrame(loop);
+  };
+  if (!reduced) window.addEventListener('scroll', () => {
+    if (document.hidden) { cur = Math.min(scrollY, flightLen()); return parallax(cur); }
+    if (!raf) raf = requestAnimationFrame(loop);
+  }, { passive: true });
   buildWall();
   // Resize: the grid's space-between absorbs small width changes on its own. Only when the number of columns or rows
   // actually changes do we rebuild — and then once, after the resize has settled — so the wall doesn't flicker.
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { const g = wallGeometry(); if (g.cols !== wallCols || g.rows !== wallRows) buildWall(); }, 150);
+    resizeTimer = setTimeout(() => { bandH = 0; const g = wallGeometry(); if (g.cols !== wallCols || g.rows !== wallRows) buildWall(); }, 150);
   });
   let wallSeen = true; new IntersectionObserver(es => es.forEach(e => { wallSeen = e.isIntersecting; })).observe(wall.parentElement);
   setInterval(() => { if (!wallSeen || document.hidden) return; const n = wall.children.length; if (n) { const i = Math.floor(Math.random() * n); roll(wall.children[i], i, scrollY > 0); } }, 220);   // the wall keeps changing on its own — only while on screen; once scrolled only the ICON changes, the colour stays (user: a re-roll reset the blended background)

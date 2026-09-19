@@ -39,7 +39,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="support.css?v=10">
+<link rel="stylesheet" href="support.css?v=11">
 <style>
 :root {
   --bg: #ffffff;
@@ -156,6 +156,10 @@ aside { width: var(--panel-w); flex-shrink: 0; display: flex; flex-direction: co
 .slider-label-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 15px; }
 .slider-label { font-size: 12px; color: var(--text-dim); flex-shrink: 0; }
 .slider-val { font-size: 12px; color: var(--text); font-weight: 500; }
+.weight-step { cursor: pointer; user-select: none; border-radius: var(--r-xs); transition: opacity var(--t-fast); }   /* the weight name steps through the weights on tap */
+.weight-step:hover { opacity: .7; }
+.weight-step:active { opacity: .5; }
+.weight-step:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .slider-track-wrap { position: relative; height: 14px; display: flex; align-items: center; }
 .weight-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: var(--r-xs); outline: none; cursor: pointer; position: relative; z-index: 1; background: transparent; }
 .weight-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--text); cursor: pointer; transition: transform var(--t-fast); position: relative; z-index: 2; }
@@ -541,7 +545,7 @@ main::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--
       "url": "https://turbaba.com",
       "sameAs": [
         "https://www.behance.net/turbaba",
-        "https://www.linkedin.com/in/oleg-turbaba-35438828/",
+        "https://www.linkedin.com/in/turbaba/",
         "https://www.instagram.com/turbaba/"
       ]
     },
@@ -617,7 +621,7 @@ main::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--
     <a class="burger-link" href="https://www.figma.com/community/plugin/1675995752572535073/iconoteka" target="_blank" rel="noopener">Figma Plugin</a>
     <a class="burger-link" href="about.html">About</a>
     <hr class="burger-sep">
-    <div class="burger-ver"><br>Made by Oleg Turbaba</div>
+    <div class="burger-ver"><br>Made by <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener" class="footer-link">Oleg Turbaba</a></div>
   </div>
 </header>
 
@@ -717,7 +721,7 @@ main::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--
         <div class="cat-list" id="catList">
         </div>
       </div>
-      <div class="sidebar-ver"><span class="footer-ver" id="footerVer"><br>Made by <a href="https://turbaba.com" target="_blank" class="footer-link">Oleg Turbaba</a></span><button id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C10.1667 22 8.48333 21.5583 6.95 20.675C5.41667 19.7917 4.20833 18.5833 3.325 17.05C2.44167 15.5167 2 13.8333 2 12C2 10.1667 2.44167 8.48333 3.325 6.95C4.20833 5.41667 5.41667 4.20833 6.95 3.325C8.48333 2.44167 10.1667 2 12 2C13.8333 2 15.5167 2.44167 17.05 3.325C18.5833 4.20833 19.7917 5.41667 20.675 6.95C21.5583 8.48333 22 10.1667 22 12C22 13.8333 21.5583 15.5167 20.675 17.05C19.7917 18.5833 18.5833 19.7917 17.05 20.675C15.5167 21.5583 13.8333 22 12 22ZM12 20.025C13.4833 20.025 14.8333 19.675 16.05 18.975C17.2833 18.2583 18.25 17.2917 18.95 16.075C19.6667 14.8417 20.025 13.4833 20.025 12C20.025 10.5167 19.6667 9.16667 18.95 7.95C18.25 6.71667 17.2833 5.75 16.05 5.05C14.8333 4.33333 13.4833 3.975 12 3.975V20.025Z"/></svg></button></div>
+      <div class="sidebar-ver"><span class="footer-ver" id="footerVer"><br>Made by <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener" class="footer-link">Oleg Turbaba</a></span><button id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C10.1667 22 8.48333 21.5583 6.95 20.675C5.41667 19.7917 4.20833 18.5833 3.325 17.05C2.44167 15.5167 2 13.8333 2 12C2 10.1667 2.44167 8.48333 3.325 6.95C4.20833 5.41667 5.41667 4.20833 6.95 3.325C8.48333 2.44167 10.1667 2 12 2C13.8333 2 15.5167 2.44167 17.05 3.325C18.5833 4.20833 19.7917 5.41667 20.675 6.95C21.5583 8.48333 22 10.1667 22 12C22 13.8333 21.5583 15.5167 20.675 17.05C19.7917 18.5833 18.5833 19.7917 17.05 20.675C15.5167 21.5583 13.8333 22 12 22ZM12 20.025C13.4833 20.025 14.8333 19.675 16.05 18.975C17.2833 18.2583 18.25 17.2917 18.95 16.075C19.6667 14.8417 20.025 13.4833 20.025 12C20.025 10.5167 19.6667 9.16667 18.95 7.95C18.25 6.71667 17.2833 5.75 16.05 5.05C14.8333 4.33333 13.4833 3.975 12 3.975V20.025Z"/></svg></button></div>
     </div>
   </aside>
 
@@ -901,10 +905,10 @@ async function loadIcons() {
     iconsData.forEach(i => { iconsMap[i.name] = i; });
     meta = data.meta || {};
     const ver = meta.version ? 'v' + meta.version.split('.').map(x => String(+x)).join('.') : '';   // 02.00.05 → v2.0.5 (conventional, same as the About page)
-    document.getElementById('footerVer').innerHTML = '<span class="ver-num">' + ver + '</span><br>Made by <a href="https://turbaba.com" target="_blank" class="footer-link">Oleg Turbaba</a>';
+    document.getElementById('footerVer').innerHTML = '<span class="ver-num">' + ver + '</span><br>Made by <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener" class="footer-link">Oleg Turbaba</a>';
       const _bv = document.querySelector('.burger-ver');
       if (_bv) { const _t = _bv.querySelector('#themeToggle');
-                 _bv.innerHTML = '<span><span class="ver-num">' + ver + '</span><br>Made by Oleg Turbaba</span>';
+                 _bv.innerHTML = '<span><span class="ver-num">' + ver + '</span><br>Made by <a href="https://www.linkedin.com/in/turbaba/" target="_blank" rel="noopener" class="footer-link">Oleg Turbaba</a></span>';
                  if (_t) _bv.appendChild(_t); }
     buildSidebar();
     buildTabCatDropdown();
@@ -1292,6 +1296,14 @@ let toastTimer = null;
 function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
+  // On the phone the confirmation sits just above the open sheet, beside the button that was
+  // tapped. It used to appear under the toolbar at the top of the grid, far from the action.
+  if (window.matchMedia('(max-width: 480px)').matches) {
+    const p = document.getElementById('panel');
+    const sheet = p ? Math.max(0, Math.round(window.innerHeight - p.getBoundingClientRect().top)) : 0;
+    el.style.top = 'auto';
+    el.style.bottom = (sheet + 12) + 'px';
+  } else { el.style.top = ''; el.style.bottom = ''; }
   el.classList.add('visible');
   clearTimeout(toastTimer);
   const duration = 2000;
@@ -1591,6 +1603,7 @@ function openPanel(icon) {
 
   const sizeInput = document.createElement('input');
   sizeInput.type = 'text'; sizeInput.value = panelSize + 'px';
+  sizeInput.id = 'exportSize'; sizeInput.setAttribute('aria-label', 'Export size');   /* a field with neither id nor name is flagged by the browser and skipped by assistive tech */
   sizeInput.className = 'size-combobox';
 
   const sizeArrow = document.createElement('span');
@@ -2002,7 +2015,23 @@ function syncWeightUI() {
   document.getElementById('weightSlider').value = state.weightIdx;
   document.getElementById('mobWeightPrev').disabled = state.weightIdx === 0;
   document.getElementById('mobWeightNext').disabled = state.weightIdx === 6;
+  const tl = document.getElementById('tabWeightLabel'); if (tl) tl.textContent = WEIGHT_LABELS[state.weightIdx];
+  const ts = document.getElementById('tabWeightSlider'); if (ts) ts.value = state.weightIdx;
 }
+
+// Tapping the weight name steps to the next weight and wraps round after Bold, so the seven
+// weights are one tap apart without reaching for the slider or the arrows (user).
+['weightLabel', 'mobWeightLabel', 'tabWeightLabel'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('weight-step');
+  el.setAttribute('role', 'button');
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('aria-label', 'Next weight');
+  const step = () => { state.weightIdx = (state.weightIdx + 1) % 7; syncWeightUI(); render(); if (panelIcon) { updatePanelPreview(panelIcon); openPanel(panelIcon); } };
+  el.addEventListener('click', step);
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } });
+});
 
 // Mobile size custom dropdown
 const mobSizeBtn = document.getElementById('mobSizeBtn');
