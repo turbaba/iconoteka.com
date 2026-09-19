@@ -1,0 +1,6 @@
+# Iconoteka — a free, open-source icon library. Everything here is open to crawlers,
+# search engines and AI assistants alike.
+User-agent: *
+Allow: /
+
+Sitemap: https://iconoteka.com/sitemap.xml
