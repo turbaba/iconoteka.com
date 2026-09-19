@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>About Iconoteka</title>
+<title>About Iconoteka, an open-source library of 1 300 icons</title>
 <meta name="description" content="Iconoteka is a free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid by Oleg Turbaba. MIT licensed."/>
-<meta property="og:title" content="About Iconoteka"/>
+<meta property="og:title" content="About Iconoteka, an open-source library of 1 300 icons"/>
 <meta property="og:description" content="A free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 <meta property="og:image" content="https://iconoteka.com/iconoteka-preview.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:alt" content="Iconoteka icons on a grid"/>
 <link rel="canonical" href="https://iconoteka.com/about.html"/>
 <meta property="og:url" content="https://iconoteka.com/about.html"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Iconoteka"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="About Iconoteka"/>
+<meta name="twitter:title" content="About Iconoteka, an open-source library of 1 300 icons"/>
 <meta name="twitter:description" content="A free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 <meta name="twitter:image" content="https://iconoteka.com/iconoteka-preview.png"/>
 <!-- Google Analytics 4 -->
@@ -21,6 +25,7 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' });   // nothing is stored until the visitor accepts
   gtag('js', new Date());
   gtag('config', 'G-4MXD87JKRM');
 </script>
@@ -186,6 +191,11 @@ main, footer { position: relative; z-index: 1; }
 .half-a p, .half-b p { margin-bottom: var(--stack); }
 /* License and Repository: larger title and text than the feature items */
 .license .half-a, .license .half-b { padding-bottom: var(--block); border-bottom: 1px solid var(--rule); }   /* two rules, one under each half; the halves stretch to one height so the lines align */
+#privacy { padding-top: 0; color: var(--text-soft); }   /* the quiet legal block: grey like the section labels, and half the usual gap above (--major down to --sec) */
+#privacy h3 { font-size: 14px; line-height: 21px; margin-bottom: var(--stack); }   /* one title over both halves, so the two columns start at the same line */
+#privacy strong { font-weight: 600; }   /* lead-ins take the site's heading weight, not the browser's 700 */
+#privacy p { font-size: 14px; line-height: 21px; }   /* no width cap: each half fills its column, so equal copy gives equal height */
+#privacy .half-a p { padding-right: var(--gut); }   /* two gutters between the columns: at 14px one gutter reads as a word space, not a column break. Left edges stay on the grid */
 .license h3, .request h3, .support-title { font-size: 28px; line-height: 34px; margin-bottom: var(--sp-2); }   /* Support Project title = the License title (no section number, not counted) */
 .license p, .request p { font-size: 20px; line-height: 30px; max-width: 46ch; }
 /* request: a brand-Blue box, white text (the Blue card's logo-mark rule), input white at 10%, white pill button.
@@ -471,6 +481,8 @@ footer button.copied { color: var(--brand); }
   .card:nth-child(8) { grid-column-start: 1; }
   .license .half-a, .license .half-b { grid-column: 1 / -1; }   /* License above Repository, each with its own rule */
   .license .half-a { margin-bottom: var(--block); }
+  #privacy .half-a, #privacy .half-b { grid-column: 1 / -1; }   /* same as License: this much prose is too narrow in a tablet half */
+  #privacy .half-a { margin-bottom: var(--block); }
   #supportCards { grid-template-columns: 1fr; } #supportCards .support-card:last-child { grid-column: auto; }
   .packages-cards { grid-template-columns: 1fr; } .mcp-card { grid-column: auto; }   /* tablet: one card under the other */
   .packages .support-title { grid-column: 1 / 4; } .packages .support-lead { grid-column: 4 / 7; }
@@ -560,6 +572,76 @@ footer button.copied { color: var(--brand); }
   const theme = saved || (prefersDark ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', theme);
 })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://iconoteka.com/#website",
+      "url": "https://iconoteka.com/",
+      "name": "Iconoteka",
+      "description": "A free, open-source library of 1 300 icons in 7 weights and 2 styles, drawn on a 24-point grid and released under the MIT license.",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://iconoteka.com/#author"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://iconoteka.com/#author",
+      "name": "Oleg Turbaba",
+      "url": "https://turbaba.com",
+      "sameAs": [
+        "https://www.behance.net/turbaba",
+        "https://www.linkedin.com/in/oleg-turbaba-35438828/",
+        "https://www.instagram.com/turbaba/"
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://iconoteka.com/#library",
+      "name": "Iconoteka",
+      "url": "https://iconoteka.com/",
+      "description": "A free, open-source library of 1 300 icons in 7 weights and 2 styles, drawn on a 24-point grid and released under the MIT license.",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any",
+      "image": "https://iconoteka.com/iconoteka-preview.png",
+      "author": {
+        "@id": "https://iconoteka.com/#author"
+      },
+      "license": "https://github.com/iconoteka/iconoteka/blob/main/LICENSE",
+      "codeRepository": "https://github.com/iconoteka/iconoteka",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "sameAs": [
+        "https://www.figma.com/community/plugin/1675995752572535073/iconoteka",
+        "https://www.npmjs.com/package/iconoteka-react",
+        "https://www.npmjs.com/package/iconoteka-mcp"
+      ]
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "https://iconoteka.com/about.html#page",
+      "url": "https://iconoteka.com/about.html",
+      "name": "About Iconoteka, an open-source library of 1 300 icons",
+      "description": "A free, open-source library of 1 300 icons in 7 weights and 2 styles, drawn on a 24-point grid and released under the MIT license.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://iconoteka.com/#website"
+      },
+      "about": {
+        "@id": "https://iconoteka.com/#library"
+      },
+      "primaryImageOfPage": "https://iconoteka.com/iconoteka-preview.png"
+    }
+  ]
+}
 </script>
 </head>
 <body>
@@ -786,6 +868,19 @@ footer button.copied { color: var(--brand); }
   </div>
 </div>
 
+<!-- privacy: what the site records and how to change the cookie choice, shareable at #privacy -->
+<div class="row" id="privacy">
+  <div class="g">
+    <h3 class="full">Privacy</h3>
+    <div class="half-a">
+      <p><strong>What's Recorded:</strong> Google Analytics counts visits and stores a cookie to do it, recording the pages you open, the site you arrived from, your country, and your browser and device type. It runs only after you accept, and what it gathers is anonymous. Separately, and without a cookie, Iconoteka logs which icons get downloaded and which searches come up empty, together with your browser's user-agent string.</p>
+    </div>
+    <div class="half-b">
+      <p>The cookie runs on your consent, and you can <a class="handle" href="#privacy" data-consent-reopen>change your choice</a> at any time; the download log runs on legitimate interest. Google LLC processes both, on servers in the United States under Google's standard contractual clauses, and analytics data is kept for 14 months. You can ask what is held about you, have it deleted, object to it being collected, or complain to your data protection authority, so <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer>
@@ -798,6 +893,7 @@ footer button.copied { color: var(--brand); }
         <a href="https://github.com/iconoteka/iconoteka" target="_blank" rel="noopener">GitHub Repository</a>
         <a href="https://www.figma.com/community/plugin/1675995752572535073/iconoteka" target="_blank" rel="noopener">Figma Plugin</a>
         <a href="https://www.dropbox.com/scl/fo/7g41zwngx13ys4wr0sl3b/ACU4p5Ya1mCY1JYoQi-u9qE?rlkey=3krjlxfzftxt5fubh3elerut2&amp;dl=0" target="_blank" rel="noopener">Download Press Kit</a>
+        <a href="#privacy">Privacy</a>
       </nav>
     </div>
     <div class="footer-group f-sup">
@@ -1441,5 +1537,6 @@ document.getElementById('requestForm').addEventListener('submit', e => {
 });
 </script>
 <script src="support.js?v=10"></script>
+<script src="consent.js?v=1"></script>
 </body>
 </html>

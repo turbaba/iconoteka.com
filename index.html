@@ -3,13 +3,17 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Iconoteka</title>
+<title>Iconoteka, 1 300 open-source icons in 7 weights and 2 styles</title>
 <meta name="description" content="Iconoteka is a free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 
 <!-- Open Graph -->
-<meta property="og:title" content="Iconoteka"/>
+<meta property="og:title" content="Iconoteka, 1 300 open-source icons in 7 weights and 2 styles"/>
 <meta property="og:description" content="Iconoteka is a free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 <meta property="og:image" content="https://iconoteka.com/iconoteka-preview.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:alt" content="Iconoteka icons on a grid"/>
 <link rel="canonical" href="https://iconoteka.com/"/>
 <meta property="og:url" content="https://iconoteka.com/"/>
 <meta property="og:type" content="website"/>
@@ -17,7 +21,7 @@
 
 <!-- Twitter/X -->
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Iconoteka"/>
+<meta name="twitter:title" content="Iconoteka, 1 300 open-source icons in 7 weights and 2 styles"/>
 <meta name="twitter:description" content="Iconoteka is a free, open-source library of 1 300 icons in 7 weights, drawn on a 24-point grid. MIT licensed."/>
 <meta name="twitter:image" content="https://iconoteka.com/iconoteka-preview.png"/>
 <!-- Google Analytics 4 -->
@@ -25,6 +29,7 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied' });   // nothing is stored until the visitor accepts
   gtag('js', new Date());
   gtag('config', 'G-4MXD87JKRM');
 </script>
@@ -179,6 +184,7 @@ aside { width: var(--panel-w); flex-shrink: 0; display: flex; flex-direction: co
 .sidebar-footer { display: none; }
 
 /* MAIN */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }   /* the page's heading: read by search engines and screen readers, never drawn */
 .main-wrap { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow-y: scroll; scrollbar-width: thin; scrollbar-color: var(--border) transparent; scrollbar-gutter: stable both-edges; }
 .search-wrap { position: relative; width: clamp(300px, calc(300px + (100vw - 861px) * 0.114), 410px); max-width: 100%; min-width: 120px; flex-shrink: 1; }
 .search-ico { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); pointer-events: none; display: flex; color: var(--text-muted); }
@@ -513,8 +519,64 @@ main::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--
   .empty { font-size: 18px; }
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://iconoteka.com/#website",
+      "url": "https://iconoteka.com/",
+      "name": "Iconoteka",
+      "description": "A free, open-source library of 1 300 icons in 7 weights and 2 styles, drawn on a 24-point grid and released under the MIT license.",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://iconoteka.com/#author"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://iconoteka.com/#author",
+      "name": "Oleg Turbaba",
+      "url": "https://turbaba.com",
+      "sameAs": [
+        "https://www.behance.net/turbaba",
+        "https://www.linkedin.com/in/oleg-turbaba-35438828/",
+        "https://www.instagram.com/turbaba/"
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://iconoteka.com/#library",
+      "name": "Iconoteka",
+      "url": "https://iconoteka.com/",
+      "description": "A free, open-source library of 1 300 icons in 7 weights and 2 styles, drawn on a 24-point grid and released under the MIT license.",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any",
+      "image": "https://iconoteka.com/iconoteka-preview.png",
+      "author": {
+        "@id": "https://iconoteka.com/#author"
+      },
+      "license": "https://github.com/iconoteka/iconoteka/blob/main/LICENSE",
+      "codeRepository": "https://github.com/iconoteka/iconoteka",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "sameAs": [
+        "https://www.figma.com/community/plugin/1675995752572535073/iconoteka",
+        "https://www.npmjs.com/package/iconoteka-react",
+        "https://www.npmjs.com/package/iconoteka-mcp"
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
+<h1 class="sr-only">Iconoteka, a free and open-source library of 1 300 icons in 7 weights and 2 styles, drawn on a 24-point grid by Oleg Turbaba and released under the MIT license.</h1>
 
 <header>
   <div class="logo-wrap">
@@ -2202,5 +2264,6 @@ loadIcons();
 
 </script>
 <script src="support.js?v=10"></script>
+<script src="consent.js?v=1"></script>
 </body>
 </html>
