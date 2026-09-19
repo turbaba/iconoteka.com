@@ -148,6 +148,7 @@ header .support-btn { font: inherit; font-size: 14px; font-weight: 600; }
 .tile-w.round { border-radius: 50%; width: calc(var(--tile) * 1.06); height: calc(var(--tile) * 1.06); margin: calc(var(--tile) * -0.03); }
 .tile-w.soft { border-radius: 22%; }
 .tile-w svg { width: 66%; height: 66%; fill: currentColor; display: block; }
+.tile-w.round svg { width: calc(66% / 1.06); height: calc(66% / 1.06); }   /* the circle tile is 6% wider so it does not read smaller than a square one -- that is compensation for the CONTAINER, so undo it for the glyph, which must be the same size in every shape */
 /* no clipping: flying tiles pass behind the page content (main sits above the band), under the sticky bar */
 .hero-band { position: relative; z-index: 0; }
 main, footer { position: relative; z-index: 1; }
@@ -1329,6 +1330,28 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
              rows: Math.max(1, Math.floor((bandH - 20 + gap) / (tile + gap))) };                             // full rows that fit the target height
   };
   let wallRows = 0;
+  // The wall arrives tile by tile in a random order rather than all at once. Opacity only: the parallax
+  // owns each tile's transform, so animating that here would fight it. First build only -- a resize that
+  // changes the column count rebuilds the wall, and replaying the entrance there would look like a glitch.
+  let wallEntered = false;
+  const enterWall = () => {
+    if (wallEntered) return;
+    wallEntered = true;
+    const ts = tiles();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const order = ts.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    const SPAN = 420;   // the whole entrance, start to last tile
+    // Each tile simply appears -- no fade, so arriving looks the same as the random swap that
+    // keeps running afterwards (user). Squared delays rather than evenly spaced: most of the wall
+    // lands in the first moment, then the stragglers arrive further and further apart.
+    ts.forEach(t => { t.style.opacity = '0'; });
+    order.forEach((idx, n) => {
+      const x = order.length > 1 ? n / (order.length - 1) : 0;
+      setTimeout(() => { ts[idx].style.opacity = ''; }, 30 + Math.round(SPAN * x * x));   // '' drops the inline style entirely
+    });
+  };
+
   const buildWall = () => {
     const g = wallGeometry(); wallCols = g.cols; const rows = g.rows; wallRows = rows;
     wall.style.setProperty('--cols', wallCols);
@@ -1338,6 +1361,7 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
       roll(t, i);
       t.addEventListener('click', () => { location.href = './#' + encodeURIComponent(t.dataset.base); });   // open it in the library
     });
+    enterWall();
   };
   // Scroll parallax: every tile has its own random depth, sideways drift, spin and fate (grow or shrink).
   // As the page scrolls the wall drifts DOWN and apart: tiles lag behind the scroll, sink toward the headline and
@@ -1416,7 +1440,19 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     resizeTimer = setTimeout(() => { bandH = 0; const g = wallGeometry(); if (g.cols !== wallCols || g.rows !== wallRows) buildWall(); }, 150);
   });
   let wallSeen = true; new IntersectionObserver(es => es.forEach(e => { wallSeen = e.isIntersecting; })).observe(wall.parentElement);
-  setInterval(() => { if (!wallSeen || document.hidden) return; const n = wall.children.length; if (n) { const i = Math.floor(Math.random() * n); roll(wall.children[i], i, scrollY > 0); } }, 220);   // the wall keeps changing on its own — only while on screen; once scrolled only the ICON changes, the colour stays (user: a re-roll reset the blended background)
+  // The swapping eases off: it starts three times quicker than it settles, then stretches out over two
+  // seconds to one swap every 400ms, so the wall is busy as it arrives and calm once you are reading (user).
+  const SWAP_FAST = 133, SWAP_SLOW = 400, SWAP_RAMP = 2000;
+  const swapStart = performance.now();
+  const swapOne = () => {
+    if (wallSeen && !document.hidden) {
+      const n = wall.children.length;
+      if (n) { const i = Math.floor(Math.random() * n); roll(wall.children[i], i, scrollY > 0); }
+    }
+    const p = Math.min(1, (performance.now() - swapStart) / SWAP_RAMP);
+    setTimeout(swapOne, SWAP_FAST + (SWAP_SLOW - SWAP_FAST) * p);
+  };
+  setTimeout(swapOne, SWAP_FAST);;   // the wall keeps changing on its own — only while on screen; once scrolled only the ICON changes, the colour stays (user: a re-roll reset the blended background)
   // feature icons: one library icon in regular FILL above each feature title (pick icons that have a fill variant)
   document.querySelectorAll('.facts [data-icon]').forEach(f => {
     if (f.dataset.icon === 'circle') { f.insertAdjacentHTML('afterbegin', '<svg class="f-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>'); return; }   // a plain filled disc (the library's circle is a ring)
