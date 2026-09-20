@@ -381,7 +381,7 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .lightbox button svg { width: 26px; height: 26px; fill: currentColor; display: block; }
 .lightbox button:disabled { opacity: .25; cursor: default; }
 .lightbox.idle .lb-top { opacity: 0; pointer-events: none; }   /* a second without the mouse moving and the controls step out of the picture (user) */
-.lightbox.idle .lb-half { cursor: none; }
+.lightbox.idle .lb-half { cursor: none !important; }   /* !important because the arrow cursor is set inline from JS, and an inline style would otherwise win */
 .lightbox button:hover { background: rgba(255,255,255,.24); }
 .lightbox button svg { width: 26px; height: 26px; fill: currentColor; display: block; }
 .slider-nav button { font: inherit; background: none; border: none; padding: 0; cursor: pointer; color: var(--text); display: flex; transition: opacity var(--t-fast); }
@@ -1619,6 +1619,8 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
 const GALLERY = [   // image src = base name, the slider builds a 960 / 1440 / 1920 srcset from it; video src = the .mp4 itself, with a poster frame
   { type: 'image', src: 'media/iconoteka-gallery-bank-app', alt: 'Three phone screens of a banking app with balance, cards and savings goals using category and action icons' },
   { type: 'image', src: 'media/iconoteka-gallery-book-cover', alt: 'Yellow book cover with a globe icon' },
+  { type: 'image', src: 'media/iconoteka-gallery-reading-app', alt: 'Hand holding a phone showing a reading app onboarding screen, book genres as coloured pills with icons' },
+  { type: 'image', src: 'media/iconoteka-gallery-painted-wall', alt: 'Hand-painted wall of condensed capitals with icons set among the words' },
   { type: 'image', src: 'media/iconoteka-gallery-festival-cyclist', alt: 'Cargo bike rider passing a festival hoarding with a large bicycle pictogram' },
   { type: 'image', src: 'media/iconoteka-gallery-smart-home-app', alt: 'Smart home app on a phone with lights, security and energy tiles' },
   { type: 'image', src: 'media/iconoteka-gallery-wayfinding-signs', alt: 'Museum wayfinding signs with a coat hanger icon and directional arrows' },
