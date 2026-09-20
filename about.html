@@ -1628,7 +1628,7 @@ const GALLERY = [   // image src = base name, the slider builds a 960 / 1440 / 1
   { type: 'video', src: 'media/iconoteka-gallery-recycling.mp4', poster: 'media/iconoteka-gallery-recycling-poster.jpg', alt: 'Waste sorting bins labelled with icons for residual waste, food and plastic' },
   { type: 'video', src: 'media/iconoteka-gallery-ui-kit.mp4', poster: 'media/iconoteka-gallery-ui-kit-poster.jpg', alt: 'Interface components animating through the icon set' },
   { type: 'image', src: 'media/iconoteka-gallery-icon-pillows', alt: 'Soft blue and orange pillows stitched with a user icon and a headphones icon' },
-  { type: 'image', src: 'media/iconoteka-gallery-workflow-builder', alt: 'Automation workflow builder with icon nodes for email, an AI agent, approval and notifications' },
+  { type: 'video', src: 'media/iconoteka-gallery-automation.mp4', poster: 'media/iconoteka-gallery-automation-poster.jpg', alt: 'An automation running: icon nodes for an email trigger, an AI agent, a condition, approval, an action and a notification complete one after another' },
   { type: 'image', src: 'media/iconoteka-gallery-project-app', alt: 'Dark project management app with sidebar navigation, board tabs and task icons' },
   { type: 'video', src: 'media/iconoteka-gallery-bus-stop.mp4', poster: 'media/iconoteka-gallery-bus-stop-poster.jpg', alt: 'Street bus stop sign with a bus pictogram, route numbers and an accessibility icon' },
   { type: 'image', src: 'media/iconoteka-gallery-travel-cards', alt: 'Travel story cards with large droplet, crescent, wine glass and tulip artwork' },
@@ -1638,7 +1638,7 @@ const slider = document.getElementById('gallery'), lastSlide = GALLERY.length - 
 slider.innerHTML = GALLERY.map(g => {
   const media = g.type === 'video'
     ? '<video src="' + g.src + '" muted loop playsinline preload="none"' + (g.poster ? ' poster="' + g.poster + '"' : '') + ' aria-label="' + (g.alt || '') + '"></video>'   // no autoplay attribute: it would download at page load; the observer below plays it near the viewport
-    : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w, ' + g.src + '-2880.jpg 2880w" sizes="(min-width: 2000px) 1780px, (min-width: 1600px) 1540px, (min-width: 1,300px) 1252px, calc(100vw - 48px)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; sizes = the real slide width (the old min(1152px) sent retina screens an upscaled 1920); quality 90, 4:4:4
+    : '<img src="' + g.src + '-1440.jpg" srcset="' + g.src + '-960.jpg 960w, ' + g.src + '-1440.jpg 1440w, ' + g.src + '-1920.jpg 1920w" sizes="(min-width: 2000px) 1780px, (min-width: 1600px) 1540px, (min-width: 1300px) 1252px, calc(100vw - 48px)" alt="' + (g.alt || '') + '" loading="lazy" decoding="async">';   // the browser picks the size it needs; sizes = the real slide width (the old min(1152px) sent retina screens an upscaled 1920); quality 90, 4:4:4. No 2880 step: those files were enlarged from a 1920 Figma export, so they carried no extra detail
   return '<div class="slot">' + media + '</div>';
 }).join('');
 // Videos load and play only while the gallery is near the screen, and pause when it leaves; with reduced motion they keep the poster
