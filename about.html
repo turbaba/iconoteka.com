@@ -148,7 +148,10 @@ header .support-btn { font: inherit; font-size: 14px; font-weight: 600; }
 .tile-w.round { border-radius: 50%; width: calc(var(--tile) * 1.06); height: calc(var(--tile) * 1.06); margin: calc(var(--tile) * -0.03); }
 .tile-w.soft { border-radius: 22%; }
 .tile-w svg { width: 66%; height: 66%; fill: currentColor; display: block; }
-.tile-w.round svg { width: calc(66% / 1.06); height: calc(66% / 1.06); }   /* the circle tile is 6% wider so it does not read smaller than a square one -- that is compensation for the CONTAINER, so undo it for the glyph, which must be the same size in every shape */
+.tile-w.round svg { width: calc(66% / 1.06); height: calc(66% / 1.06); }
+.tile-chip { position: fixed; z-index: 40; pointer-events: none; color: var(--text); font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; text-shadow: 0 1px 3px var(--bg), 0 0 8px var(--bg); opacity: 0; transform: translate(-50%, -100%); transition: opacity var(--t-fast); }   /* plain text, no pill (user): a shadow in the page colour keeps it readable over anything */
+.tile-chip.on { opacity: 1; }
+.slider-nav button { position: relative; }   /* the circle tile is 6% wider so it does not read smaller than a square one -- that is compensation for the CONTAINER, so undo it for the glyph, which must be the same size in every shape */
 /* no clipping: flying tiles pass behind the page content (main sits above the band), under the sticky bar */
 .hero-band { position: relative; z-index: 0; }
 main, footer { position: relative; z-index: 1; }
@@ -184,6 +187,7 @@ main, footer { position: relative; z-index: 1; }
 /* ── page grid ────────────────────────────────────────────────────────────── */
 /* Every block is a full-width row; content sits on a 12-column grid, 22px gutters, 1252px max */
 .row { padding: var(--sec) var(--pad); }
+.row:focus, .row:focus-visible, .row:target, main:focus, main:focus-visible { outline: none; }   /* landing on #section must not draw a focus ring round the whole block: a row is a container, never something you interact with. Interactive controls keep their own rings */
 .g   { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); row-gap: 0; max-width: 1252px; margin: 0 auto; }   /* 1152 + 100: 50px off each side margin (user took half of the 100 back) */
 .g > * { min-width: 0; }
 .full { grid-column: 1 / -1; }
@@ -359,10 +363,27 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .facts [data-icon="cube"] { --fc: #979c1a; }   /* Moss Olive */
 
 /* in use: one 16:9 slide at content width, the next peeking past the right edge; arrows above */
-.inuse-text { grid-column: 1 / 9; margin: var(--block) 0 0; font-size: 20px; line-height: 30px; letter-spacing: 0; max-width: 60ch; }   /* large body size */
+.inuse-text { grid-column: 1 / 9; margin: var(--block) 0 0; font-size: 20px; line-height: 30px; letter-spacing: 0; max-width: 60ch; padding-right: var(--block); }   /* large body size. The padding keeps a line that nearly fills its column away from the marks beside it: the gap depended on where the text happened to wrap, and fell to 50px at some widths (user) */
 .handle { font-weight: inherit; text-decoration: underline; text-underline-offset: .3em; text-decoration-thickness: 1px; text-decoration-skip-ink: none; transition: opacity var(--t-fast); }   /* inline links: same weight and colour as the copy; a 1px underline set low, in the text colour (palette colours were tried and removed — user) */
 .handle:hover { opacity: .8; }   /* same hover as the header links — no colour */
-.slider-nav { grid-column: 9 / 13; align-self: end; display: flex; justify-content: flex-end; gap: 28px; margin-top: var(--block); }
+.slider-nav { grid-column: 9 / 13; align-self: start; display: flex; justify-content: flex-end; gap: 28px; margin-top: var(--block); }   /* level with the first line of the text beside it, not under the whole block (user) */
+#slideFull { margin-right: 28px; }   /* the same mark size as the arrows, set twice their gap away from them (user) */
+.lightbox { position: fixed; inset: 0; z-index: 3000; background: #000; display: flex; align-items: center; justify-content: center; }
+.lightbox img, .lightbox video { width: 100%; height: 100%; object-fit: cover; display: block; }   /* fills the screen rather than sitting in bars (user) */
+.lightbox .lb-stage { position: absolute; inset: 0; }
+.lightbox .lb-stage img, .lightbox .lb-stage video { position: absolute; inset: 0; opacity: 0; transition: opacity var(--t-slow, .4s) ease; }
+.lightbox .lb-stage .on { opacity: 1; }   /* one fades up over the one before it */
+.lightbox .lb-half { position: absolute; top: 0; bottom: 0; width: 50%; }   /* the screen itself turns the page, and the pointer is the library's own arrow (user) */
+.lightbox .lb-half.l { left: 0; } .lightbox .lb-half.r { right: 0; }
+.lightbox .lb-top { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; transition: opacity var(--t-fast); }
+.lightbox button { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(8px); color: var(--text); border: none; border-radius: 999px; cursor: pointer; transition: opacity var(--t-fast), background var(--t-fast); }   /* the page's own pair -- black circle and white cross in the dark, reversed in the light -- held semi-transparent over the picture (user) */
+.lightbox button:hover:not(:disabled) { background: color-mix(in srgb, var(--bg) 80%, transparent); }
+.lightbox button svg { width: 26px; height: 26px; fill: currentColor; display: block; }
+.lightbox button:disabled { opacity: .25; cursor: default; }
+.lightbox.idle .lb-top { opacity: 0; pointer-events: none; }   /* a second without the mouse moving and the controls step out of the picture (user) */
+.lightbox.idle .lb-half { cursor: none; }
+.lightbox button:hover { background: rgba(255,255,255,.24); }
+.lightbox button svg { width: 26px; height: 26px; fill: currentColor; display: block; }
 .slider-nav button { font: inherit; background: none; border: none; padding: 0; cursor: pointer; color: var(--text); display: flex; transition: opacity var(--t-fast); }
 .slider-nav button:hover:not(:disabled) { opacity: .7; }
 .slider-nav button svg { width: 28px; height: 28px; fill: currentColor; display: block; }
@@ -370,9 +391,10 @@ h3 { font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -.01e
 .slider { display: flex; align-items: flex-start; gap: var(--gut); overflow-x: auto; scrollbar-width: none; cursor: grab; user-select: none;
           margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%); }   /* runs edge to edge, so slides leave the screen on the left too; snapping is done in JS */
 .slider.dragging { cursor: grabbing; }
+.slider:focus, .slider:focus-visible { outline: none; }   /* Chrome makes a scroll container keyboard-focusable, so landing on #gallery drew a ring round the whole strip. The arrows are the visible control here, and they keep their own focus ring */
 .slider::-webkit-scrollbar { display: none; }
 .slider .slot { flex: 0 0 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
-.slider .slot img, .slider .slot video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slider .slot img, .slider .slot video { width: 100%; height: 100%; object-fit: cover; display: block; -webkit-user-drag: none; user-drag: none; }   /* dragging a shot pans the strip; without this the browser lifts the picture out instead */
 
 /* author: 4:3 portrait on the left half, text and links on the right half */
 .photo { aspect-ratio: 4 / 3; border-radius: 8px; background: var(--ui-surface); overflow: hidden; }
@@ -516,6 +538,7 @@ footer button.copied { color: var(--brand); }
   .inuse-text { grid-column: 1 / 5; }
   .support-title { grid-column: 1 / 3; } .support-lead { grid-column: 3 / 7; }   /* tablet: 1/3 + 2/3 of the 6-col grid */
   .slider-nav { grid-column: 5 / 7; }
+  #slideFull { margin-right: 0; }   /* tight against the arrows here, so it sits away from the text beside it (user) */
   .hero-band { --band-h: 360px; }
   .wall { --tile: 68px; --wgap: 14px; }
   .slider-nav button svg { width: 24px; height: 24px; }
@@ -553,7 +576,8 @@ footer button.copied { color: var(--brand); }
   .card .n { left: 6px; top: 5px; } .card .code { right: 6px; top: 5px; } .card .cap { left: 6px; bottom: 5px; }
   .author .bio, .author-contact, .inuse-text, .request-box .request-body p, .license p, .support-lead { font-size: 16px; line-height: 24px; letter-spacing: 0; }   /* phone: the standard body size for the author, gallery, License/Repository and request copy (user) */
   .request-box h3 { font-size: 22px; line-height: 28px; }   /* smaller request title on the phone (user) */
-  .slider { grid-row: 1; } .slider-nav { grid-row: 2; justify-content: flex-end; margin-top: var(--block); } .inuse-text { grid-row: 3; margin-top: var(--stack); }   /* arrows above the text, at the right (user) */
+  .slider { grid-row: 1; } .slider-nav { grid-row: 2; justify-content: flex-start; margin-top: var(--block); } .inuse-text { grid-row: 3; margin-top: var(--stack); }   /* arrows above the text, at the LEFT on the phone (user 2026-09-20; they were right-aligned) */
+  #slideFull { display: none; }   /* no full screen on the phone: it is the whole screen already, and the controls need a pointer (user) */
   .tl li { display: block; }   /* phone: a small title (date + version) with the note under it; count and weights skipped (user) */
   .tl time, .tl b { display: inline; font-weight: 500; }
   .tl b { margin-left: var(--sp-1); }
@@ -827,6 +851,7 @@ footer button.copied { color: var(--brand); }
     <div class="slider full" id="gallery"></div>
     <p class="inuse-text">Share your work, mention <a class="handle" href="https://www.instagram.com/iconoteka/" target="_blank" rel="noopener">@iconoteka</a> on LinkedIn, X, or Instagram when presenting your projects.</p>
     <div class="slider-nav">
+      <button type="button" id="slideFull" aria-label="View full screen"></button>
       <button type="button" id="slidePrev" aria-label="Previous"></button>
       <button type="button" id="slideNext" aria-label="Next"></button>
     </div>
@@ -1264,6 +1289,15 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + pathOf(icon, w, style) + '"/></svg>' +
     '<small class="cap">' + LABELS[i] + '<span class="st"> ' + (style === 'stroke' ? 'Stroke' : 'Fill') + '</span></small></div>';
   const arrow = (name, fallback) => { const ic = icons.find(i => i.name.split('-')[0] === name); return ic ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + pathOf(ic, 'regular', 'stroke') + '"/></svg>' : fallback; };
+  document.getElementById('slideFull').innerHTML = arrow('fullscreen', '\u26f6');
+  window.CLOSE_MARK = arrow('cross', '\u00d7');   // the lightbox is built outside this scope, so keep its marks here
+  window.PREV_MARK = arrow('arrow_left', '\u2190');
+  window.NEXT_MARK = arrow('arrow_right', '\u2192');
+  const arrowLight = n => { const ic = icons.find(i => i.name.split('-')[0] === n); return ic ? '<svg viewBox="0 0 24 24"><path d="' + pathOf(ic, 'light', 'stroke') + '"/></svg>' : ''; };
+  window.PREV_CURSOR = arrowLight('arrow_left');   // the pointer is drawn from the light weight (user)
+  window.NEXT_CURSOR = arrowLight('arrow_right');
+  window.PLAY_MARK = arrow('triangle_right', '\u25b6');
+  window.PAUSE_MARK = arrow('pause', '\u23f8');
   document.getElementById('slidePrev').innerHTML = arrow('arrow_left', '←');
   document.getElementById('slideNext').innerHTML = arrow('arrow_right', '→');
   const otherMark = document.querySelector('#mcp-tab-other .mcp-tab-mark'); if (otherMark && !otherMark.firstChild) otherMark.innerHTML = arrow('more', '');   // Other Apps: Iconoteka's own "more" icon in its mark slot (user)
@@ -1505,6 +1539,53 @@ fetch('icons.json').then(r => r.json()).then(data => {   // no cache-buster: Pag
     c.addEventListener('click', () => { if (!phone()) return; paint(c, pick(pool)); tint(c, dealColour(null)); jackpot(); });   // phone only: a tap re-rolls this cell for the colour game (user); on larger screens the cells are not clickable (user), hover does the work
   });
   grid.addEventListener('mouseleave', armReset);
+
+  // Hovering a wall tile names it. The wall carries no captions, so without this the icons are anonymous.
+  (() => {
+    const chip = document.createElement('div');
+    chip.className = 'tile-chip';
+    document.body.appendChild(chip);
+    const HOVER_WAIT = 450;   // long enough that sweeping the wall stays quiet
+    const pretty = n => n.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const place = t => {
+      const r = t.getBoundingClientRect();
+      chip.style.left = Math.round(r.left + r.width / 2) + 'px';
+      chip.style.top = Math.round(r.top - 10) + 'px';
+    };
+    let hold = null;
+    wall.addEventListener('pointerover', e => {
+      const t = e.target.closest('.tile-w');
+      if (!t || !t.dataset.base) return;
+      clearTimeout(hold);
+      hold = setTimeout(() => { chip.textContent = pretty(t.dataset.base); place(t); chip.classList.add('on'); }, HOVER_WAIT);
+    });
+    wall.addEventListener('pointerout', e => {
+      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.tile-w')) return;
+      clearTimeout(hold);
+      chip.classList.remove('on');
+    });
+    addEventListener('scroll', () => chip.classList.remove('on'), { passive: true });   // the tiles fly on scroll
+
+    // The same chip names the icon-only controls: under the gallery, and inside full screen.
+    const naming = '.slider-nav button, .lightbox button';
+    let wait = null;
+    document.addEventListener('pointerover', e => {
+      const b = e.target.closest && e.target.closest(naming);
+      if (!b || !b.getAttribute('aria-label')) return;
+      clearTimeout(wait);
+      wait = setTimeout(() => {                                  // a pause first, so passing over says nothing
+        chip.textContent = b.getAttribute('aria-label');
+        place(b);
+        chip.classList.add('on');
+      }, HOVER_WAIT);
+    });
+    document.addEventListener('pointerout', e => {
+      if (!e.target.closest || !e.target.closest(naming)) return;
+      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(naming)) return;
+      clearTimeout(wait);
+      chip.classList.remove('on');
+    });
+  })();
   // Phone game: tap the cells until all 14 share one colour — confetti in the palette colours bursts from the grid (once per
   // all-same state; it re-arms when the colours differ again). Off under prefers-reduced-motion.
   let celebrated = true;   // the load state is already all one colour — it only counts once the colours have differed and come back together
@@ -1543,6 +1624,7 @@ const GALLERY = [   // image src = base name, the slider builds a 960 / 1440 / 1
   { type: 'image', src: 'media/iconoteka-gallery-wayfinding-signs', alt: 'Museum wayfinding signs with a coat hanger icon and directional arrows' },
   { type: 'image', src: 'media/iconoteka-gallery-city-guide', alt: 'Colourful city guide tiles for museums, food, coffee, parks and more' },
   { type: 'video', src: 'media/iconoteka-gallery-recycling.mp4', poster: 'media/iconoteka-gallery-recycling-poster.jpg', alt: 'Waste sorting bins labelled with icons for residual waste, food and plastic' },
+  { type: 'video', src: 'media/iconoteka-gallery-ui-kit.mp4', poster: 'media/iconoteka-gallery-ui-kit-poster.jpg', alt: 'Interface components animating through the icon set' },
   { type: 'image', src: 'media/iconoteka-gallery-icon-pillows', alt: 'Soft blue and orange pillows stitched with a user icon and a headphones icon' },
   { type: 'image', src: 'media/iconoteka-gallery-workflow-builder', alt: 'Automation workflow builder with icon nodes for email, an AI agent, approval and notifications' },
   { type: 'image', src: 'media/iconoteka-gallery-project-app', alt: 'Dark project management app with sidebar navigation, board tabs and task icons' },
@@ -1581,7 +1663,8 @@ if ('IntersectionObserver' in window) new IntersectionObserver(([e], o) => { if 
 else warm(0);
 // drag to scroll with the mouse; snapping is suspended while dragging and re-applied on release
 const DRAG_GAIN = 1.4;   // the slides move further than the hand, so a short pull is enough
-slider.addEventListener('mousedown', e => { dragX = e.clientX; dragLeft = slider.scrollLeft; dragged = false; lastX = e.clientX; lastT = performance.now(); vel = 0; slider.classList.add('dragging'); e.preventDefault(); });
+slider.addEventListener('mousedown', e => { if (!e.target.closest('.slot')) return;   // the gap between shots is not a handle (user)
+  dragX = e.clientX; dragLeft = slider.scrollLeft; dragged = false; lastX = e.clientX; lastT = performance.now(); vel = 0; slider.classList.add('dragging'); e.preventDefault(); });
 window.addEventListener('mousemove', e => {
   if (dragX === null) return;
   const dx = e.clientX - dragX; if (Math.abs(dx) > 3) dragged = true;
@@ -1595,7 +1678,117 @@ window.addEventListener('mouseup', () => {
   else if (Math.abs(moved) > 40) goTo(start + (moved > 0 ? 1 : -1));   // any real pull (40px of travel) turns one slide, no need to drag half a slide
   else goTo(start);                                                    // a nudge: stay
 });
-slider.addEventListener('click', e => { if (dragged) { e.preventDefault(); e.stopPropagation(); } }, true);   // a drag is not a click
+// Full screen: the slide in view opens on a black field, the browser's own full screen if it will have it.
+// It loops, crossfades, turns the page when either half of the screen is clicked, and can play itself.
+// A copy is shown rather than the slide itself, so the strip keeps its scroll position underneath.
+(() => {
+  const btn = document.getElementById('slideFull');
+  if (!btn) return;
+  const STEP = 4000;   // how long a slide holds while playing
+  let box = null, stage = null, playBtn = null, at = 0, timer = null, idle = null;
+
+  const stop = () => { clearInterval(timer); timer = null; if (playBtn) playBtn.innerHTML = window.PLAY_MARK || '▶'; };
+  const start = () => {
+    stop();
+    timer = setInterval(() => show(at + 1), STEP);
+    if (playBtn) playBtn.innerHTML = window.PAUSE_MARK || '⏸';
+  };
+  const shut = () => {
+    if (!box) return;
+    const b = box; box = null;
+    stop(); clearTimeout(idle);
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    b.remove();
+    removeEventListener('keydown', onKey);
+    warm(at);
+    // The strip lands on the slide full screen ended on, but WITHOUT the smooth scroll: animating it as the
+    // overlay disappears is the travel that read as a strange transition on the way out (user).
+    slider.scrollTo({ left: Math.max(0, Math.min(lastSlide, at)) * slideStep(), behavior: 'instant' });
+  };
+  // wraps at both ends, so the set never dead-ends
+  const show = i => {
+    const n = slots.length;
+    at = ((i % n) + n) % n;
+    const media = slots[at] && slots[at].querySelector('img, video');
+    if (!media || !stage) return;
+    const copy = media.cloneNode(true);
+    copy.removeAttribute('loading');
+    if (copy.tagName === 'VIDEO') { copy.controls = false; copy.muted = true; copy.loop = true; copy.autoplay = true; }
+    stage.appendChild(copy);
+    requestAnimationFrame(() => copy.classList.add('on'));               // one frame at zero, then it fades up
+    if (copy.tagName === 'VIDEO') copy.play().catch(() => {});
+    [...stage.children].forEach(el => {
+      if (el === copy) return;
+      el.classList.remove('on');
+      setTimeout(() => el.remove(), 500);                                 // gone once it has faded out
+    });
+    warm(at);
+  };
+  const onKey = e => {
+    if (e.key === 'Escape') return shut();
+    if (e.key === 'ArrowRight') { e.preventDefault(); stir(); stop(); show(at + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); stir(); stop(); show(at - 1); }
+    if (e.key === ' ') { e.preventDefault(); stir(); timer ? stop() : start(); }
+  };
+  const stir = () => {
+    if (!box) return;
+    box.classList.remove('idle');
+    clearTimeout(idle);
+    idle = setTimeout(() => { if (box) box.classList.add('idle'); }, 1000);
+  };
+  // The library's own arrow, drawn as the pointer: white with a dark halo so it reads on any picture.
+  const cursorFrom = markup => {
+    const m = /d="([^"]+)"/.exec(markup || '');
+    if (!m) return 'pointer';
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">'
+      + '<path d="' + m[1] + '" fill="#fff"/></svg>';   // white glyph, nothing behind it (user)
+    return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '") 20 20, pointer';
+  };
+
+  const mark = (cls, label, html, go) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.setAttribute('aria-label', label);
+    b.innerHTML = html; b.addEventListener('click', e => { e.stopPropagation(); stir(); go(); });
+    return b;
+  };
+
+  btn.addEventListener('click', () => {
+    if (box) return shut();
+    box = document.createElement('div');
+    box.className = 'lightbox';
+    stage = document.createElement('div'); stage.className = 'lb-stage';
+
+    const left = document.createElement('div'); left.className = 'lb-half l';
+    const right = document.createElement('div'); right.className = 'lb-half r';
+    left.addEventListener('click', () => { stir(); stop(); show(at - 1); });
+    right.addEventListener('click', () => { stir(); stop(); show(at + 1); });
+
+    left.style.cursor = cursorFrom(window.PREV_CURSOR || window.PREV_MARK);   // the pointer IS the arrow, so no buttons over the picture
+    right.style.cursor = cursorFrom(window.NEXT_CURSOR || window.NEXT_MARK);
+    playBtn = null;                                          // no button: the slideshow runs from the space bar (user)
+    const close = mark('lb-close', 'Close', window.CLOSE_MARK || '×', shut);
+    const top = document.createElement('div'); top.className = 'lb-top';
+    top.append(close);
+
+    box.append(stage, left, right, top);
+    document.body.appendChild(box);
+    show(slideIndex());
+    addEventListener('keydown', onKey);
+    box.addEventListener('mousemove', stir);
+    stir();
+    if (box.requestFullscreen) box.requestFullscreen().catch(() => {});      // a plain overlay if the browser refuses
+  });
+  document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && box) shut(); });
+})();
+
+slider.addEventListener('click', e => {
+  if (dragged) { e.preventDefault(); e.stopPropagation(); return; }   // a drag is not a click
+  const slot = e.target.closest('.slot');                             // clicking a neighbour turns to it (user)
+  if (!slot) return;
+  const i = slots.indexOf(slot);
+  if (i < 0 || i === slideIndex()) return;                            // the slide in view keeps its own clicks (video play/pause)
+  e.preventDefault(); e.stopPropagation(); warm(i); goTo(i);
+}, true);
 
 // Request an icon — same endpoint the library uses for requests
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbypc8jSM4yoJzqBXbdo05pxNupgwz7h4k8ypMtaIFGeCpUvm0tUlAWVy7qIOkdwtGm-sA/exec';

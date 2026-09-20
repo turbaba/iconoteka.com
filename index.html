@@ -156,7 +156,7 @@ aside { width: var(--panel-w); flex-shrink: 0; display: flex; flex-direction: co
 .slider-label-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 15px; }
 .slider-label { font-size: 12px; color: var(--text-dim); flex-shrink: 0; }
 .slider-val { font-size: 12px; color: var(--text); font-weight: 500; }
-.weight-step { cursor: pointer; user-select: none; border-radius: var(--r-xs); transition: opacity var(--t-fast); }   /* the weight name steps through the weights on tap */
+.weight-step { cursor: pointer; user-select: none; border-radius: var(--r-xs); transition: opacity var(--t-fast); display: inline-block; text-align: left; padding: 8px 0; margin: -8px 0; }   /* the weight name steps through the weights on tap. The hit area is padded vertically (the margin cancels it again so nothing moves) and held to the width of the longest name, so short ones like Bold are no harder to hit than Ultralight (user) */
 .weight-step:hover { opacity: .7; }
 .weight-step:active { opacity: .5; }
 .weight-step:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
@@ -216,7 +216,7 @@ main::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--
 .icons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 12px 24px; width: 100%; max-width: 1256px; }
 
 /* ICON CARD */
-.icon-card { width: 100%; height: 128px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 16px; gap: 8px; border-radius: var(--r-md); cursor: pointer; background: transparent; border: 1px solid transparent; transition: background var(--t-fast), border-color .1s; color: var(--text); position: relative; flex-shrink: 0; overflow: hidden; }
+.icon-card { -webkit-user-select: none; user-select: none; width: 100%; height: 128px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 16px; gap: 8px; border-radius: var(--r-md); cursor: pointer; background: transparent; border: 1px solid transparent; transition: background var(--t-fast), border-color .1s; color: var(--text); position: relative; flex-shrink: 0; overflow: hidden; }
 .icon-card:hover { background: var(--ui-card-hover); border-color: transparent; }
 .icon-card.focused { background: var(--ui-card-hover); border-color: transparent; outline: none; }
 .icon-card.active-panel { background: var(--ui-surface); border-color: transparent; }
@@ -1254,6 +1254,8 @@ function makeCard(icon) {
   const card = document.createElement('div');
   card.className = 'icon-card' + (panelIcon && panelIcon.name === icon.name ? ' active-panel' : '');
   card.dataset.name = icon.name;
+  card.draggable = true;   // drag the icon straight out to the desktop, or into an app that takes SVG
+  card.addEventListener('dragstart', e => dragIcon(e, icon));
 
   const svgWrap = document.createElement('div'); svgWrap.className = 'icon-svg-wrap';
   if (path) {
@@ -1407,6 +1409,33 @@ function downloadPNG(icon, color, sz) {
   };
   img.src = url;
 }
+
+// Dragging an icon out of the grid. The same SVG is offered three ways, and the receiver picks:
+//   DownloadURL     the browser writes <name>.svg wherever it is dropped (Finder, and apps that take files)
+//   image/svg+xml   apps that read vector off the drag itself
+//   text/plain      anything else gets the source
+// The blob has to outlive the drag, so it is revoked on dragend rather than straight away.
+let dragBlobURL = null;
+function dragIcon(e, icon) {
+  const sz = panelSize || 24, path = getPath(icon);
+  if (!path || !e.dataTransfer) return;
+  const name = iconFileName(icon);
+  const svg = '<svg id="' + name + '" xmlns="http://www.w3.org/2000/svg" width="' + sz + '" height="' + sz +
+              '" viewBox="0 0 24 24" fill="#141414"><path id="' + formatSegment(icon.name.split('-')[0]) +
+              '" d="' + path + '"/></svg>';
+  if (dragBlobURL) URL.revokeObjectURL(dragBlobURL);
+  dragBlobURL = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  const dt = e.dataTransfer;
+  dt.effectAllowed = 'copy';
+  try { dt.setData('DownloadURL', 'image/svg+xml:' + name + '.svg:' + dragBlobURL); } catch (err) {}
+  try { dt.setData('image/svg+xml', svg); } catch (err) {}
+  try { dt.setData('text/html', svg); } catch (err) {}   // Figma reads SVG off text/html when pasting; worth offering on a drop too
+  dt.setData('text/plain', svg);
+  const art = e.currentTarget.querySelector('svg');
+  if (art) dt.setDragImage(art, art.clientWidth / 2, art.clientHeight / 2);   // the glyph itself follows the cursor
+  trackDownload(icon, 'Drag SVG', sz);
+}
+window.addEventListener('dragend', () => { if (dragBlobURL) { URL.revokeObjectURL(dragBlobURL); dragBlobURL = null; } });
 
 function copySVG(icon, sz) {
   sz = sz || panelSize || 24;
@@ -2032,6 +2061,25 @@ function syncWeightUI() {
   el.addEventListener('click', step);
   el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } });
 });
+
+// Hold each weight name to the width of the longest one, measured in its own font, so the tap target
+// never shrinks with the word. Re-measured once the webfont is in, since that changes the widths.
+function sizeWeightSteps() {
+  ['weightLabel', 'mobWeightLabel', 'tabWeightLabel'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+    probe.style.font = getComputedStyle(el).font;
+    document.body.appendChild(probe);
+    let w = 0;
+    WEIGHT_LABELS.forEach(n => { probe.textContent = n; w = Math.max(w, probe.getBoundingClientRect().width); });
+    probe.remove();
+    el.style.minWidth = Math.ceil(w) + 'px';
+  });
+}
+sizeWeightSteps();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeWeightSteps);
 
 // Mobile size custom dropdown
 const mobSizeBtn = document.getElementById('mobSizeBtn');
