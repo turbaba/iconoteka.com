@@ -1706,6 +1706,8 @@ window.addEventListener('mouseup', () => {
     // The strip lands on the slide full screen ended on, but WITHOUT the smooth scroll: animating it as the
     // overlay disappears is the travel that read as a strange transition on the way out (user).
     slider.scrollTo({ left: Math.max(0, Math.min(lastSlide, at)) * slideStep(), behavior: 'instant' });
+    // Leave the visitor at the gallery rather than on a hash that would reopen this on the next reload.
+    if (location.hash.startsWith('#gallery-full')) history.replaceState(null, '', '#gallery');
   };
   // wraps at both ends, so the set never dead-ends
   const show = i => {
@@ -1754,7 +1756,7 @@ window.addEventListener('mouseup', () => {
     return b;
   };
 
-  btn.addEventListener('click', () => {
+  const open = i => {
     if (box) return shut();
     box = document.createElement('div');
     box.className = 'lightbox';
@@ -1762,8 +1764,11 @@ window.addEventListener('mouseup', () => {
 
     const left = document.createElement('div'); left.className = 'lb-half l';
     const right = document.createElement('div'); right.className = 'lb-half r';
-    left.addEventListener('click', () => { stir(); stop(); show(at - 1); });
-    right.addEventListener('click', () => { stir(); stop(); show(at + 1); });
+    // A link opens the overlay without a click, and no browser will go truly full screen without one,
+    // so the first click inside asks again -- by then the visitor has gestured (see the hash handler below).
+    const turn = step => { stir(); stop(); show(at + step); if (box && !document.fullscreenElement && box.requestFullscreen) box.requestFullscreen().catch(() => {}); };
+    left.addEventListener('click', () => turn(-1));
+    right.addEventListener('click', () => turn(1));
 
     left.style.cursor = cursorFrom(window.PREV_CURSOR || window.PREV_MARK);   // the pointer IS the arrow, so no buttons over the picture
     right.style.cursor = cursorFrom(window.NEXT_CURSOR || window.NEXT_MARK);
@@ -1774,13 +1779,30 @@ window.addEventListener('mouseup', () => {
 
     box.append(stage, left, right, top);
     document.body.appendChild(box);
-    show(slideIndex());
+    show(i);
     addEventListener('keydown', onKey);
     box.addEventListener('mousemove', stir);
     stir();
     if (box.requestFullscreen) box.requestFullscreen().catch(() => {});      // a plain overlay if the browser refuses
-  });
+  };
+  btn.addEventListener('click', () => open(slideIndex()));
   document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && box) shut(); });
+
+  // about.html#gallery-full opens the full screen view, and #gallery-full=automation opens it on that slide.
+  // The name is whatever follows iconoteka-gallery- in the file, so a link survives the shuffle the strip does on load.
+  // The phone has no full screen view (the button is hidden there), so the link just leaves the visitor at the gallery.
+  const indexOf = name => slots.findIndex(sl => {
+    const m = sl.querySelector('img, video');
+    return m && (m.getAttribute('src') || '').includes('iconoteka-gallery-' + name);
+  });
+  const fromHash = () => {
+    const m = /^#gallery-full(?:=(.*))?$/.exec(location.hash);
+    if (!m || !btn.offsetParent) return;
+    const i = Math.max(0, m[1] ? indexOf(decodeURIComponent(m[1])) : 0);   // a name that no longer exists opens the first slide
+    box ? show(i) : open(i);                                               // already open: a second link just turns to its slide
+  };
+  addEventListener('hashchange', fromHash);
+  addEventListener('load', fromHash);   // after the slides exist
 })();
 
 slider.addEventListener('click', e => {
