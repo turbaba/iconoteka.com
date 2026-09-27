@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<base href="/">   <!-- GitHub Pages serves this file for ANY missing path, at any depth: resolve every relative URL from the root -->
 <script>document.documentElement.classList.add('rv-pending'); setTimeout(() => document.documentElement.classList.remove('rv-pending'), 2500);</script>   <!-- reveal.js lifts this once the line-by-line units are set; the timeout is a safety net -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Iconoteka Privacy</title>
-<meta name="description" content="What Iconoteka records: Google Analytics visits behind a cookie, and anonymous counts of icon downloads and empty searches. How to change your consent."/>
-<meta property="og:title" content="Iconoteka Privacy"/>
+<title>Page Not Found, Iconoteka</title>
+<meta name="description" content="This address is not on iconoteka.com."/>
+<meta name="robots" content="noindex"/>
+<meta property="og:title" content="Iconoteka"/>
 <meta property="og:description" content="What the site records, what runs on consent, and how to change your choice."/>
 <meta property="og:image" content="https://iconoteka.com/iconoteka-preview.png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:alt" content="Iconoteka icons on a grid"/>
-<link rel="canonical" href="https://iconoteka.com/privacy.html"/>
-<meta property="og:url" content="https://iconoteka.com/privacy.html"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Iconoteka"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -643,6 +643,15 @@ a.partner:hover .partner-go { opacity: 1; }
   .priv-body h3 { font-size: 16px; line-height: 24px; }
   .priv-sec .g { align-items: start; }
 }
+
+/* 404: the page's title, one line of help and one action back to the homepage */
+.row.headline.nf { padding-bottom: calc(var(--major) * 1.5); }   /* the button needs air before the footer rule */
+.nf .g { padding-bottom: 0; border-bottom: none; }
+.nf-lead { grid-column: 1 / 9; margin: var(--stack) 0 0; font-size: 22px; line-height: 32px; color: var(--text); }
+.nf-links { grid-column: 1 / -1; margin-top: var(--block); }
+.links a.nf-home { height: 48px; padding: 2px 24px 0; font-size: 16px; font-weight: 600; border-radius: var(--r-pill); background: var(--text); color: var(--bg); }
+.links a.nf-home:hover { opacity: .85; }
+@media (max-width: 860px) { .nf-lead { grid-column: 1 / -1; font-size: 20px; line-height: 30px; } }
 </style>
 <script>
 // Theme init — runs immediately before page renders
@@ -759,104 +768,13 @@ a.partner:hover .partner-go { opacity: 1; }
 
 <main>
 
-<div class="row headline">
+<div class="row headline nf">
   <div class="g">
-    <h1 class="statement">Privacy</h1>
-    <p class="priv-updated">Last updated 26 September 2026</p>
+    <h1 class="statement">Page not found</h1>
+    <p class="nf-lead">The address may be mistyped, or the page has moved.</p>
+    <div class="links nf-links"><a class="nf-home" href="/">Go to Homepage</a></div>
   </div>
 </div>
-
-<section class="row priv-sec" id="responsible">
-  <div class="g">
-    <h2 class="priv-title">Who Is Responsible</h2>
-    <div class="priv-body">
-      <p>Iconoteka is run by Oleg Turbaba, who decides what the site records and why. For questions, requests or complaints about your data, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>. The address reaches him directly.</p>
-    </div>
-  </div>
-</section>
-
-<section class="row priv-sec" id="privacy">
-  <div class="g">
-    <h2 class="priv-title">What Is Recorded</h2>
-    <div class="priv-body">
-      <h3>When you browse</h3>
-      <ul>
-        <li>The pages you open, the site you arrived from, your country, and your browser and device type</li>
-        <li>Counted by Google Analytics with a cookie, only after you accept. Decline and it never loads</li>
-      </ul>
-      <h3>When you use the library</h3>
-      <ul>
-        <li>Which icons are copied or downloaded, which searches come up empty, and which icons people request</li>
-        <li>Your browser's user-agent string, sent with them</li>
-        <li>Logged without a cookie. This is what tells the library which icons are missing</li>
-      </ul>
-      <h3>On your device</h3>
-      <ul>
-        <li>Your light or dark theme, and your answer to the cookie banner, kept in your browser's own storage</li>
-        <li>Neither leaves your device</li>
-      </ul>
-      <p>That is the whole list. The site has no accounts, no advertising and no tracking across other sites, and it never asks for your name, address or payment details.</p>
-    </div>
-  </div>
-</section>
-
-<section class="row priv-sec" id="basis">
-  <div class="g">
-    <h2 class="priv-title">Why, and on What Basis</h2>
-    <div class="priv-body">
-      <ul class="priv-defs">
-        <li><strong>Consent.</strong> Analytics runs only on your consent, which you can <a class="handle" href="#privacy" data-consent-reopen>change at any time</a>.</li>
-        <li><strong>Legitimate interest.</strong> The usage log holds no identifiers, and without it there is no way to tell which icons the library still lacks.</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="row priv-sec" id="third-parties">
-  <div class="g">
-    <h2 class="priv-title">Who Else Is Involved</h2>
-    <div class="priv-body">
-      <ul class="priv-defs">
-        <li><strong>Google Analytics</strong> (Google LLC) counts visits and processes the usage log, on servers in the United States, under Google's standard contractual clauses.</li>
-        <li><strong>GitHub Pages</strong> serves the site and keeps its own short-lived server logs.</li>
-        <li><strong>Dropbox</strong> hosts the press kit, so downloading it is a visit to Dropbox under their terms.</li>
-      </ul>
-      <p>Fonts and icons are served from this site itself. The Figma plugin records the same anonymous usage signals as the site. The npm packages and the MCP server run on your own machine and send nothing anywhere.</p>
-    </div>
-  </div>
-</section>
-
-<section class="row priv-sec" id="retention">
-  <div class="g">
-    <h2 class="priv-title">How Long It Is Kept</h2>
-    <div class="priv-body">
-      <ul class="priv-defs">
-        <li><strong>Analytics</strong> is kept for 14 months.</li>
-        <li><strong>The usage log</strong> is kept as long as it is useful for deciding what to draw next.</li>
-        <li><strong>Your theme and banner answer</strong> stay in your browser until you clear them.</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="row priv-sec" id="rights">
-  <div class="g">
-    <h2 class="priv-title">Your Rights</h2>
-    <div class="priv-body">
-      <p>You can ask what is held about you, have it deleted, object to it being collected, or complain to your data protection authority. Because none of it is tied to a name or an account, a request usually comes down to a date and a rough description of what you did.</p>
-      <p>For any of that, <a class="handle nobr" href="mailto:olegturbaba@gmail.com">get in touch</a>.</p>
-    </div>
-  </div>
-</section>
-
-<section class="row priv-sec" id="changes">
-  <div class="g">
-    <h2 class="priv-title">Changes</h2>
-    <div class="priv-body">
-      <p>When this page changes, the date at the top changes with it, and anything significant is explained here.</p>
-    </div>
-  </div>
-</section>
 
 </main>
 
