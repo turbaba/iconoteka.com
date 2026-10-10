@@ -1,0 +1,56 @@
+name: Library release
+
+# The site follows the library by itself (author, 10 Oct 2026: "i need it to be automatically").
+# Every 15 minutes this looks at the library's version.json. When the version has gone up, it takes the
+# release's icons.json, writes the new counts into the pages, and commits to main, which publishes the site.
+# It touches icons.json and the six pages' numbers, nothing else. Everything else on the site still goes
+# live only by hand.
+#
+# Run it by hand from the Actions tab at any time; "dry run" shows what would change and commits nothing.
+# A red run means a check failed and the site was left exactly as it was.
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Show what would change, commit nothing
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: library-release
+  cancel-in-progress: false
+
+jobs:
+  update:
+    # the staging copy and any fork carry this file too; only the real site acts on it
+    if: github.repository == 'turbaba/iconoteka.com'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Look for a new library release
+        id: release
+        run: python3 .github/scripts/library-release.py
+
+      - name: What changed
+        if: steps.release.outputs.changed == 'true'
+        run: git status --short && git diff --stat
+
+      - name: Commit and publish
+        if: steps.release.outputs.changed == 'true' && inputs.dry_run != true
+        env:
+          MESSAGE: ${{ steps.release.outputs.message }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config http.postBuffer 524288000
+          git add icons.json index.html about.html dev.html press.html privacy.html 404.html
+          git commit -m "$MESSAGE"
+          git push
